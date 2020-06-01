@@ -32,25 +32,25 @@ public class App {
     protected static JSONObject config;
 
     private static final Logger logger = LogManager.getLogger(App.class);
-    
-    // if the config file name or location is changed, also needs to change in pom.xml
-    protected static final String configFile = "config.json"; 
+
+    // if the config file name or location is changed, also needs to change in
+    // pom.xml
+    protected static final String configFile = "config.json";
 
     /**
-     * The static path and templates path are specified here and not
-     * in the config file because the other sample apps may have to take a 
-     * differing path.
+     * The static path and templates path are specified here and not in the config
+     * file because the other sample apps may have to take a differing path.
      * 
-     * NOTE: Right now, the static path is set realtive to where the server
-     * is being run from. ie, if run from the "drugbank-sample-apps" folder, the
-     * static path is "resources", but if run from in the "db-app" folder,
-     * the static path is "../../resource". This will hopefully be changed. 
+     * NOTE: Right now, the static path is set realtive to where the server is being
+     * run from. ie, if run from the "drugbank-sample-apps" folder, the static path
+     * is "resources", but if run from in the "db-app" folder, the static path is
+     * "../../resource". This will hopefully be changed.
      */
-    protected static String staticPath = "resources"; 
+    protected static String staticPath = "resources";
     protected static String templatesPath = staticPath + "/templates/";
-    
+
     public static void main(final String[] args) {
-       
+
         config = loadConfig();
         setupServer(config);
 
@@ -71,7 +71,7 @@ public class App {
         // regional product concepts API call
         get("/api/*/product_concepts", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get(req.splat()[0] + "/product_concepts", params).getData().toString();
+            return api.drugbank_get(req.splat()[0] + "/product_concepts", params).getData();
         });
 
         // product concepts API call (DB ID, routes/strength)
@@ -124,7 +124,7 @@ public class App {
             return api.drugbank_get(req.splat()[0] + "/indications", params).getData();
         });
 
-        // indications page
+        // support page
         get("/support", (req, res) -> new ModelAndView(new HashMap<>(), "support.html"), engine);
 
         // get the API key
@@ -134,7 +134,7 @@ public class App {
 
         // update the API key
         put("/auth_key/update", (req, res) -> {
-            
+
             final JSONObject JsonResponse = new JSONObject();
             logger.info("Recieved API key update request: " + req.body());
 
@@ -146,16 +146,14 @@ public class App {
             JsonResponse.put("original-key", authKey);
             JsonResponse.put("updated-key", newKey);
 
-            /** 
-             * if the new key is the same as the old one,
-             * dont bother updating it
+            /**
+             * if the new key is the same as the old one, dont bother updating it
              * 
-             * else if the new key is empty
-             * note: this shouldn't ever be an issue as
-             * a form won't submit if it's empty
+             * else if the new key is empty note: this shouldn't ever be an issue as a form
+             * won't submit if it's empty
              * 
              * otherwise, try to update the key
-             */ 
+             */
             if (authKey.equals(newKey)) {
                 res.status(200);
                 JsonResponse.put("message", "New key is the same as the old key");
@@ -167,7 +165,7 @@ public class App {
                 return JsonResponse;
 
             } else {
-                
+
                 try {
                     authKey = newKey;
                     config.put("auth-key", authKey);
@@ -178,7 +176,7 @@ public class App {
                     res.status(200);
                     JsonResponse.put("message", "Key successfully updated");
                     return JsonResponse;
-                    
+
                 } catch (final IOException e) {
                     e.printStackTrace();
                     res.status(500);
@@ -189,7 +187,7 @@ public class App {
             }
 
         });
-        
+
     }
 
     /**
@@ -208,7 +206,8 @@ public class App {
         return params;
     }
 
-    /** Loads properties from the configFile into a JSONObject
+    /**
+     * Loads properties from the configFile into a JSONObject
      * 
      * The file must contain: - port: the port to host the server on - templates:
      * path to the template resources directory - static: path to the static
@@ -218,15 +217,15 @@ public class App {
      * 
      * A JSON file is used instead of a properties file so the file can be reused
      * for non-Java implementations.
-     */ 
+     */
     static JSONObject loadConfig() {
 
         InputStream in = App.class.getClassLoader().getResourceAsStream(configFile);
         StringBuilder content = new StringBuilder();
 
-        try (Reader reader = new BufferedReader(new InputStreamReader
-                (in, Charset.forName(StandardCharsets.UTF_8.name())))) {
-            
+        try (Reader reader = new BufferedReader(
+                new InputStreamReader(in, Charset.forName(StandardCharsets.UTF_8.name())))) {
+
             int c;
             while ((c = reader.read()) != -1) {
                 content.append((char) c);
@@ -235,11 +234,11 @@ public class App {
         } catch (IOException e) {
             e.printStackTrace();
             throw new NullPointerException("Cannot find resource file '" + configFile + "'");
-        }  
+        }
 
         final JSONObject configObject = new JSONObject(content.toString());
         return configObject;
-      
+
     }
 
     /**
@@ -261,8 +260,8 @@ public class App {
 
         try {
             apiHost = config.getString("api-host");
-            
-            // if the URL to the API is missing 
+
+            // if the URL to the API is missing
             // the last slash, put it at the end
             if (!apiHost.substring(apiHost.length() - 1).equals("/")) {
                 apiHost = apiHost + "/";
@@ -284,8 +283,8 @@ public class App {
     }
 
     /**
-     * Updates the configFile by overwriting it 
-     * with the locally stored config JSONObject.
+     * Updates the configFile by overwriting it with the locally stored config
+     * JSONObject.
      * 
      * Called when an API key change request is made.
      */
