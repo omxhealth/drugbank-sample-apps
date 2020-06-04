@@ -51,7 +51,7 @@ public class JinjavaEngine extends TemplateEngine {
      * Setup renderer
      */
     protected void configure() {
-        if(rendererConfig == null) {
+        if (rendererConfig == null) {
             renderer = new Jinjava();
             rendererConfig = renderer.getGlobalConfig();
         } else {
@@ -65,7 +65,7 @@ public class JinjavaEngine extends TemplateEngine {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Ser renderer config
+     * Set renderer config
      * @param config JinjavaConfig
      */
     public void setConfig(JinjavaConfig config) {

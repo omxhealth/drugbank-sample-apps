@@ -18,7 +18,7 @@ getStrengths = function(d) {
  */
 loadTableResults = function(products_table, data) {
     if ($(".drug_autocomplete").val() && $(".route_autocomplete").val() && $(".strength_autocomplete").val()) {
-        JSON.parse(data).forEach(function(d) {
+        data.forEach(function(d) {
             products_table.row.add([d.name, d.dosage_form, getStrengths(d), d.route, d.labeller.name]);
         });
         products_table.draw();
@@ -52,7 +52,7 @@ $(document).ready(function() {
             },
             processResults: function(data) {
                 return {
-                    results: $.map(JSON.parse(data), function(i) {
+                    results: $.map(data, function(i) {
                         return {
                             id: i.drugbank_pcid,
                             text: highlight_name(i)
@@ -82,7 +82,7 @@ $(document).ready(function() {
                 delay: 100,
                 success: function(data) {
                     displayRequest(api_host + path, data);
-                    JSON.parse(data).map(function(d) {
+                    data.map(function(d) {
                         return {
                             route: d.route,
                             id: d.drugbank_pcid
@@ -118,7 +118,7 @@ $(document).ready(function() {
                 delay: 100,
                 success: function(data) {
                     displayRequest(api_host + path, data);
-                    JSON.parse(data).map(function(d) {
+                    data.map(function(d) {
                         return {
                             strength: d.name,
                             id: d.drugbank_pcid
