@@ -119,7 +119,6 @@
       </plugins>
     </pluginManagement>
      <resources>
-        
         <resource>
           <!--Root directy of all sample apps, to grab config.json-->
           <directory>./../../</directory>

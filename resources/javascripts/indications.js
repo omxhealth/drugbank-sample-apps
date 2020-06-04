@@ -21,7 +21,7 @@ loadTableResults = function(indications_table, data, options) {
     // Empty the interactions table
     clearTableResults(indications_table);
     
-    JSON.parse(data).forEach(function(d) {
+    data.forEach(function(d) {
       return indications_table.row.add([d.drug.name, options[d.kind], getUsage(d), d.off_label, d.otc_use]);
     });
 

@@ -32,7 +32,7 @@ public class TemplateLocator implements ResourceLocator {
     public String getString(String fileName, Charset charset, JinjavaInterpreter jinjavaInterpreter)
             throws IOException
     {
-        if(useCache) {
+        if (useCache) {
             String template = templateCache.get(fileName);
             if(template != null) {
                 return template;
@@ -42,7 +42,7 @@ public class TemplateLocator implements ResourceLocator {
         Path templatePath = Paths.get(path, fileName).toAbsolutePath();
         String convertedContent = new String(Files.readAllBytes(templatePath), charset);
 
-        if(useCache) {
+        if (useCache) {
             templateCache.put(fileName, convertedContent);
         }
 
@@ -58,7 +58,7 @@ public class TemplateLocator implements ResourceLocator {
 
     public void setUseCache(boolean useCache) {
         this.useCache = useCache;
-        if(!useCache) {
+        if (!useCache) {
             templateCache = new HashMap<>();
         }
     }
