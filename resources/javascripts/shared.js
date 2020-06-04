@@ -34,7 +34,7 @@ clearTableResults = function(table) {
 displayRequest = function(url, data) {
     $(".http-request").html("GET " + url);
     $(".shell-command").html("curl -L '" + url + "' -H 'Authorization: mytoken'");
-    $(".api-response").html(Prism.highlight(JSON.stringify(JSON.parse(data), null, 2), Prism.languages.json));
+    $(".api-response").html(Prism.highlight(JSON.stringify((data), null, 2), Prism.languages.json));
 };
 
 handleError = function(jqXHR, element) {

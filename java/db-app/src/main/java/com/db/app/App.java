@@ -33,107 +33,120 @@ public class App {
 
     private static final Logger logger = LogManager.getLogger(App.class);
 
-    // if the config file name or location is changed, also needs to change in
-    // pom.xml
+    // if config file name or location is changed, also needs to change in pom.xml
     protected static final String configFile = "config.json";
 
     /**
-     * The static path and templates path are specified here and not in the config
-     * file because the other sample apps may have to take a differing path.
-     * 
-     * NOTE: Right now, the static path is set realtive to where the server is being
-     * run from. ie, if run from the "drugbank-sample-apps" folder, the static path
+     * NOTE: the static path is set realtive to the directory where the server is being
+     * called from. So if run from the "drugbank-sample-apps" folder, the static path
      * is "resources", but if run from in the "db-app" folder, the static path is
-     * "../../resource". This will hopefully be changed.
+     * "../../resource". This can hopefully be changed so it doesn't matter.
      */
-    protected static String staticPath = "resources";
+    protected static String staticPath = "../../resources";
     protected static String templatesPath = staticPath + "/templates/";
 
     public static void main(final String[] args) {
 
+        // Load config and setup the server
         config = loadConfig();
         setupServer(config);
 
-        logger.info(System.getProperty("user.dir").toString());
+        logger.info("Working Path: " + System.getProperty("user.dir").toString());
 
+        // Template engine setup
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
 
-        // product concepts page
-        get("/product_concepts", (req, res) -> new ModelAndView(new HashMap<>(), "product_concepts.html"), engine);
+        /* Set product concepts routes */
 
-        // product concepts API call
+        // GET render: product concepts page 
+        get("/product_concepts", (req, res) -> 
+                new ModelAndView(new HashMap<>(), "product_concepts.html"), engine);
+
+        // GET API call: product concepts
         get("/api/product_concepts", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get("product_concepts", params).getData();
+            res.type("application/json");
+            return api.drugbank_get("product_concepts", params).getData().toString();
         });
 
-        // regional product concepts API call
+        // GET API call: regional product concepts
         get("/api/*/product_concepts", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get(req.splat()[0] + "/product_concepts", params).getData();
+            res.type("application/json");
+            return api.drugbank_get(req.splat()[0] + "/product_concepts", 
+                    params).getData().toString();
         });
 
-        // product concepts API call (DB ID, routes/strength)
+        // GET API call: product concepts (DB ID, routes/strength)
         get("/api/product_concepts/*/*", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get("product_concepts/" + req.splat()[0] + "/" + req.splat()[1], params).getData();
+            res.type("application/json");
+            return api.drugbank_get("product_concepts/" + req.splat()[0] + 
+                    "/" + req.splat()[1], params).getData().toString();
         });
 
-        // regional product concepts API call (DB ID, routes/strength)
+        // GET API call: regional product concepts (DB ID, routes/strength)
         get("/api/*/product_concepts/*/*", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api
-                    .drugbank_get(req.splat()[0] + "/product_concepts/" + req.splat()[1] + "/" + req.splat()[2], params)
-                    .getData();
+            res.type("application/json");
+            return api.drugbank_get(req.splat()[0] + "/product_concepts/" + 
+                    req.splat()[1] + "/" + req.splat()[2], params).getData().toString();
         });
 
-        // drug names page
-        get("/api/drug_names", (req, res) -> {
-            final Map<String, String> params = setParams(req);
-            return api.drugbank_get("drug_names", params).getData();
-        });
+        /* Set drug-drug interactions routes */
 
-        // drug-drug interactions page
+        // GET render: drug-drug interations (ddi) page 
         get("/ddi", (req, res) -> new ModelAndView(new HashMap<>(), "ddi.html"), engine);
 
-        // drug-drug interations API call
+        // GET API call: ddi
         get("/api/ddi", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get("ddi", params).getData();
+            res.type("application/json");
+            return api.drugbank_get("ddi", params).getData().toString();
         });
 
-        // regional drug-drug interations API call
+        // GET API call: regional ddi
         get("/api/*/ddi", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get(req.splat()[0] + "/ddi", params).getData();
+            res.type("application/json");
+            return api.drugbank_get(req.splat()[0] + "/ddi", params).getData().toString();
         });
 
-        // indications page
-        get("/indications", (req, res) -> new ModelAndView(new HashMap<>(), "indications.html"), engine);
+        /* Set indications routes */
 
-        // indications API call
+        // GET render: indications page 
+        get("/indications", (req, res) -> 
+                new ModelAndView(new HashMap<>(), "indications.html"), engine);
+
+        // GET API call: indications
         get("/api/indications", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get("indications", params).getData();
+            res.type("application/json");
+            return api.drugbank_get("indications", params).getData().toString();
         });
 
-        // regional indications API call
+        // GET API call: regional indications
         get("/api/*/indications", (req, res) -> {
             final Map<String, String> params = setParams(req);
-            return api.drugbank_get(req.splat()[0] + "/indications", params).getData();
+            res.type("application/json");
+            return api.drugbank_get(req.splat()[0] + "/indications", 
+                    params).getData().toString();
         });
 
-        // support page
-        get("/support", (req, res) -> new ModelAndView(new HashMap<>(), "support.html"), engine);
+        /* Set support page routes */
 
-        // get the API key
+        // GET render: support page
+        get("/support", (req, res) -> 
+                new ModelAndView(new HashMap<>(), "support.html"), engine);
+
+        // GET: current API authorization key
         get("/auth_key", (req, res) -> {
             return authKey;
         });
 
-        // update the API key
-        put("/auth_key/update", (req, res) -> {
+        // PUT: update API authorization key 
+        put("/auth_key", (req, res) -> {
 
             final JSONObject JsonResponse = new JSONObject();
             logger.info("Recieved API key update request: " + req.body());
@@ -149,8 +162,9 @@ public class App {
             /**
              * if the new key is the same as the old one, dont bother updating it
              * 
-             * else if the new key is empty note: this shouldn't ever be an issue as a form
-             * won't submit if it's empty
+             * else if the new key is empty, don't bother updating it 
+             * (note: this shouldn't ever be an issue as an HTML form
+             * won't submit if it is empty)
              * 
              * otherwise, try to update the key
              */
@@ -191,7 +205,7 @@ public class App {
     }
 
     /**
-     * Grabs the params from the request and returns them as a Map.
+     * Grabs the params from the given request and returns them as a Map.
      * 
      * @param req the request made
      * @return Map of the params
@@ -207,18 +221,15 @@ public class App {
     }
 
     /**
-     * Loads properties from the configFile into a JSONObject
+     * Loads properties from the config file into a JSONObject
      * 
      * The file must contain: - port: the port to host the server on - templates:
      * path to the template resources directory - static: path to the static
      * resources directory - api-host: the URL to the Drugbank API including the
      * version to be used ("https://api.drugbankplus.com/v1/") - auth-key:
      * authorization key for API access
-     * 
-     * A JSON file is used instead of a properties file so the file can be reused
-     * for non-Java implementations.
      */
-    static JSONObject loadConfig() {
+    public static JSONObject loadConfig() {
 
         InputStream in = App.class.getClassLoader().getResourceAsStream(configFile);
         StringBuilder content = new StringBuilder();
@@ -246,7 +257,7 @@ public class App {
      * 
      * @param config the config JSON
      */
-    static void setupServer(final JSONObject config) {
+    public static void setupServer(final JSONObject config) {
 
         staticFiles.externalLocation(staticPath);
 
@@ -283,10 +294,10 @@ public class App {
     }
 
     /**
-     * Updates the configFile by overwriting it with the locally stored config
+     * Updates the config file by overwriting it with the locally stored config
      * JSONObject.
      * 
-     * Called when an API key change request is made.
+     * Called when an API auth key change request is made.
      */
     public static void updateConfig(final JSONObject config) throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
