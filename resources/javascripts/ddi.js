@@ -46,7 +46,7 @@ loadTableResults = function(interactions_table, search) {
                 displayRequest(search_url, data);
                 
                 // Fill the table
-                JSON.parse(data).interactions.forEach(function(d) {
+                data.interactions.forEach(function(d) {
                     return interactions_table.row.add([d.product_concept_name, d.affected_product_concept_name, d.severity, d.description]);
                 });
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
             },
             processResults: function(data) {
                 return {
-                    results: $.map(JSON.parse(data), function(i) {
+                    results: $.map(data, function(i) {
                         return {
                             id: i.drugbank_pcid,
                             text: highlight_name(i)

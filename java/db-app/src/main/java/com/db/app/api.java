@@ -251,6 +251,10 @@ class DBResponse {
         
     }
 
+    /**
+     * Returns a boolean based on if the data JSON is an object or array.
+     * @return
+     */
     public boolean isObject() {
         return this.isObject();
     }
@@ -260,8 +264,8 @@ class DBResponse {
     }
 
     /**
-     * Returns the data from the database response.
-     * Remember to cast to the correct type (JSONObject or JSONArray)!
+     * Returns the data from the database response as an object.
+     * Remember to cast to the correct type (JSONObject or JSONArray).
      * @return JSON object or array (as an Object)
      */
     public Object getData() {
@@ -293,8 +297,7 @@ class DBResponse {
      *     url: 'https://api.drugbankplus.com/v1/drugs/DB00472/adverse_effects?page=2&per_page=50'
      * }
      * 
-     * Adapted from https://stackoverflow.com/a/5902142/12471692, as a nice link 
-     * parser for Java couldn't be found.
+     * Adapted from https://stackoverflow.com/a/5902142/12471692
      * 
      * @return 
      */
@@ -310,22 +313,28 @@ class DBResponse {
 
             url = url.replaceAll("[\\[\\]]|<|\"", "");
             String[] urlParts = url.split("\\?");
+
             if (urlParts.length > 1) {
                 String query = urlParts[1];
+
                 for (String param : query.split("&")) {
                     String[] pair = param.split("=");
                     String key = URLDecoder.decode(pair[0], "UTF-8");
                     String value = "";
+                    
                     if (pair.length > 1) {
                         value = URLDecoder.decode(pair[1], "UTF-8");
                     }
     
                     List<String> values = params.get(key);
+                    
                     if (values == null) {
                         values = new ArrayList<String>();
                         params.put(key, values);
                     }
+
                     values.add(value);
+
                 }
 
                 List<String> values = new ArrayList<String>();
@@ -336,8 +345,8 @@ class DBResponse {
     
             return params;
 
-        } catch (UnsupportedEncodingException ex) {
-            throw new AssertionError(ex);
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError(e);
         }
 
     }
@@ -363,7 +372,7 @@ class DBResponse {
     }
 
     /**
-     * Prints the recieved JSON to the terminal.
+     * Prints the JSON data to the terminal.
      */
     public void prettyPrintData() {
         if (isObject){

@@ -24,7 +24,7 @@ $(document).ready(function() {
         e.stopPropagation();
 
         return $.ajax({
-            url: "/auth_key/update",
+            url: "/auth_key",
             type: "PUT",
             contentType: "application/json",
             data: JSON.stringify({
