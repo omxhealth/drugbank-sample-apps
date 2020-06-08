@@ -36,11 +36,15 @@ let DRUGBANK_HEADERS =
 // Start the server    
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); 
 
+app.get("/", function (req, res) {
+    res.redirect("/product_concepts");
+});
+
 /* Set product concepts routes */   
 
 // GET render: product concepts page    
 app.get("/product_concepts", function (req, res) {
-    res.render("product_concepts.html");
+    res.render("product_concepts.jinja");
 });  
 
 // GET API call: product concepts
@@ -73,7 +77,7 @@ app.get("/api/:region/product_concepts/:x/:y", async function (req, res) {
 
 // GET render: drug-drug interations (ddi) page    
 app.get("/ddi", function (req, res) {
-    res.render("ddi.html");
+    res.render("ddi.jinja");
 });
 
 // GET API call: ddi
@@ -92,7 +96,7 @@ app.get("/api/:region/ddi", async function (req, res) {
 
 // GET render: indications page    
 app.get("/indications", function (req, res) {
-    res.render("indications.html");
+    res.render("indications.jinja");
 });
 
 // GET API call: indications
@@ -111,7 +115,7 @@ app.get("/api/:region/indications", async function (req, res) {
 
 // GET render: support page
 app.get("/support", function (req, res) {
-    res.render("support.html");
+    res.render("support.jinja");
 });
 
 // GET: current API authorization key
@@ -171,7 +175,6 @@ function openConfig(path) {
     try {
         var config_data_in = fs.readFileSync(path);  
         var config = JSON.parse(config_data_in);
-        console.log(config);
         return config;
     } catch (error) {
         console.log(error);
