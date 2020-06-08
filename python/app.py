@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, jsonify, make_response
+from flask import Flask, render_template, request, Response, jsonify, make_response, redirect
 from json import JSONDecodeError
 import json
 import requests
@@ -35,11 +35,14 @@ def drugbank_get(route, params):
     res = requests.get(url, params=params, headers=DRUGBANK_HEADERS)
     return res.json()
 
+@app.route("/")
+def default_page():
+    return redirect("/product_concepts")
 
 # GET render: product concepts page
 @app.route("/product_concepts", methods=["GET"])
 def product_concepts_page():
-    return render_template("product_concepts.html")
+    return render_template("product_concepts.jinja")
 
 
 # GET API call: product concepts
@@ -74,7 +77,7 @@ def api_product_concepts_regional_vars(region, x, y):
 # GET render: drug-drug interaction (ddi) page
 @app.route("/ddi", methods=["GET"])
 def ddi_page():
-    return render_template("ddi.html")
+    return render_template("ddi.jinja")
 
 
 # GET API call: ddi
@@ -94,7 +97,7 @@ def api_ddi_regional(region):
 # GET render: indications page
 @app.route("/indications", methods=["GET"])
 def indications_page():
-    return render_template("indications.html")
+    return render_template("indications.jinja")
 
 
 # GET API call: indications
@@ -114,7 +117,7 @@ def api_indications_regional(region):
 # GET render: support page
 @app.route("/support", methods=["GET"])
 def support_page():
-    return render_template("support.html")
+    return render_template("support.jinja")
 
 
 # GET: current API authorization key

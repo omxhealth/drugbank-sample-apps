@@ -57,11 +57,13 @@ public class App {
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
 
+        redirect.get("/", "/product_concepts");
+
         /* Set product concepts routes */
 
         // GET render: product concepts page 
         get("/product_concepts", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "product_concepts.html"), engine);
+                new ModelAndView(new HashMap<>(), "product_concepts.jinja"), engine);
 
         // GET API call: product concepts
         get("/api/product_concepts", (req, res) -> {
@@ -97,7 +99,7 @@ public class App {
         /* Set drug-drug interactions routes */
 
         // GET render: drug-drug interations (ddi) page 
-        get("/ddi", (req, res) -> new ModelAndView(new HashMap<>(), "ddi.html"), engine);
+        get("/ddi", (req, res) -> new ModelAndView(new HashMap<>(), "ddi.jinja"), engine);
 
         // GET API call: ddi
         get("/api/ddi", (req, res) -> {
@@ -117,7 +119,7 @@ public class App {
 
         // GET render: indications page 
         get("/indications", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "indications.html"), engine);
+                new ModelAndView(new HashMap<>(), "indications.jinja"), engine);
 
         // GET API call: indications
         get("/api/indications", (req, res) -> {
@@ -138,7 +140,7 @@ public class App {
 
         // GET render: support page
         get("/support", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "support.html"), engine);
+                new ModelAndView(new HashMap<>(), "support.jinja"), engine);
 
         // GET: current API authorization key
         get("/auth_key", (req, res) -> {
