@@ -1,0 +1,152 @@
+= haml :base
+
+%body.c-guides-tutorials.a-product_concepts
+  %main.container-fluid{:role => "main"}
+    .help-container.main-container
+      .content-container
+        #indications-tutorial.help-content.stretch-content.tutorial-content
+          .content-items
+            %h3 Indications Search
+            %p
+              A drug indication describes the approved conditions, diseases, or states for which a drug can
+              safely and effectively be used. These indications may vary between regions, health systems,
+              and countries depending on how they are defined, the products that are being used, and the
+              regulatory body that is approving them.
+            %p
+              Drug indications can be searched and filtered via the DrugBank API in several ways. Use the
+              form below to see examples of how this may be done.
+            #step-1.example-box.container-fluid
+              .row
+                .example-col.col-sm-4
+                  #loader
+                    %img{:alt => "Pill", :src => "images/pill.gif"}/
+                  %form#indication_search_form{"accept-charset" => "UTF-8", :action => "#", :method => "post"}
+                    %input{:name => "utf8", :type => "hidden", :value => "✓"}/
+                    %input{:name => "authenticity_token", :type => "hidden", :value => "xB03o12Uuz3qyNNFaBWdUQYftJQsOAs4jxNZ7HTOT/1as11kUp9ukBzkMhFWRiPIIeFR16gPQOIXZ+8gZAvMBA=="}/
+                    .form-group
+                      %label{:for => "indication_name"}
+                        Indication
+                        Name
+                      %input#indication_name.form-control{:name => "indication_name", :type => "text"}/
+                      %label{:for => "specificity"} Specificity
+                      %select#specificity_select.form-control{:name => "specificity_select"}
+                        %option{:value => ""} Name Matches Only
+                        %option{:value => "specific"} Include More Specific
+                        %option{:value => "general"} Include More General
+                      %label{:for => "kind"}
+                        Kind (select up to 3 or leave blank for
+                        all)
+                      %select#kind_select.form-control{:multiple => "multiple", :name => "kind_select[]"}
+                        %option{:value => "treatment_of"} Treatment of
+                        %option{:value => "prevention_of"} Prevention of
+                        %option{:value => "prophylaxis_of"} Prophylaxis of
+                        %option{:value => "symptomatic_treatment_of"}
+                          Symptomatic treatment of
+                        %option{:value => "management_of"} Management of
+                        %option{:value => "for_therapy"} For therapy
+                        %option{:value => "adjunct_therapy_in_prevention_of"}
+                          Adjunct therapy in
+                          prevention of
+                        %option{:value => "adjunct_therapy_in_treatment_of"}
+                          Adjunct therapy in
+                          treatment of
+                        %option{:value => "adjunct_therapy_in_management_of"}
+                          Adjunct therapy in
+                          management of
+                        %option{:value => "adjunct_therapy_in_prophylaxis_of"}
+                          Adjunct therapy in
+                          prophylaxis of
+                        %option{:value => "adjunct_for_therapy"} Adjunct for therapy
+                        %option{:value => "used_in_combination_to_treat"}
+                          Used in combination to
+                          treat
+                        %option{:value => "used_in_combination_for_therapy"}
+                          Used in combination for
+                          therapy
+                        %option{:value => "used_in_combination_to_induce"}
+                          Used in combination to
+                          induce
+                        %option{:value => "used_in_combination_to_manage"}
+                          Used in combination to
+                          manage
+                        %option{:value => "used_in_combination_to_prevent"}
+                          Used in combination to
+                          prevent
+                        %option{:value => "used_in_combination_for_prophylaxis_of"}
+                          Used in
+                          combination for prophylaxis of
+                        %option{:value => "used_in_combination_for_symptomatic_treatment_of"}
+                          Used in
+                          combination for symptomatic treatment of
+                        %option{:value => "used_in_combination_as_diagnostic_agent"}
+                          Used in
+                          combination as diagnostic agent
+                        %option{:value => "used_in_combination_for_diagnostic_process"}
+                          Used in
+                          combination for diagnostic process
+                        %option{:value => "used_in_combination_to_reverse"}
+                          Used in combination to
+                          reverse
+                        %option{:value => "induction_of"} Induction of
+                        %option{:value => "reversal_of"} Reversal of
+                        %option{:value => "diagnostic_agent"} Diagnostic agent
+                        %option{:value => "used_as_adjunct_in_combination_to_manage"}
+                          Used as adjunct
+                          in combination to manage
+                        %option{:value => "used_as_adjunct_in_combination_to_prevent"}
+                          Used as
+                          adjunct in combination to prevent
+                        %option{:value => "used_as_adjunct_in_combination_to_treat"}
+                          Used as adjunct
+                          in combination to treat
+                      %label{:for => "off_label"} Off Label
+                      %select#off_label_select.form-control{:name => "off_label_select"}
+                        %option{:value => ""} Include Off Label
+                        %option{:value => "false"} Exclude Off Label
+                        %option{:value => "true"} Off Label Only
+                      %label{:for => "otc_use"} OTC Use
+                      %select#otc_use_select.form-control{:name => "otc_use_select"}
+                        %option{:value => ""} Include OTC
+                        %option{:value => "false"} Exclude OTC
+                        %option{:value => "true"} OTC Only
+                    .actions
+                      %input#indication_search.btn.db-primary{"data-disable-with" => "Search", "data-url" => "https://dev.drugbankplus.com/guides/tutorials/api_request", :name => "commit", :type => "submit", :value => "Search"}/
+                .code-col.col-sm-8
+                  %ul.nav.nav-pills{:role => "tablist"}
+                    %li.active{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#http-1", :role => "tab"} Request
+                    %li{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#api-1", :role => "tab"} Response
+                  .tab-content
+                    #http-1.tab-pane.active{:role => "tabpanel"}
+                      .example-header HTTP Request
+                      %pre.language-http
+                        %code.http-request.language-http
+                      .example-header Shell Command
+                      %pre.shell-box.language-http
+                        %code.shell-command.language-http
+                    #api-1.tab-pane{:role => "tabpanel"}
+                      .example-header API Response
+                      %pre.api-box.language-json
+                        %code.api-response.language-json
+              .row
+                .col-sm-12
+                  %table#DataTables_Table_0.table.table-striped.indications-table.dataTable.no-footer{"aria-describedby" => "DataTables_Table_0_info", :role => "grid"}
+                    %thead
+                      %tr{:role => "row"}
+                        %th.sorting_asc{"aria-controls" => "DataTables_Table_0", "aria-label" => "Drug: activate to sort column descending", "aria-sort" => "ascending", :colspan => "1", :rowspan => "1", :style => "width: 108px;", :tabindex => "0"} Drug
+                        %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Kind: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 102px;", :tabindex => "0"}
+                          Kind
+                        %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Condition/Process/Therapy: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 415px;", :tabindex => "0"}
+                          Condition/Process/Therapy
+                        %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Off Label: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 164px;", :tabindex => "0"} Off Label
+                        %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "OTC: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 96px;", :tabindex => "0"}
+                          OTC
+                    %tbody
+                      %tr.odd
+                        %td.dataTables_empty{:colspan => "5", :valign => "top"} No data available in table
+                        %td
+                        %td
+                        %td
+                        %td
+  %script{:src => "javascripts/indications.js"}
