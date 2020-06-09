@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function() {
 
     // Request the current API key for display

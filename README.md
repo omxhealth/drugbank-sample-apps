@@ -63,4 +63,15 @@ To deactivate the virtual environment and use your original Python environment, 
 deactivate
 ```
 ## Ruby
-WIP
+Navigate to `drugbank-sample-apps/nodejs`. Install the necessary gems with [Bundler](https://bundler.io/) by using the command
+
+```
+bundle install
+```
+
+The app is then run with the command
+
+```
+bundle exec ruby app.rb
+```
+Visit the default address  with the port given in the console to view the app.

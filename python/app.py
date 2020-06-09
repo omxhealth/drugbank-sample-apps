@@ -35,9 +35,11 @@ def drugbank_get(route, params):
     res = requests.get(url, params=params, headers=DRUGBANK_HEADERS)
     return res.json()
 
+
 @app.route("/")
 def default_page():
     return redirect("/product_concepts")
+
 
 # GET render: product concepts page
 @app.route("/product_concepts", methods=["GET"])
@@ -144,7 +146,7 @@ def put_auth_key():
         message = "No key was provided"
 
     else:
-        status = update_API_key(new_key, old_key)
+        status = update_API_key(new_key)
 
         if status == 200:
             message = "Key successfully updated"
@@ -169,7 +171,12 @@ def put_auth_key():
 # If anything goes wrong (file not found, IO exception),
 # the old key is restored
 # Returns the status code to be sent to the client (200 OK or 500 Server Error)
-def update_API_key(new_key, old_key):
+def update_API_key(new_key):
+
+    global DRUGBANK_API_KEY
+
+    # get the current key
+    old_key = DRUGBANK_API_KEY
 
     # update key
     DRUGBANK_API_KEY = new_key

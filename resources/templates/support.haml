@@ -1,0 +1,40 @@
+= haml :base
+
+%body
+  %main.container-fluid{:role => "main"}
+    .help-container.main-container
+      .content-container
+        .content-items
+          %h1 Support
+          %h3 External Links
+          %p
+            For assistance with using the API, please refer to the DrugBank
+            = succeed "." do
+              %a{:href => "https://dev.drugbankplus.com/guides/api"} help center
+          %p Relevant Topics:
+          %ul
+            %li
+              %a{:href => "https://docs.drugbankplus.com/v1/#drug-names-autocomplete"} Drug Names / Autocomplete
+            %li
+              %a{:href => "https://docs.drugbankplus.com/v1/#product-concepts"} Product Concepts
+            %li
+              %a{:href => "https://docs.drugbankplus.com/v1/#drug-drug-interactions"} Drug-Drug Interactions
+            %li
+              %a{:href => "https://docs.drugbankplus.com/v1/#indications"} Indications
+          %p
+            Online versions of some examples can be found
+            = succeed "." do
+              %a{:href => "https://dev.drugbankplus.com/guides/tutorials/index"} here
+          %p
+            Still unsure about something? Contact our
+            %a{:href => "https://www.drugbankplus.com/contact/support?ref=dev.drugbankplus.com%2Fguides%2Findex"} support team
+            for additional help with our data and products.
+          %h3 Settings
+          %div
+            %form#auth_key_form{"accept-charset" => "UTF-8", :action => "#", :method => "post"}
+              %label API Key
+              %input#auth_key_input{:type => "text"}/
+              %input#auth_key_submit{:type => "submit", :value => "Update"}/
+            #auth_key_updated{:style => "display: none;"}
+              %p#auth_update_message Authentification key updated
+%script{:src => "javascripts/support.js"}
