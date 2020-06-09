@@ -1,0 +1,236 @@
+= haml :base
+
+%body.c-guides-tutorials.a-product_concepts
+  %main.container-fluid{:role => "main"}
+    .help-container.main-container
+      .content-container
+        #interactions-tutorial.help-content.stretch-content.tutorial-content
+          .content-items
+            %h3 Drug-Drug Interactions Search
+            %p
+              Select up to three drugs. The result includes interactions between any drugs in the list and gives a
+              description and a severity rating for each interaction.
+            #step-1.example-box.container-fluid
+              .row
+                .example-col.col-sm-4
+                  #loader{:style => "display: none;"}
+                    %img{:alt => "Pill", :src => "images/pill.gif"}/
+                  .form-group
+                    %label{:for => "Drugs__add_up_to_3_"} Drugs (add up to 3)
+                    %select#drug_search_1.drug_autocomplete.select2-hidden-accessible{"aria-hidden" => "true", "data-select2-id" => "drug_search_1", "data-url" => "https://dev.drugbankplus.com/guides/tutorials/api_request", :name => "drug_search_1", :tabindex => "-1"}
+                  #drug-product-list
+                    .drug-product.btn.btn-md.btn-label{"data-code" => "DBPC0180857"}
+                      Acetaminophen
+                      %span.glyphicon.glyphicon-remove
+                    .drug-product.btn.btn-md.btn-label{"data-code" => "DBPC0021865"}
+                      Prilocaine
+                      %span.glyphicon.glyphicon-remove
+                .code-col.col-sm-8
+                  %ul.nav.nav-pills{:role => "tablist"}
+                    %li.active{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#http-1", :role => "tab"} Request
+                    %li{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#api-1", :role => "tab"} Response
+                  .tab-content
+                    #http-1.tab-pane.active{:role => "tabpanel"}
+                      .example-header HTTP Request
+                      %pre.language-http
+                        %code.http-request.language-http GET https://api.drugbankplus.com/v1/us/ddi?product_concept_id=DBPC0180857,DBPC0021865
+                      .example-header Shell Command
+                      %pre.shell-box.language-http
+                        %code.shell-command.language-http curl -L 'https://api.drugbankplus.com/v1/us/ddi?product_concept_id=DBPC0180857,DBPC0021865' -H 'Authorization: mytoken'
+                    #api-1.tab-pane{:role => "tabpanel"}
+                      .example-header API Response
+                      %pre.api-box.language-json
+                        %code.api-response.language-json
+                          %span.token.punctuation
+                            %span.token.punctuation {
+                          %span.token.property
+                            %span.token.property "interactions"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.punctuation
+                            %span.token.punctuation [
+                          %span.token.punctuation
+                            %span.token.punctuation {
+                          %span.token.property
+                            %span.token.property "product_concept_id"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "DBPC0180857"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "product_concept_name"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Acetaminophen"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "product_ingredient"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.punctuation
+                            %span.token.punctuation {
+                          %span.token.property
+                            %span.token.property "drugbank_id"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "DB00316"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "name"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Acetaminophen"
+                          %span.token.punctuation
+                            %span.token.punctuation }
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "affected_product_concept_id"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "DBPC0021865"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "affected_product_concept_name"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Prilocaine"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "affected_product_ingredient"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.punctuation
+                            %span.token.punctuation {
+                          %span.token.property
+                            %span.token.property "drugbank_id"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "DB00750"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "name"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Prilocaine"
+                          %span.token.punctuation
+                            %span.token.punctuation }
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "description"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "The risk or severity of methemoglobinemia can be increased when Acetaminophen is combined with Prilocaine."
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "extended_description"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Cases of methemoglobinemia have been reported with the use of prilocaine/lidocaine cream in patients receiving the treatment with or without the concurrent use of methemoglobin-inducing agents. Concomitant use of other agents associated with the risk of developing drug-induced methemoglobinemia may result in exacerbated risk for developing this adverse event, with increased risk for creating prolongation and intensification of the adverse event. Patients with glucose-6-phosphate dehydrogenase deficiency or congenital or idiopathic methemoglobinemia as well as infants under the age of 12 months with or without these conditions are more susceptible to drug-induced methemoglobinemia."
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "action"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "increase_specific_adverse_effects"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "severity"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "moderate"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "subject_dosage"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string ""
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "affected_dosage"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string ""
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "evidence_level"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "level_1"
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "management"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.string
+                            %span.token.string "Monitor patients for signs of methemoglobinemia (e.g., hypoxia, cyanosis) when prilocaine is used in combination with other agents associated with development of methemoglobinemia. If methemoglobinemia develops, discontinue the use of prilocaine with initiation of appropriate medical intervention. Avoid prilocaine-containing topical preparations in patients with congenital or idiopathic methemoglobinemia and in infants under the age of twelve months who are receiving treatment with methemoglobin-inducing agents."
+                          %span.token.punctuation
+                            %span.token.punctuation }
+                          %span.token.punctuation
+                            %span.token.punctuation ]
+                          %span.token.punctuation
+                            %span.token.punctuation ,
+                          %span.token.property
+                            %span.token.property "total_results"
+                          %span.token.operator
+                            %span.token.operator :
+                          %span.token.number
+                            %span.token.number 1
+                          %span.token.punctuation
+                            %span.token.punctuation }
+              .row
+                .col-sm-12
+                  #DataTables_Table_0_wrapper.dataTables_wrapper.form-inline.dt-bootstrap.no-footer
+                    .row
+                      .col-sm-12
+                        %table#DataTables_Table_0.table.table-striped.interactions-table.dataTable.no-footer{"aria-describedby" => "DataTables_Table_0_info", :role => "grid"}
+                          %thead
+                            %tr{:role => "row"}
+                              %th.sorting_desc{"aria-controls" => "DataTables_Table_0", "aria-label" => "Product: activate to sort column ascending", "aria-sort" => "descending", :colspan => "1", :rowspan => "1", :style => "width: 181px;", :tabindex => "0"}
+                                Product
+                              %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Affected Product: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 320px;", :tabindex => "0"}
+                                Affected Product
+                              %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Severity: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 187px;", :tabindex => "0"}
+                                Severity
+                              %th.sorting{"aria-controls" => "DataTables_Table_0", "aria-label" => "Description: activate to sort column ascending", :colspan => "1", :rowspan => "1", :style => "width: 236px;", :tabindex => "0"}
+                                Description
+                          %tbody
+                            %tr.odd{:role => "row"}
+                              %td.sorting_1 Acetaminophen
+                              %td Prilocaine
+                              %td moderate
+                              %td
+                                The risk or severity of methemoglobinemia can be increased when Acetaminophen is
+                                combined with Prilocaine.
+  %script{:src => "javascripts/ddi.js"}

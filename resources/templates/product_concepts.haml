@@ -1,0 +1,55 @@
+= haml :base
+
+%body.c-guides-tutorials.a-product_concepts
+  %header
+  %main.container-fluid{:role => "main"}
+    .help-container.main-container
+      .content-container
+        #product-concepts-tutorial.help-content.stretch-content.tutorial-content
+          .content-items
+            %h3#select-a-specific-product-code Product Concept Search
+            %p Select a drug, route and strength below to find matching product concepts.
+            #step-4.example-box.container-fluid
+              .row
+                .example-col.col-sm-4
+                  #loader
+                    %img{:alt => "Pill", :src => "images/pill.gif"}/
+                  .form-group
+                    %label{:for => "Drug"} Drug
+                    %select#drug_search_4.drug_autocomplete{"data-step" => "4", "data-url" => "https://dev.drugbankplus.com/guides/tutorials/api_request", :name => "drug_search_4"}
+                  .form-group
+                    %label{:for => "Route"} Route
+                    %select#route_search_4.route_autocomplete{"data-step" => "4", "data-url" => "https://dev.drugbankplus.com/guides/tutorials/api_request", :name => "route_search_4"}
+                  .form-group
+                    %label{:for => "Strength"} Strength
+                    %select#strength_search_4.strength_autocomplete{"data-step" => "4", "data-url" => "https://dev.drugbankplus.com/guides/tutorials/api_request", :name => "strength_search_4"}
+                .code-col.col-sm-8
+                  %ul.nav.nav-pills{:role => "tablist"}
+                    %li.active{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#http-4", :role => "tab"} Request
+                    %li{:role => "presentation"}
+                      %a{"data-toggle" => "tab", :href => "#api-4", :role => "tab"} Response
+                  .tab-content
+                    #http-4.tab-pane.active{:role => "tabpanel"}
+                      .example-header HTTP Request
+                      %pre.language-http
+                        %code.http-request.language-http
+                      .example-header Shell Command
+                      %pre.shell-box.language-http
+                        %code.shell-command.language-http
+                    #api-4.tab-pane{:role => "tabpanel"}
+                      .example-header API Response
+                      %pre.api-box.language-json
+                        %code.api-response.language-json
+              .row
+                .col-sm-12
+                  %table.table.table-striped.products-table
+                    %thead
+                      %tr{:role => "row"}
+                        %th Name
+                        %th Dosage
+                        %th Strength
+                        %th Route
+                        %th Labeller
+                    %tbody
+  %script{:src => "javascripts/product_concepts.js"}
