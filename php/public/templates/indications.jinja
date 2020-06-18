@@ -1,0 +1,163 @@
+{% extends "base.jinja" %} {% block content %}
+
+<body class="c-guides-tutorials a-product_concepts">
+  <main class="container-fluid" role="main">
+    <div class="help-container main-container">
+      <div class="content-container">
+        <div class="help-content stretch-content tutorial-content" id="indications-tutorial">
+          <div class="content-items">
+            <h3>Indications Search</h3>
+            <p>A drug indication describes the approved conditions, diseases, or states for which a drug can
+              safely and effectively be used. These indications may vary between regions, health systems,
+              and countries depending on how they are defined, the products that are being used, and the
+              regulatory body that is approving them.</p>
+            <p>Drug indications can be searched and filtered via the DrugBank API in several ways. Use the
+              form below to see examples of how this may be done.</p>
+            <div class="example-box container-fluid" id="step-1">
+              <div class="row">
+                <div class="example-col col-sm-4">
+                  <div id="loader"><img src="images/pill.gif" alt="Pill"></div>
+                  <form id="indication_search_form" action="#" accept-charset="UTF-8" method="post">
+                    <input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token"
+                      value="xB03o12Uuz3qyNNFaBWdUQYftJQsOAs4jxNZ7HTOT/1as11kUp9ukBzkMhFWRiPIIeFR16gPQOIXZ+8gZAvMBA==">
+                    <div class="form-group"><label for="indication_name">Indication
+                        Name</label><input type="text" name="indication_name" id="indication_name"
+                        class="form-control"><label for="specificity">Specificity</label><select
+                        name="specificity_select" id="specificity_select" class="form-control">
+                        <option value="">Name Matches Only</option>
+                        <option value="specific">Include More Specific</option>
+                        <option value="general">Include More General</option>
+                      </select><label for="kind">Kind (select up to 3 or leave blank for
+                        all)</label><select name="kind_select[]" id="kind_select" multiple="multiple"
+                        class="form-control">
+                        <option value="treatment_of">Treatment of</option>
+                        <option value="prevention_of">Prevention of</option>
+                        <option value="prophylaxis_of">Prophylaxis of</option>
+                        <option value="symptomatic_treatment_of">Symptomatic treatment of
+                        </option>
+                        <option value="management_of">Management of</option>
+                        <option value="for_therapy">For therapy</option>
+                        <option value="adjunct_therapy_in_prevention_of">Adjunct therapy in
+                          prevention of</option>
+                        <option value="adjunct_therapy_in_treatment_of">Adjunct therapy in
+                          treatment of</option>
+                        <option value="adjunct_therapy_in_management_of">Adjunct therapy in
+                          management of</option>
+                        <option value="adjunct_therapy_in_prophylaxis_of">Adjunct therapy in
+                          prophylaxis of</option>
+                        <option value="adjunct_for_therapy">Adjunct for therapy</option>
+                        <option value="used_in_combination_to_treat">Used in combination to
+                          treat</option>
+                        <option value="used_in_combination_for_therapy">Used in combination for
+                          therapy</option>
+                        <option value="used_in_combination_to_induce">Used in combination to
+                          induce</option>
+                        <option value="used_in_combination_to_manage">Used in combination to
+                          manage</option>
+                        <option value="used_in_combination_to_prevent">Used in combination to
+                          prevent</option>
+                        <option value="used_in_combination_for_prophylaxis_of">Used in
+                          combination for prophylaxis of</option>
+                        <option value="used_in_combination_for_symptomatic_treatment_of">Used in
+                          combination for symptomatic treatment of</option>
+                        <option value="used_in_combination_as_diagnostic_agent">Used in
+                          combination as diagnostic agent</option>
+                        <option value="used_in_combination_for_diagnostic_process">Used in
+                          combination for diagnostic process</option>
+                        <option value="used_in_combination_to_reverse">Used in combination to
+                          reverse</option>
+                        <option value="induction_of">Induction of</option>
+                        <option value="reversal_of">Reversal of</option>
+                        <option value="diagnostic_agent">Diagnostic agent</option>
+                        <option value="used_as_adjunct_in_combination_to_manage">Used as adjunct
+                          in combination to manage</option>
+                        <option value="used_as_adjunct_in_combination_to_prevent">Used as
+                          adjunct in combination to prevent</option>
+                        <option value="used_as_adjunct_in_combination_to_treat">Used as adjunct
+                          in combination to treat</option>
+                      </select><label for="off_label">Off Label</label><select name="off_label_select"
+                        id="off_label_select" class="form-control">
+                        <option value="">Include Off Label</option>
+                        <option value="false">Exclude Off Label</option>
+                        <option value="true">Off Label Only</option>
+                      </select><label for="otc_use">OTC Use</label><select name="otc_use_select" id="otc_use_select"
+                        class="form-control">
+                        <option value="">Include OTC</option>
+                        <option value="false">Exclude OTC</option>
+                        <option value="true">OTC Only</option>
+                      </select></div>
+                    <div class="actions"><input type="submit" name="commit" value="Search" id="indication_search"
+                        class="btn db-primary" data-url="https://dev.drugbankplus.com/guides/tutorials/api_request"
+                        data-disable-with="Search"></div>
+                  </form>
+                </div>
+                <div class="code-col col-sm-8">
+                  <ul class="nav nav-pills" role="tablist">
+                    <li class="active" role="presentation"><a data-toggle="tab" href="#http-1" role="tab">Request</a>
+                    </li>
+                    <li role="presentation"><a data-toggle="tab" href="#api-1" role="tab">Response</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="http-1" role="tabpanel">
+                      <div class="example-header">HTTP Request</div>
+                      <pre class=" language-http"><code class=" http-request language-http"></code></pre>
+                      <div class="example-header">Shell Command</div>
+                      <pre class="shell-box language-http"><code class=" shell-command language-http"></code></pre>
+                    </div>
+                    <div class="tab-pane" id="api-1" role="tabpanel">
+                      <div class="example-header">API Response</div>
+                      <pre class="api-box language-json"><code class=" api-response language-json"></code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <table class="table table-striped indications-table dataTable no-footer" id="DataTables_Table_0"
+                          role="grid" aria-describedby="DataTables_Table_0_info">
+                          <thead>
+                            <tr role="row">
+                              <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                colspan="1" style="width: 108px;" aria-sort="ascending"
+                                aria-label="Drug: activate to sort column descending">Drug</th>
+                              <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                colspan="1" style="width: 102px;" aria-label="Kind: activate to sort column ascending">
+                                Kind</th>
+                              <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                colspan="1" style="width: 415px;"
+                                aria-label="Condition/Process/Therapy: activate to sort column ascending">
+                                Condition/Process/Therapy</th>
+                              <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                colspan="1" style="width: 164px;"
+                                aria-label="Off Label: activate to sort column ascending">Off Label</th>
+                              <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                colspan="1" style="width: 96px;" aria-label="OTC: activate to sort column ascending">OTC
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="odd">
+                              <td colspan="5" class="dataTables_empty" valign="top">No data available in table</td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="javascripts/indications.js"></script>
+</body>
+
+</html>
+{% endblock %}
