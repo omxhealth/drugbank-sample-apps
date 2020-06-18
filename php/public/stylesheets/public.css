@@ -1,0 +1,906 @@
+.db-primary, .tutorial-content .example-box ul.nav.nav-pills li.active a {
+  background-color: #00b0f2;
+  color: white;
+  border-color: #00b0f2; }
+  .db-primary:hover, .tutorial-content .example-box ul.nav.nav-pills li.active a:hover, .db-primary:focus, .tutorial-content .example-box ul.nav.nav-pills li.active a:focus, .db-primary:active, .tutorial-content .example-box ul.nav.nav-pills li.active a:active {
+    color: white;
+    background-color: #66d6ff;
+    border-color: #66d6ff; }
+
+.db-secondary {
+  background-color: white;
+  border: 1px solid #ff00b8;
+  color: #ff00b8; }
+  .db-secondary:hover, .db-secondary:focus, .db-secondary:active {
+    color: #ff00b8;
+    background-color: #ffb3e9; }
+
+.db-danger {
+  background-color: #D63727;
+  color: white;
+  border-color: #D63727; }
+  .db-danger:hover, .db-danger:focus, .db-danger:active {
+    color: white;
+    background-color: #F04E35;
+    border-color: #F04E35; }
+
+.mini-btn,
+a.mini-btn {
+  position: relative;
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.15rem 1rem;
+  border-radius: 11px;
+  text-transform: uppercase; }
+
+.small-btn,
+a.small-btn {
+  position: relative;
+  display: inline-block;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  padding: 0.2rem 1.5rem;
+  border-radius: 15px;
+  text-transform: uppercase; }
+
+.reg-btn,
+a.reg-btn {
+  position: relative;
+  display: inline-block;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  padding: 0.1rem 2rem;
+  border-radius: 15px;
+  text-transform: uppercase; }
+
+.outline-btn,
+a.outline-btn {
+  color: #FF02AF !important;
+  border: 1px solid #FF02AF;
+  background-color: transparent;
+  transition: all 0.25s ease; }
+  .outline-btn:hover, .outline-btn:active, .outline-btn:focus,
+  a.outline-btn:hover,
+  a.outline-btn:active,
+  a.outline-btn:focus {
+    outline: none !important;
+    background-color: #FF02AF;
+    border-color: #FF02AF;
+    color: white !important; }
+    .outline-btn:hover .drugbank-icon, .outline-btn:active .drugbank-icon, .outline-btn:focus .drugbank-icon,
+    a.outline-btn:hover .drugbank-icon,
+    a.outline-btn:active .drugbank-icon,
+    a.outline-btn:focus .drugbank-icon {
+      color: white;
+      fill: white;
+      stroke: white; }
+  .outline-btn .drugbank-icon,
+  a.outline-btn .drugbank-icon {
+    transition: all 0.25s ease;
+    color: #FF02AF;
+    fill: #FF02AF;
+    stroke: #FF02AF;
+    vertical-align: middle;
+    margin-left: 5px; }
+    .outline-btn .drugbank-icon svg,
+    a.outline-btn .drugbank-icon svg {
+      width: 1rem;
+      height: 1rem; }
+
+.pink-btn,
+a.pink-btn {
+  color: white !important;
+  background-color: #FF02AF;
+  transition: all 0.25s ease;
+  border: 1px solid transparent; }
+  .pink-btn:hover, .pink-btn:active, .pink-btn:focus,
+  a.pink-btn:hover,
+  a.pink-btn:active,
+  a.pink-btn:focus {
+    outline: none !important;
+    background-color: #e2009b;
+    border-color: #e2009b;
+    color: white !important; }
+
+.light-blue-btn,
+a.light-blue-btn {
+  color: white !important;
+  background-color: #B2B7EA;
+  transition: all 0.25s ease;
+  border: 1px solid transparent; }
+  .light-blue-btn:hover, .light-blue-btn:active, .light-blue-btn:focus,
+  a.light-blue-btn:hover,
+  a.light-blue-btn:active,
+  a.light-blue-btn:focus {
+    outline: none !important;
+    background-color: #9aa1e3;
+    border-color: #9aa1e3;
+    color: white !important; }
+
+.blue-btn,
+a.blue-btn {
+  color: white !important;
+  background-color: #727DD4;
+  transition: all 0.25s ease;
+  border: 1px solid transparent; }
+  .blue-btn:hover, .blue-btn:active, .blue-btn:focus,
+  a.blue-btn:hover,
+  a.blue-btn:active,
+  a.blue-btn:focus {
+    outline: none !important;
+    background-color: #9aa1e3;
+    border-color: #9aa1e3;
+    color: white !important; }
+
+.dark-blue-btn,
+a.dark-blue-btn {
+  color: white !important;
+  background-color: #263063;
+  transition: all 0.25s ease;
+  border: 1px solid transparent; }
+  .dark-blue-btn:hover, .dark-blue-btn:active, .dark-blue-btn:focus, .dark-blue-btn.activated,
+  a.dark-blue-btn:hover,
+  a.dark-blue-btn:active,
+  a.dark-blue-btn:focus,
+  a.dark-blue-btn.activated {
+    outline: none !important;
+    background-color: #9196B0;
+    border-color: #9196B0;
+    color: white !important; }
+
+.no-click-btn {
+  pointer-events: none; }
+
+/* PrismJS 1.16.0
+ * This theme has been customized for drugbankplus.com
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #fff;
+  background: none;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none; }
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em; }
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #161F44; }
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal; }
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray; }
+
+.token.punctuation {
+  color: #fff; }
+
+.namespace {
+  opacity: .7; }
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #727DD4; }
+
+.token.boolean,
+.token.number {
+  color: #B2B7EA; }
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #FF02AF; }
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: white; }
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #b3b3b3; }
+
+.token.keyword {
+  color: #B2B7EA; }
+
+.token.regex,
+.token.important {
+  color: #b3b3b3; }
+
+.token.important,
+.token.bold {
+  font-weight: bold; }
+
+.token.italic {
+  font-style: italic; }
+
+.token.entity {
+  cursor: help; }
+
+html {
+  height: 100%; }
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  font-size: 16px;
+  margin-top: 0;
+  padding: 0px; }
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern";
+  font-weight: normal;
+  color: #515251;
+  background: white;
+  position: relative;
+  min-height: 100%; }
+  body li, body p, body a, body h1, body h2, body h3, body h4, body h5 {
+    color: #263063; }
+  body h1, body h2, body h3, body h4, body h5, body th, body dt {
+    font-weight: normal; }
+  body body, body li, body p, body a, body td, body dd {
+    font-weight: 100; }
+  body a, body a:visited {
+    color: #727DD4; }
+  body .no-transition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    transition: none !important; }
+  body .alert {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    justify-content: space-between; }
+    body .alert .drugbank-icon {
+      cursor: pointer; }
+    body .alert .drugbank-icon svg {
+      width: 2rem;
+      height: 2rem;
+      display: inline-block; }
+    body .alert.alert-danger {
+      border-color: #FF02AF;
+      color: #FF02AF;
+      background-color: #FFE4F6; }
+    body .alert.alert-success {
+      border-color: #727DD4;
+      color: #727DD4;
+      background-color: #E1E2F6; }
+    body .alert a {
+      color: inherit;
+      font-weight: bold; }
+  body .drugbank-icon {
+    display: inline-block; }
+    body .drugbank-icon svg {
+      display: block;
+      background-color: transparent;
+      fill: currentColor;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: middle; }
+    body .drugbank-icon.icon-circle {
+      border-radius: 50%; }
+  body .page_info {
+    color: #56616e; }
+  body .pagination-holder {
+    text-align: center; }
+    body .pagination-holder .pagination {
+      margin: 0px; }
+      body .pagination-holder .pagination .page a, body .pagination-holder .pagination .page.current, body .pagination-holder .pagination .page.gap, body .pagination-holder .pagination .first a, body .pagination-holder .pagination .prev a, body .pagination-holder .pagination .last a, body .pagination-holder .pagination .next a {
+        line-height: 1;
+        font-size: 1.6rem;
+        padding: 0.5em 0.25em;
+        display: inline-block;
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+        text-align: center;
+        font-weight: bold;
+        color: #56616e; }
+        body .pagination-holder .pagination .page a.current, body .pagination-holder .pagination .page.current.current, body .pagination-holder .pagination .page.gap.current, body .pagination-holder .pagination .first a.current, body .pagination-holder .pagination .prev a.current, body .pagination-holder .pagination .last a.current, body .pagination-holder .pagination .next a.current {
+          color: white;
+          background-color: #ff00b8; }
+        body .pagination-holder .pagination .page a.disabled, body .pagination-holder .pagination .page a.gap, body .pagination-holder .pagination .page.current.disabled, body .pagination-holder .pagination .page.current.gap, body .pagination-holder .pagination .page.gap.disabled, body .pagination-holder .pagination .page.gap.gap, body .pagination-holder .pagination .first a.disabled, body .pagination-holder .pagination .first a.gap, body .pagination-holder .pagination .prev a.disabled, body .pagination-holder .pagination .prev a.gap, body .pagination-holder .pagination .last a.disabled, body .pagination-holder .pagination .last a.gap, body .pagination-holder .pagination .next a.disabled, body .pagination-holder .pagination .next a.gap {
+          color: #aab3c1; }
+        body .pagination-holder .pagination .page a:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .page.current:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .page.gap:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .first a:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .prev a:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .last a:not(.disabled):not(.current):not(.gap), body .pagination-holder .pagination .next a:not(.disabled):not(.current):not(.gap) {
+          cursor: pointer; }
+          body .pagination-holder .pagination .page a:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .page.current:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .page.gap:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .first a:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .prev a:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .last a:not(.disabled):not(.current):not(.gap):hover, body .pagination-holder .pagination .next a:not(.disabled):not(.current):not(.gap):hover {
+            background-color: #abb2bf;
+            color: #56616e; }
+  body code {
+    background-color: #ffe6f8;
+    color: #FF02AF;
+    padding: 0.2em;
+    border-radius: 0px; }
+  body .nil {
+    font-style: italic;
+    color: #abb2bf; }
+  body .copy-tooltip .tooltip-inner {
+    background-color: #ff00b8; }
+  body .copy-tooltip .tooltip-arrow {
+    border-top-color: #ff00b8 !important; }
+
+.help-container {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: white; }
+  .help-container a {
+    transition: opacity 0.25s ease; }
+    .help-container a:hover {
+      opacity: 0.75; }
+    .help-container a.image-link {
+      transition: box-shadow 0.25s ease;
+      display: block; }
+      .help-container a.image-link:hover {
+        opacity: 1;
+        box-shadow: 0px 0px 0px 2px #FF02AF; }
+  .help-container .content-container {
+    width: 70%;
+    flex: 1;
+    padding: 40px;
+    align-self: stretch;
+    transition: all 0.5s ease; }
+    .help-container .content-container h1 {
+      font-size: 31px;
+      line-height: 38px;
+      margin-bottom: 20px;
+      color: #263063;
+      font-weight: 100; }
+    .help-container .content-container h2 {
+      font-size: 24px;
+      line-height: 34px;
+      color: #263063; }
+    .help-container .content-container h3 {
+      font-size: 19px;
+      line-height: 25px;
+      color: #727DD4;
+      text-transform: uppercase; }
+    .help-container .content-container h4 {
+      font-size: 20px;
+      line-height: 26px;
+      color: #263063; }
+    .help-container .content-container p, .help-container .content-container li {
+      font-size: 15px;
+      line-height: 26px;
+      font-weight: 100; }
+    .help-container .content-container hr {
+      border-top: 1px solid #E1E2F6; }
+    .help-container .content-container img.compact {
+      max-width: 40%; }
+  .help-container .help-content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: flex-start; }
+    .help-container .help-content .content-items {
+      width: 70%;
+      position: relative; }
+      @media (min-width: 768px) {
+        .help-container .help-content .content-items.wrap-items {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between; }
+          .help-container .help-content .content-items.wrap-items > a {
+            width: calc(50% - 10px);
+            margin-bottom: 20px; } }
+      .help-container .help-content .content-items .related-links {
+        float: right;
+        width: auto;
+        margin: 20px 0px 20px -50px;
+        right: -70px; }
+      .help-container .help-content .content-items .search-bar {
+        position: absolute;
+        top: -73px;
+        right: 40px;
+        width: 270px;
+        max-width: calc(100% - 115px); }
+        .help-container .help-content .content-items .search-bar input.search-query, .help-container .help-content .content-items .search-bar:focus {
+          height: 48px !important;
+          border-radius: 24px;
+          -moz-border-radius: 24px;
+          -webkit-border-radius: 24px;
+          padding: 0.3rem 58px 0.3rem 24px;
+          font-size: 2.2rem;
+          line-height: 4;
+          border: none; }
+        .help-container .help-content .content-items .search-bar .drugbank-icon {
+          top: 6px;
+          right: 10px; }
+          .help-container .help-content .content-items .search-bar .drugbank-icon svg {
+            height: 34px;
+            width: 34px; }
+      .help-container .help-content .content-items .empty {
+        color: #263063;
+        font-weight: normal; }
+      .help-container .help-content .content-items dl dt a {
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 24px; }
+      .help-container .help-content .content-items .citation-box {
+        background-color: #F3F3FB;
+        margin: 20px 0;
+        padding: 15px;
+        color: #263063;
+        font-weight: 100;
+        font-size: 16px;
+        line-height: 24px; }
+        .help-container .help-content .content-items .citation-box a {
+          font-weight: normal;
+          color: #727DD4; }
+        .help-container .help-content .content-items .citation-box .citation-links {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 5px; }
+        .help-container .help-content .content-items .citation-box .copy-link {
+          text-transform: uppercase;
+          color: #727DD4;
+          cursor: pointer;
+          display: inline-block; }
+          .help-container .help-content .content-items .citation-box .copy-link .drugbank-icon {
+            margin-right: 0.5rem;
+            vertical-align: middle; }
+            .help-container .help-content .content-items .citation-box .copy-link .drugbank-icon svg {
+              fill: #ff00b8; }
+          .help-container .help-content .content-items .citation-box .copy-link:hover {
+            text-decoration: underline; }
+      .help-container .help-content .content-items .search-help-bar {
+        margin-bottom: 20px; }
+        .help-container .help-content .content-items .search-help-bar .btn-search {
+          border-color: #727DD4;
+          background-color: #727DD4;
+          font-weight: 100;
+          font-size: 16px;
+          padding: 8px 15px;
+          line-height: 1;
+          color: white; }
+          .help-container .help-content .content-items .search-help-bar .btn-search:hover, .help-container .help-content .content-items .search-help-bar .btn-search:focus, .help-container .help-content .content-items .search-help-bar .btn-search:active {
+            border-color: #B2B7EA;
+            background-color: #B2B7EA; }
+          .help-container .help-content .content-items .search-help-bar .btn-search .drugbank-icon {
+            vertical-align: middle;
+            margin: -5px 5px -5px 0px; }
+    .help-container .help-content .help-item {
+      display: block;
+      background: white;
+      margin-bottom: 40px;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(37, 46, 127, 0.26);
+      text-decoration: none;
+      position: relative;
+      top: 0px;
+      transition: all 0.25s ease; }
+      .help-container .help-content .help-item h3 {
+        padding-bottom: 5px;
+        border-bottom: 2px solid #727DD4;
+        margin-top: 0px;
+        margin-bottom: 10px;
+        transition: all 0.25s ease; }
+      .help-container .help-content .help-item p {
+        font-size: 18px;
+        line-height: 24px;
+        color: #263063; }
+      .help-container .help-content .help-item:hover, .help-container .help-content .help-item:active {
+        opacity: 1;
+        top: -5px; }
+        .help-container .help-content .help-item:hover h3, .help-container .help-content .help-item:active h3 {
+          color: #FF02AF;
+          border-bottom: 2px solid #FF02AF; }
+    .help-container .help-content.stretch-content .content-items {
+      width: 100%; }
+      .help-container .help-content.stretch-content .content-items .search-bar {
+        right: 60px; }
+    .help-container .help-content.centered-content {
+      max-width: 1000px;
+      width: 100%;
+      margin: 0px auto; }
+  .help-container .table-responsive {
+    border: none !important; }
+  .help-container table {
+    display: block;
+    overflow-x: scroll;
+    font-size: 14px; }
+    .help-container table thead tr {
+      background-color: #F9F9FD; }
+      .help-container table thead tr td, .help-container table thead tr th {
+        border-bottom: none;
+        color: #263063; }
+    .help-container table tbody tr td, .help-container table tbody tr th {
+      border-top: none;
+      color: #263063; }
+    .help-container table tbody tr td {
+      font-weight: normal; }
+    .help-container table tbody > tr:nth-of-type(odd) {
+      background-color: #F3F3FB; }
+    .help-container table tbody > tr:nth-of-type(even) {
+      background-color: #F9F9FD; }
+  .help-container .section {
+    margin-top: 20px; }
+    .help-container .section h2::before, .help-container .section h3::before {
+      display: block;
+      content: " ";
+      margin-top: 60px;
+      height: 60px;
+      visibility: hidden;
+      pointer-events: none; }
+  .help-container.shrink .help-sidebar {
+    padding-top: 0px; }
+  .help-container.shrink .content-container {
+    padding-top: 20px; }
+
+.search-highlight, .tutorial-content .result-table em {
+  border: 1px solid #F7E633;
+  padding: 2px;
+  margin: -3px;
+  border-radius: 4px;
+  background: linear-gradient(to top left, #F7E633 0%, #F1D32F 100%); }
+
+.tutorial-content .filter-bar {
+  margin-bottom: 20px; }
+  .tutorial-content .filter-bar h4 {
+    color: #263063; }
+  .tutorial-content .filter-bar .filters {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; }
+  .tutorial-content .filter-bar .btn, .tutorial-content .filter-bar .mini-btn, .tutorial-content .filter-bar .small-btn, .tutorial-content .filter-bar .reg-btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: transparent;
+    border-color: #263063;
+    color: #263063;
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-width: 2px;
+    min-height: 38px; }
+    .tutorial-content .filter-bar .btn:hover, .tutorial-content .filter-bar .mini-btn:hover, .tutorial-content .filter-bar .small-btn:hover, .tutorial-content .filter-bar .reg-btn:hover, .tutorial-content .filter-bar .btn.active, .tutorial-content .filter-bar .active.mini-btn, .tutorial-content .filter-bar .active.small-btn, .tutorial-content .filter-bar .active.reg-btn {
+      color: white !important;
+      background-color: #263063;
+      box-shadow: none;
+      opacity: 1; }
+      .tutorial-content .filter-bar .btn:hover .drugbank-icon svg, .tutorial-content .filter-bar .mini-btn:hover .drugbank-icon svg, .tutorial-content .filter-bar .small-btn:hover .drugbank-icon svg, .tutorial-content .filter-bar .reg-btn:hover .drugbank-icon svg, .tutorial-content .filter-bar .btn.active .drugbank-icon svg, .tutorial-content .filter-bar .active.mini-btn .drugbank-icon svg, .tutorial-content .filter-bar .active.small-btn .drugbank-icon svg, .tutorial-content .filter-bar .active.reg-btn .drugbank-icon svg {
+        fill: white;
+        stroke: white;
+        color: white; }
+    .tutorial-content .filter-bar .btn.btn-general, .tutorial-content .filter-bar .btn-general.mini-btn, .tutorial-content .filter-bar .btn-general.small-btn, .tutorial-content .filter-bar .btn-general.reg-btn {
+      border-color: #C42A8F;
+      color: #C42A8F; }
+      .tutorial-content .filter-bar .btn.btn-general:hover, .tutorial-content .filter-bar .btn-general.mini-btn:hover, .tutorial-content .filter-bar .btn-general.small-btn:hover, .tutorial-content .filter-bar .btn-general.reg-btn:hover, .tutorial-content .filter-bar .btn.btn-general.active, .tutorial-content .filter-bar .btn-general.active.mini-btn, .tutorial-content .filter-bar .btn-general.active.small-btn, .tutorial-content .filter-bar .btn-general.active.reg-btn {
+        background-color: #C42A8F; }
+    .tutorial-content .filter-bar .btn.btn-data-formats, .tutorial-content .filter-bar .btn-data-formats.mini-btn, .tutorial-content .filter-bar .btn-data-formats.small-btn, .tutorial-content .filter-bar .btn-data-formats.reg-btn {
+      border-color: #87C67A;
+      color: #87C67A; }
+      .tutorial-content .filter-bar .btn.btn-data-formats:hover, .tutorial-content .filter-bar .btn-data-formats.mini-btn:hover, .tutorial-content .filter-bar .btn-data-formats.small-btn:hover, .tutorial-content .filter-bar .btn-data-formats.reg-btn:hover, .tutorial-content .filter-bar .btn.btn-data-formats.active, .tutorial-content .filter-bar .btn-data-formats.active.mini-btn, .tutorial-content .filter-bar .btn-data-formats.active.small-btn, .tutorial-content .filter-bar .btn-data-formats.active.reg-btn {
+        background-color: #87C67A; }
+    .tutorial-content .filter-bar .btn.btn-api-support, .tutorial-content .filter-bar .btn-api-support.mini-btn, .tutorial-content .filter-bar .btn-api-support.small-btn, .tutorial-content .filter-bar .btn-api-support.reg-btn {
+      border-color: #E6944B;
+      color: #E6944B; }
+      .tutorial-content .filter-bar .btn.btn-api-support:hover, .tutorial-content .filter-bar .btn-api-support.mini-btn:hover, .tutorial-content .filter-bar .btn-api-support.small-btn:hover, .tutorial-content .filter-bar .btn-api-support.reg-btn:hover, .tutorial-content .filter-bar .btn.btn-api-support.active, .tutorial-content .filter-bar .btn-api-support.active.mini-btn, .tutorial-content .filter-bar .btn-api-support.active.small-btn, .tutorial-content .filter-bar .btn-api-support.active.reg-btn {
+        background-color: #E6944B; }
+    .tutorial-content .filter-bar .btn.btn-tutorials, .tutorial-content .filter-bar .btn-tutorials.mini-btn, .tutorial-content .filter-bar .btn-tutorials.small-btn, .tutorial-content .filter-bar .btn-tutorials.reg-btn {
+      border-color: #04BAC6;
+      color: #04BAC6; }
+      .tutorial-content .filter-bar .btn.btn-tutorials:hover, .tutorial-content .filter-bar .btn-tutorials.mini-btn:hover, .tutorial-content .filter-bar .btn-tutorials.small-btn:hover, .tutorial-content .filter-bar .btn-tutorials.reg-btn:hover, .tutorial-content .filter-bar .btn.btn-tutorials.active, .tutorial-content .filter-bar .btn-tutorials.active.mini-btn, .tutorial-content .filter-bar .btn-tutorials.active.small-btn, .tutorial-content .filter-bar .btn-tutorials.active.reg-btn {
+        background-color: #04BAC6; }
+    .tutorial-content .filter-bar .btn.btn-articles, .tutorial-content .filter-bar .btn-articles.mini-btn, .tutorial-content .filter-bar .btn-articles.small-btn, .tutorial-content .filter-bar .btn-articles.reg-btn {
+      border-color: #82346C;
+      color: #82346C; }
+      .tutorial-content .filter-bar .btn.btn-articles:hover, .tutorial-content .filter-bar .btn-articles.mini-btn:hover, .tutorial-content .filter-bar .btn-articles.small-btn:hover, .tutorial-content .filter-bar .btn-articles.reg-btn:hover, .tutorial-content .filter-bar .btn.btn-articles.active, .tutorial-content .filter-bar .btn-articles.active.mini-btn, .tutorial-content .filter-bar .btn-articles.active.small-btn, .tutorial-content .filter-bar .btn-articles.active.reg-btn {
+        background-color: #82346C; }
+    .tutorial-content .filter-bar .btn .drugbank-icon, .tutorial-content .filter-bar .mini-btn .drugbank-icon, .tutorial-content .filter-bar .small-btn .drugbank-icon, .tutorial-content .filter-bar .reg-btn .drugbank-icon {
+      vertical-align: middle;
+      margin-top: -4px;
+      margin-bottom: -4px; }
+      .tutorial-content .filter-bar .btn .drugbank-icon svg, .tutorial-content .filter-bar .mini-btn .drugbank-icon svg, .tutorial-content .filter-bar .small-btn .drugbank-icon svg, .tutorial-content .filter-bar .reg-btn .drugbank-icon svg {
+        width: 30px;
+        height: 30px; }
+.tutorial-content .suggest-row {
+  margin-bottom: 20px; }
+.tutorial-content .page-info {
+  color: #263063; }
+.tutorial-content .pagination-holder .pagination {
+  margin: 10px 0px; }
+  .tutorial-content .pagination-holder .pagination .page a, .tutorial-content .pagination-holder .pagination .next a, .tutorial-content .pagination-holder .pagination .prev a, .tutorial-content .pagination-holder .pagination .last a, .tutorial-content .pagination-holder .pagination .first a {
+    color: #263063;
+    text-decoration: none; }
+  .tutorial-content .pagination-holder .pagination .page.current, .tutorial-content .pagination-holder .pagination .next.current, .tutorial-content .pagination-holder .pagination .prev.current, .tutorial-content .pagination-holder .pagination .last.current, .tutorial-content .pagination-holder .pagination .first.current {
+    background-color: #FF02AF; }
+.tutorial-content .result-table {
+  margin: 1em 0em; }
+  .tutorial-content .result-table .row {
+    padding: 1em 0em; }
+  .tutorial-content .result-table h4 a {
+    font-weight: bold;
+    color: #263063;
+    text-decoration: none; }
+  .tutorial-content .result-table .type-col {
+    white-space: nowrap;
+    text-align: right; }
+  .tutorial-content .result-table .label {
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 7px 12px 5px;
+    border-width: 2px;
+    margin-top: 5px;
+    display: inline-block;
+    margin-right: 10px; }
+    .tutorial-content .result-table .label.label-general {
+      background-color: #C42A8F; }
+    .tutorial-content .result-table .label.label-data-formats {
+      background-color: #87C67A; }
+    .tutorial-content .result-table .label.label-api-support {
+      background-color: #E6944B; }
+    .tutorial-content .result-table .label.label-tutorials {
+      background-color: #04BAC6; }
+    .tutorial-content .result-table .label.label-articles {
+      background-color: #82346C; }
+    .tutorial-content .result-table .label .drugbank-icon {
+      vertical-align: middle;
+      margin-right: 2px;
+      margin-right: 4px;
+      margin-top: -5px;
+      margin-bottom: -2px; }
+      .tutorial-content .result-table .label .drugbank-icon svg {
+        height: 22px;
+        width: 22px;
+        fill: white;
+        stroke: white;
+        color: white; }
+  .tutorial-content .result-table em {
+    font-style: normal; }
+  .tutorial-content .result-table p {
+    word-break: break-word; }
+  .tutorial-content .result-table .search-link {
+    font-weight: bold;
+    color: #263063; }
+    .tutorial-content .result-table .search-link .drugbank-icon {
+      margin-left: 4px; }
+      .tutorial-content .result-table .search-link .drugbank-icon svg {
+        height: 11px;
+        width: 11px; }
+.tutorial-content .icon-general {
+  color: #C42A8F;
+  fill: #C42A8F;
+  stroke: #C42A8F; }
+.tutorial-content .icon-data-formats {
+  color: #87C67A;
+  fill: #87C67A;
+  stroke: #87C67A; }
+.tutorial-content .icon-api-support {
+  color: #E6944B;
+  fill: #E6944B;
+  stroke: #E6944B; }
+.tutorial-content .icon-tutorials {
+  color: #04BAC6;
+  fill: #04BAC6;
+  stroke: #04BAC6; }
+.tutorial-content .icon-articles {
+  color: #82346C;
+  fill: #82346C;
+  stroke: #82346C; }
+.tutorial-content pre {
+  margin: 0;
+  padding: 0.5em;
+  background: #263063;
+  font-size: 13px; }
+.tutorial-content .example-box {
+  margin: 1em 0;
+  border: 1px solid #F3F3FB;
+  clear: both; }
+  .tutorial-content .example-box .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: stretch; }
+    .tutorial-content .example-box .row > div {
+      float: none; }
+    @media (max-width: 767px) {
+      .tutorial-content .example-box .row {
+        flex-direction: column; }
+        .tutorial-content .example-box .row > div {
+          width: 100%; } }
+  .tutorial-content .example-box .example-col {
+    padding: 2em; }
+  .tutorial-content .example-box .code-col {
+    padding: 1em 2em;
+    background-color: #F3F3FB; }
+    .tutorial-content .example-box .code-col pre {
+      line-height: 1;
+      text-shadow: none;
+      min-height: 34px; }
+      .tutorial-content .example-box .code-col pre.shell-box {
+        margin-bottom: 210px; }
+      .tutorial-content .example-box .code-col pre.api-box {
+        height: 300px; }
+      .tutorial-content .example-box .code-col pre.code-box {
+        height: 322px; }
+    .tutorial-content .example-box .code-col .highlight {
+      border-width: 1px;
+      border-style: solid;
+      display: inline-block;
+      padding: 0px 2px; }
+      .tutorial-content .example-box .code-col .highlight.green {
+        border-color: #83c475; }
+      .tutorial-content .example-box .code-col .highlight.blue {
+        border-color: #00b0f2; }
+      .tutorial-content .example-box .code-col .highlight.orange {
+        border-color: #e6944b; }
+      .tutorial-content .example-box .code-col .highlight.pink {
+        border-color: #ff00b8; }
+      .tutorial-content .example-box .code-col .highlight.teal {
+        border-color: #00b8c4; }
+      .tutorial-content .example-box .code-col .highlight.purple {
+        border-color: #9400D3; }
+      .tutorial-content .example-box .code-col .highlight.red {
+        border-color: #ea6771; }
+    .tutorial-content .example-box .code-col .explanation {
+      margin-bottom: 0.5em;
+      font-weight: 100; }
+    .tutorial-content .example-box .code-col .translation {
+      margin-top: 0.5em; }
+    .tutorial-content .example-box .code-col .language-sql {
+      margin-bottom: 1em; }
+  .tutorial-content .example-box .form-group hr {
+    margin-top: 10px;
+    margin-bottom: 10px; }
+  .tutorial-content .example-box .form-group input.error {
+    border-color: #ea6771; }
+  .tutorial-content .example-box .actions {
+    text-align: right; }
+    .tutorial-content .example-box .actions input {
+      border-color: #727DD4;
+      background-color: #727DD4;
+      font-weight: 100;
+      font-size: 16px;
+      padding: 10px 15px;
+      line-height: 1; }
+      .tutorial-content .example-box .actions input:hover, .tutorial-content .example-box .actions input:focus, .tutorial-content .example-box .actions input:active {
+        border-color: #B2B7EA;
+        background-color: #B2B7EA; }
+  .tutorial-content .example-box label {
+    display: block;
+    margin-top: 5px;
+    color: #263063; }
+  .tutorial-content .example-box .select2 {
+    min-width: 100%; }
+  .tutorial-content .example-box ul.nav.nav-pills {
+    margin-bottom: 1em; }
+    .tutorial-content .example-box ul.nav.nav-pills li {
+      margin-right: 5px; }
+      .tutorial-content .example-box ul.nav.nav-pills li a {
+        line-height: 1;
+        color: #727DD4; }
+        .tutorial-content .example-box ul.nav.nav-pills li a:hover {
+          background: #E1E2F6; }
+      .tutorial-content .example-box ul.nav.nav-pills li.active a {
+        border-color: #727DD4;
+        background-color: #727DD4; }
+        .tutorial-content .example-box ul.nav.nav-pills li.active a:hover, .tutorial-content .example-box ul.nav.nav-pills li.active a:focus, .tutorial-content .example-box ul.nav.nav-pills li.active a:active {
+          border-color: #B2B7EA;
+          background-color: #B2B7EA; }
+  .tutorial-content .example-box .dataTables_wrapper {
+    overflow-x: hidden;
+    margin: 1em 1em 0em 1em;
+    color: #263063; }
+  .tutorial-content .example-box .products-table, .tutorial-content .example-box .indications-table, .tutorial-content .example-box .interactions-table {
+    display: table; }
+    .tutorial-content .example-box .products-table .dataTables_empty, .tutorial-content .example-box .indications-table .dataTables_empty, .tutorial-content .example-box .interactions-table .dataTables_empty {
+      font-style: italic;
+      color: #aab3c1; }
+    .tutorial-content .example-box .products-table tbody tr td:first-child:not(.dataTables_empty), .tutorial-content .example-box .indications-table tbody tr td:first-child:not(.dataTables_empty), .tutorial-content .example-box .interactions-table tbody tr td:first-child:not(.dataTables_empty) {
+      font-weight: bold; }
+  .tutorial-content .example-box .dataTables_paginate .pagination > li:not(.disabled):not(.active) > a {
+    color: #727DD4; }
+    .tutorial-content .example-box .dataTables_paginate .pagination > li:not(.disabled):not(.active) > a:hover, .tutorial-content .example-box .dataTables_paginate .pagination > li:not(.disabled):not(.active) > a:focus {
+      background-color: #B2B7EA; }
+  .tutorial-content .example-box .dataTables_paginate .pagination > .active > a {
+    background-color: #727DD4;
+    border-color: #727DD4; }
+.tutorial-content .btn-label {
+  background-color: #FF02AF;
+  color: white;
+  border-color: #FF02AF;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em; }
+  .tutorial-content .btn-label .glyphicon {
+    top: 2px;
+    margin-left: 0.5em; }
+.tutorial-content .btn-primary {
+  border-color: #727DD4;
+  background-color: #727DD4;
+  font-weight: 100;
+  line-height: 1; }
+  .tutorial-content .btn-primary:hover, .tutorial-content .btn-primary:focus, .tutorial-content .btn-primary:active {
+    border-color: #B2B7EA;
+    background-color: #B2B7EA; }
+.tutorial-content #loader {
+  display: none;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  z-index: 999; }
+  .tutorial-content #loader img {
+    margin-top: 3em; }
+.tutorial-content .query-table {
+  width: auto;
+  margin-left: 1em; }
+  .tutorial-content .query-table td {
+    border-top: none;
+    padding: 4px 8px; }
+
+.data-details h5 {
+  font-size: 16px; }
+.data-details .source {
+  text-align: right;
+  font-size: 80%; }
+.data-details ul li, .data-details ol li {
+  margin-bottom: 10px; }
+.data-details .inner-attribute-table {
+  margin-bottom: 8px; }
+.data-details pre {
+  margin-bottom: 10px; }
+.data-details .attribute-table td p:last-child {
+  margin-bottom: 0px; }
+.data-details .attribute-table td.centered-cell {
+  text-align: center;
+  vertical-align: middle; }
+
+/*# sourceMappingURL=public.css.map */
