@@ -1,5 +1,5 @@
 {
-    "port": "4567",
-    "auth-key": "butt",
-    "api-host": "https://api.drugbankplus.com/v1/"
+  "port": "4567",
+  "auth-key": "bb53b91fa2329bd2617e51e9742f813c",
+  "api-host": "https://api.drugbankplus.com/v1/"
 }

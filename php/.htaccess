@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /../resources
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(assets|bower_components|dist)/(.*)$ /app/$1/$2 [L,NC]
+
+RewriteCond %{REQUEST_URI} !^assets|bower_components|dist/.*$
+RewriteRule ^ index.php [L,QSA]
