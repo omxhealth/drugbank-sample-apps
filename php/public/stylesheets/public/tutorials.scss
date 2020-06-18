@@ -1,0 +1,453 @@
+.tutorial-content {
+  .filter-bar {
+    margin-bottom: 20px;
+    h4 {
+      color: $db-dark-blue;
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .btn {
+      margin-right: 5px;
+      margin-bottom: 5px;
+      background-color: transparent;
+      border-color: $db-dark-blue;
+      color: $db-dark-blue;
+      border-radius: 999px;
+      text-transform: uppercase;
+      font-weight: normal;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-width: 2px;
+      min-height: 38px;
+      &:hover, &.active {
+        color: white !important;
+        background-color: $db-dark-blue;
+        box-shadow: none;
+        opacity: 1;
+        .drugbank-icon {
+          svg {
+            fill: white;
+            stroke: white;
+            color: white;
+          }
+        }
+      }
+      &.btn-general {
+        border-color: $help-pink;
+        color: $help-pink;
+        &:hover, &.active {
+          background-color: $help-pink;
+        }
+      }
+      &.btn-data-formats {
+        border-color: $help-green;
+        color: $help-green;
+        &:hover, &.active {
+          background-color: $help-green;
+        }
+      }
+      &.btn-api-support {
+        border-color: $help-orange;
+        color: $help-orange;
+        &:hover, &.active {
+          background-color: $help-orange;
+        }
+      }
+      &.btn-tutorials {
+        border-color: $help-blue;
+        color: $help-blue;
+        &:hover, &.active {
+          background-color: $help-blue;
+        }
+      }
+      &.btn-articles {
+        border-color: $help-purple;
+        color: $help-purple;
+        &:hover, &.active {
+          background-color: $help-purple;
+        }
+      }
+      .drugbank-icon {
+        vertical-align: middle;
+        margin-top: -4px;
+        margin-bottom: -4px;
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+
+  .suggest-row {
+    margin-bottom: 20px;
+  }
+
+  .page-info {
+    color: $db-dark-blue;
+  }
+
+  .pagination-holder {
+    .pagination {
+      margin: 10px 0px;
+      .page, .next, .prev, .last, .first {
+        a {
+          color: $db-dark-blue;
+          text-decoration: none;
+        }
+        &.current {
+          background-color: $db-pink;
+        }
+      }
+    }
+  }
+
+  .result-table {
+    margin: 1em 0em;
+    .row {
+      padding: 1em 0em;
+    }
+    h4 a {
+      font-weight: bold;
+      color: $db-dark-blue;
+      text-decoration: none;
+    }
+    .type-col {
+      white-space: nowrap;
+      text-align: right;
+    }
+    .label {
+      border-radius: 999px;
+      text-transform: uppercase;
+      font-weight: normal;
+      font-size: 14px;
+      padding: 7px 12px 5px;
+      border-width: 2px;
+      margin-top: 5px;
+      display: inline-block;
+      margin-right: 10px;
+      &.label-general {
+        background-color: $help-pink;
+      }
+      &.label-data-formats {
+        background-color: $help-green;
+      }
+      &.label-api-support {
+        background-color: $help-orange;
+      }
+      &.label-tutorials {
+        background-color: $help-blue;
+      }
+      &.label-articles {
+        background-color: $help-purple;
+      }
+      .drugbank-icon {
+        vertical-align: middle;
+        margin-right: 2px;
+        margin-right: 4px;
+        margin-top: -5px;
+        margin-bottom: -2px;
+        svg {
+          height: 22px;
+          width: 22px;
+          fill: white;
+          stroke: white;
+          color: white;
+        }
+      }
+    }
+    em {
+      font-style: normal;
+      @extend .search-highlight;
+    }
+    p {
+      word-break: break-word;
+    }
+
+    .search-link {
+      font-weight: bold;
+      color: $db-dark-blue;
+      .drugbank-icon {
+        margin-left: 4px;
+        svg {
+          height: 11px;
+          width: 11px;
+        }
+      }
+    }
+  }
+
+  .icon-general {
+    color: $help-pink;
+    fill: $help-pink;
+    stroke: $help-pink;
+  }
+  .icon-data-formats {
+    color: $help-green;
+    fill: $help-green;
+    stroke: $help-green;
+  }
+  .icon-api-support {
+    color: $help-orange;
+    fill: $help-orange;
+    stroke: $help-orange;
+  }
+  .icon-tutorials {
+    color: $help-blue;
+    fill: $help-blue;
+    stroke: $help-blue;
+  }
+  .icon-articles {
+    color: $help-purple;
+    fill: $help-purple;
+    stroke: $help-purple;
+  }
+
+  pre {
+    margin: 0;
+    padding: 0.5em;
+    background: $db-dark-blue;
+    font-size: 13px;
+  }
+
+  .example-box {
+    margin: 1em 0;
+    border: 1px solid $db-super-light-blue;
+    clear: both;
+    .row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: stretch;
+      align-items: stretch;
+      & > div {
+        float: none;
+      }
+      @media (max-width: $screen-xs-max) {
+        flex-direction: column;
+        & > div {
+          width: 100%;
+        }
+      }
+    }
+    .example-col {
+      padding: 2em;
+    }
+    .code-col {
+      padding: 1em 2em;
+      background-color: $db-super-light-blue;
+      pre {
+        line-height: 1;
+        text-shadow: none;
+        min-height: 34px;
+        &.shell-box {
+          margin-bottom: 210px;
+        }
+        &.api-box {
+          height: 300px;
+        }
+        &.code-box {
+          height: 322px;
+        }
+      }
+      .highlight {
+        border-width: 1px;
+        border-style: solid;
+        display: inline-block;
+        padding: 0px 2px;
+        &.green {
+          border-color: $drugbank-green;
+        }
+        &.blue {
+          border-color: $drugbank-blue;
+        }
+        &.orange {
+          border-color: $drugbank-orange;
+        }
+        &.pink {
+          border-color: $drugbank-pink;
+        }
+        &.teal {
+          border-color: $drugbank-teal;
+        }
+        &.purple {
+          border-color: $drugbank-violet;
+        }
+        &.red {
+          border-color: $drugbank-red;
+        }
+      }
+      .explanation {
+        margin-bottom: 0.5em;
+        font-weight: 100;
+      }
+      .translation {
+        margin-top: 0.5em;
+      }
+      .language-sql {
+        margin-bottom: 1em;
+      }
+    }
+    .form-group {
+      hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      input.error {
+        border-color: $drugbank-red;
+      }
+    }
+    .actions {
+      text-align: right;
+      input {
+        border-color: $db-blue;
+        background-color: $db-blue;
+        font-weight: 100;
+        font-size: 16px;
+        padding: 10px 15px;
+        line-height: 1;
+        &:hover, &:focus, &:active {
+          border-color: $db-light-blue;
+          background-color: $db-light-blue;
+        }
+      }
+    }
+    label {
+      display: block;
+      margin-top: 5px;
+      color: $db-dark-blue;
+    }
+    .select2 {
+      min-width: 100%;
+    }
+    ul.nav.nav-pills {
+      margin-bottom: 1em;
+      li {
+        margin-right: 5px;
+        a {
+          line-height: 1;
+          color: $db-blue;
+          &:hover {
+            background: $db-very-light-blue;
+          }
+        }
+        &.active a {
+          @extend .db-primary;
+          border-color: $db-blue;
+          background-color: $db-blue;
+          &:hover, &:focus, &:active {
+            border-color: $db-light-blue;
+            background-color: $db-light-blue;
+          }
+        }
+      }
+    }
+    .dataTables_wrapper {
+      overflow-x: hidden;
+      margin: 1em 1em 0em 1em;
+      color: $db-dark-blue;
+    }
+    .products-table, .indications-table, .interactions-table {
+      display: table;
+      .dataTables_empty {
+        font-style: italic;
+        color: $drugbank-light-grey;
+      }
+      tbody tr {
+        td:first-child:not(.dataTables_empty) {
+          font-weight: bold;
+        }
+      }
+    }
+    .dataTables_paginate {
+      .pagination > li:not(.disabled):not(.active) > a {
+        color: $db-blue;
+        &:hover, &:focus {
+          background-color: $db-light-blue;
+        }
+      }
+      .pagination > .active > a {
+        background-color: $db-blue;
+        border-color: $db-blue;
+      }
+    }
+  }
+
+  .btn-label {
+    background-color: $db-pink;
+    color: white;
+    border-color: $db-pink;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+    .glyphicon {
+      top: 2px;
+      margin-left: 0.5em;
+    }
+  }
+  .btn-primary {
+    border-color: $db-blue;
+    background-color: $db-blue;
+    font-weight: 100;
+    line-height: 1;
+    &:hover, &:focus, &:active {
+      border-color: $db-light-blue;
+      background-color: $db-light-blue;
+    }
+  }
+
+  #loader {
+    display: none;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(355, 355, 355, 0.75);
+    vertical-align: middle;
+    z-index: 999;
+    img {
+      margin-top: 3em;
+    }
+  }
+
+  .query-table {
+    width: auto;
+    margin-left: 1em;
+    td {
+      border-top: none;
+      padding: 4px 8px;
+    }
+  }
+}
+
+.data-details {
+  h5 {
+    font-size: 16px;
+  }
+  .source {
+    text-align: right;
+    font-size: 80%;
+  }
+  ul li, ol li {
+    margin-bottom: 10px;
+  }
+  .inner-attribute-table {
+    margin-bottom: 8px;
+  }
+  pre {
+    margin-bottom: 10px;
+  }
+  .attribute-table {
+    td p:last-child {
+      margin-bottom: 0px;
+    }
+    td.centered-cell {
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+}
