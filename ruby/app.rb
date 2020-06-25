@@ -15,8 +15,28 @@ set :public_folder, __dir__ + "/../resources"
 set :views, settings.public_folder + "/templates"
 set :port, $config["port"]
 
+# Checks that the region found in the config file is valid.
+# Region can either be "us", "ca", "eu", or "" (for searching all).
+# If the region isn't any of the above, it will default to "" (all)
+def validate_region(config)
+
+    $region = $config["region"].downcase
+
+    case $region
+        
+        when "us", "ca", "eu"
+            $config["region"] = $region
+        else
+            $config["region"] = ""
+    end    
+
+end 
+
+validate_region($config)
+
 $drugbank_api = $config["api-host"]
 $drugbank_api_key = $config["auth-key"]
+$drugbank_region = $config["region"]
 $drugbank_headers = {
     "Authorization": $drugbank_api_key,
     "Content-Type": "application/json",
@@ -32,6 +52,11 @@ end
 
 get "/" do
     redirect "/product_concepts"
+end   
+
+get "/config" do
+    content_type :json
+    $config.to_json
 end    
 
 # GET render: product concepts page
@@ -104,23 +129,17 @@ end
 # GET render: support page
 get "/support" do
     haml :support
-end
-
-# GET: current API authorization key
-get "/auth_key" do
-    $drugbank_api_key
-end    
+end  
 
 # PUT: update the authorization key
 put "/auth_key" do
 
     content_type :json
 
-    old_key = $drugbank_api_key
-
     request.body.rewind
     json_request = JSON.parse request.body.read
 
+    old_key = $drugbank_api_key
     new_key = json_request["q"]
 
     if old_key == new_key
@@ -151,7 +170,42 @@ put "/auth_key" do
     status status_code
     body json_response
 
-end    
+end
+
+# PUT: update region
+put "/region" do
+
+    content_type :json
+
+    request.body.rewind
+    json_request = JSON.parse request.body.read
+
+    old_region = $drugbank_region
+    new_region = json_request["region"]
+
+    if old_region == new_region
+        status_code = 200
+        message = "New region is the same as the old region"
+
+    else
+        status_code = update_region(new_region)
+
+        if status_code == 200
+            message = "Region successfully updated"
+        else
+            message = "Unable to update config file"
+        end
+
+    end  
+    
+    json_response = {
+        "message": message
+    }.to_json
+
+    status status_code
+    body json_response
+
+end
 
 # Updates the auth key by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
@@ -165,7 +219,7 @@ def update_API_key(new_key)
     # update key
     $drugbank_api_key = new_key
 
-    # update config file
+    # update the local config
     $config["auth-key"] = new_key
 
     # try to write back to config file
@@ -177,8 +231,39 @@ def update_API_key(new_key)
         # in case anything goes wrong, revert changes
         puts msg
         $config["auth-key"] = old_key
+        $drugbank_api_key = old_key
         $drugbank_headers["Authorization"] = old_key
         return 500
     end    
 
 end    
+
+# Updates the region by writing the new value to the config file.
+# If anything goes wrong (file not found, IO exception),
+# the old region is restored
+# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+def update_region(new_region)
+
+    #get the old region
+    old_region = $drugbank_region
+
+    # update key
+    $drugbank_region = new_region
+ 
+    # update the local config
+    $config["region"] = new_region
+ 
+    # try to write back to config file
+    begin
+        File.write("../config.json",JSON.pretty_generate($config)) 
+        return 200    
+    rescue StandardError => msg 
+        # in case anything goes wrong, revert changes
+        puts msg
+        $config["region"] = old_region
+        $drugbank_region = old_region
+        return 500
+    end    
+
+end    
+   

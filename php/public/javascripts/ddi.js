@@ -1,10 +1,10 @@
-activeDrugList = function(interactions_table, search, api_host) {
+activeDrugList = function (interactions_table, search, api_host) {
 
     // Add handler to remove product on click and update results
-    $("#drug-product-list .glyphicon-remove").on('click', function(e) {
-        
+    $("#drug-product-list .glyphicon-remove").on('click', function (e) {
+
         $(this).parent().remove();
-        
+
         if ($("#drug-product-list .drug-product").length < 3) {
             $(search).prop("disabled", false);
         }
@@ -15,9 +15,9 @@ activeDrugList = function(interactions_table, search, api_host) {
 
 };
 
-loadTableResults = function(interactions_table, search) {
+loadTableResults = function (interactions_table, search) {
     var codes, ddi_url;
-    
+
     // Empty the interactions table
     clearTableResults(interactions_table);
 
@@ -26,27 +26,27 @@ loadTableResults = function(interactions_table, search) {
         $("#loader").show();
 
         // Get the list of NDC codes
-        codes = $("#drug-product-list .drug-product").map(function() {
+        codes = $("#drug-product-list .drug-product").map(function () {
             return $(this).data("code");
         }).toArray().join();
 
         ddi_url = "ddi?product_concept_id=" + codes;
 
         return $.ajax({
-            url: localhost + encodeURI(ddi_url),
+            url: localhost + region + encodeURI(ddi_url),
             // Brief delay to a) work around a select2 bug that is not patched in the version
             // included in rails-select2 (https://github.com/select2/select2/issues/4205)
             // and b) reduce the number of requests sent
             delay: 100,
-            success: function(data) {
+            success: function (data) {
                 var search_url;
 
                 // Fill the side display
-                search_url = encodeURI(api_host + ddi_url);
+                search_url = encodeURI(api_host + region + ddi_url);
                 displayRequest(search_url, data);
-                
+
                 // Fill the table
-                data.interactions.forEach(function(d) {
+                data.interactions.forEach(function (d) {
                     return interactions_table.row.add([d.product_concept_name, d.affected_product_concept_name, d.severity, d.description]);
                 });
 
@@ -54,7 +54,7 @@ loadTableResults = function(interactions_table, search) {
                 return $("#loader").hide();
 
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 handleError(jqXHR, ".drug_autocomplete");
                 return $("#loader").hide();
             }
@@ -62,8 +62,10 @@ loadTableResults = function(interactions_table, search) {
     }
 };
 
-$(document).ready(function() {
-    
+$(document).ready(function () {
+
+    getConfig();
+
     var interactions_table = $('.interactions-table').DataTable({
         order: [[0, "desc"]]
     });
@@ -73,23 +75,23 @@ $(document).ready(function() {
         theme: "bootstrap",
         placeholder: "Start typing a drug name",
         minimumInputLength: 3,
-        templateResult: function(d) {
+        templateResult: function (d) {
             return $('<span>' + em_to_u_tags(d.text) + '</span>');
         },
-        templateSelection: function(d) {
+        templateSelection: function (d) {
             return $('<span>' + strip_em_tags(d.text) + '</span>');
         },
         ajax: {
-            url: localhost + encodeURI("product_concepts"),
+            url: localhost + region + encodeURI("product_concepts"),
             delay: 100,
-            data: function(params) {
+            data: function (params) {
                 return {
                     q: encodeURI(params.term)
                 };
             },
-            processResults: function(data) {
+            processResults: function (data) {
                 return {
-                    results: $.map(data, function(i) {
+                    results: $.map(data, function (i) {
                         return {
                             id: i.drugbank_pcid,
                             text: highlight_name(i)
@@ -97,7 +99,7 @@ $(document).ready(function() {
                     })
                 };
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 handleError(jqXHR, ".drug_autocomplete");
             }
         }
@@ -108,7 +110,7 @@ $(document).ready(function() {
     loadTableResults(interactions_table, ".drug_autocomplete");
 
     // When drug autocomplete is changed, load the related routes
-    $("#interactions-tutorial .drug_autocomplete").on("change", function(e) {
+    $("#interactions-tutorial .drug_autocomplete").on("change", function (e) {
         var text;
 
         // If something is selected

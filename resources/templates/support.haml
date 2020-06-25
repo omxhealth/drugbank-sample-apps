@@ -29,12 +29,28 @@
             Still unsure about something? Contact our
             %a{:href => "https://www.drugbankplus.com/contact/support?ref=dev.drugbankplus.com%2Fguides%2Findex"} support team
             for additional help with our data and products.
-          %h3 Settings
           %div
-            %form#auth_key_form{"accept-charset" => "UTF-8", :action => "#", :method => "post"}
-              %label API Key
-              %input#auth_key_input{:type => "text"}/
-              %input#auth_key_submit{:type => "submit", :value => "Update"}/
-            #auth_key_updated{:style => "display: none;"}
-              %p#auth_update_message Authentification key updated
-%script{:src => "javascripts/support.js"}
+            %h3 Settings
+            .row
+              %form.form-horizontal{"form-group" => "", :id => "region_form>\n              <div class="}
+                %label.control-label.col-sm-2{:for => "region_select"} Region
+                .col-sm-3
+                  %select#region_select.form-control
+                    %option{:value => ""} All
+                    %option{:value => "us"} United States
+                    %option{:value => "ca"} Canada
+                    %option{:value => "eu"} Europe
+          %br/
+          %form#auth_key_form.form-horizontal{"accept-charset" => "UTF-8", :action => "#", :method => "post"}
+            .form-group
+              %label.control-label.col-sm-2{:for => "auth_key_input"} API Key
+              .col-sm-7
+                .input-group
+                  %input#auth_key_input.form-control{:type => "text"}/
+                  %span.input-group-btn
+                    %button#auth_key_submit.btn.btn-primary{:type => "submit"} Update
+          #auth_key_alert.alert.alert-warning.alert-dismissible{:role => "alert", :style => "display: none;"}
+            %p#auth_update_message
+            %button.close{"aria-label" => "Close", "data-hide" => "alert", :type => "button"}
+              %span{"aria-hidden" => "true"} ×
+  %script{:src => "javascripts/support.js"}

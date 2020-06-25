@@ -31,6 +31,8 @@ loadTableResults = function(indications_table, data, options) {
 
 $(document).ready(function() {
     
+    getConfig();
+        
     if (document.getElementById("kind_select")) {
         options = {};
 
@@ -62,7 +64,7 @@ $(document).ready(function() {
             kind = $("#kind_select").val();
             off_label = $("#off_label_select").val();
             otc_use = $("#otc_use_select").val();
-            indications_url = "us/indications?q=" + q;
+            indications_url = "indications?q=" + q;
             
             if (more) {
                 indications_url += "&more=" + more;
@@ -78,7 +80,7 @@ $(document).ready(function() {
             }
 
             return $.ajax({
-                url: localhost + encodeURI(indications_url),
+                url: localhost + region + encodeURI(indications_url),
                 // Brief delay to a) work around a select2 bug that is not patched in the version
                 // included in rails-select2 (https://github.com/select2/select2/issues/4205)
                 // and b) reduce the number of requests sent
@@ -90,7 +92,7 @@ $(document).ready(function() {
                     var search_url;
                     
                     // Fill the side display
-                    search_url = encodeURI(api_host + indications_url);
+                    search_url = encodeURI(api_host + region + indications_url);
                     displayRequest(search_url, data);
 
                     // Update the results table
@@ -110,4 +112,4 @@ $(document).ready(function() {
 
     });
     
-})
+});
