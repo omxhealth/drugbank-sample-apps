@@ -19,9 +19,29 @@ except JSONDecodeError:
     print("Error: File does not appear to be a valid JSON document.")
     sys.exit()
 
-# Set variables after reading in the config
+# Checks that the region found in the config file is valid.
+# Region can either be "us", "ca", "eu", or "" (for searching all).
+# If the region isn't any of the above, it will default to "" (all).
+# Needs to be defined before it is first used.
+def validate_region(config):
+
+    accepted_regions = {"us", "ca", "eu"}
+    region = config["region"].lower()
+
+    if region in accepted_regions:
+        config["region"] = region
+    else:
+        config["region"] = ""
+
+
+# Check and set valid region
+validate_region(config)
+
+# Set variables after reading in the config.
+# Note that not all delcarations may remain constant.
 DRUGBANK_API = config["api-host"]
 DRUGBANK_API_KEY = config["auth-key"]
+DRUGBANK_REGION = config["region"]
 DRUGBANK_HEADERS = {
     "Authorization": DRUGBANK_API_KEY,
     "Content-Type": "application/json",
@@ -40,6 +60,12 @@ def drugbank_get(route, params):
 def default_page():
     return redirect("/product_concepts")
 
+# GET config json
+# Used to give the front-end access to the
+# config file (for the API host and region)
+@app.route("/config", methods=["GET"])
+def get_config():
+    return jsonify(config)
 
 # GET render: product concepts page
 @app.route("/product_concepts", methods=["GET"])
@@ -71,7 +97,7 @@ def api_product_concepts_vars(x, y):
 # GET API call: regional product concepts (x = DB ID, y = routes/strength)
 @app.route("/api/<region>/product_concepts/<x>/<y>", methods=["GET"])
 def api_product_concepts_regional_vars(region, x, y):
-    res = drugbank_get(region + "/product_concepts" +
+    res = drugbank_get(region + "/product_concepts/" +
                        x + "/" + y, request.args)
     return jsonify(res)
 
@@ -132,6 +158,8 @@ def get_auth_key():
 @app.route("/auth_key", methods=["PUT"])
 def put_auth_key():
 
+    global DRUGBANK_API_KEY
+
     status = 200
     message = ""
     old_key = DRUGBANK_API_KEY
@@ -167,6 +195,53 @@ def put_auth_key():
     return res
 
 
+# PUT: update the region
+@app.route("/region", methods=["PUT"])
+def put_region():
+
+    global DRUGBANK_REGION
+
+    status = 200
+    message = ""
+    json_request = json.loads(request.data)
+    new_region = json_request["region"]
+
+    if new_region == DRUGBANK_REGION:
+        message = "New region is the same as the old region"
+
+    else:
+        status = update_region(new_region)
+
+        if status == 200:
+            message = "Region successfully updated"
+        else:
+            message = "Unable to update file '" + config_file + "'"
+
+    json_response = json.dumps(
+        {
+            "message": message
+        })
+
+    res = make_response(json_response)
+    res.headers["Content-Type"] = "application/json"
+    res.status_code = status
+    return res
+
+
+# Checks that the region found in the config file is valid.
+# Region can either be "us", "ca", "eu", or "" (for searching all).
+# If the region isn't any of the above, it will default to "" (all).
+def validate_region(config):
+
+    accepted_regions = {"us", "ca", "eu"}
+    region = config["region"].lower()
+
+    if region in accepted_regions:
+        config["region"] = region
+    else:
+        config["region"] = ""
+
+
 # Updates the auth key by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
 # the old key is restored
@@ -193,10 +268,41 @@ def update_API_key(new_key):
 
     except (FileNotFoundError, IOError):
         # in case anything goes wrong, revert changes
+        DRUGBANK_API_KEY = old_key
         config["auth-key"] = old_key
         DRUGBANK_HEADERS["Authorization"] = old_key
         return 500
 
 
+# Updates the selected region by writing the new value to the config file.
+# If anything goes wrong, the old region is restored.
+# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+def update_region(new_region):
+
+    global DRUGBANK_REGION
+
+    # get the current region
+    old_region = DRUGBANK_REGION
+
+    # update region
+    DRUGBANK_REGION = new_region
+
+    # update config file
+    config["region"] = new_region
+
+    # try to write back to config file
+    try:
+        json_file = open("../" + config_file, "w", encoding="utf-8")
+        json.dump(config, json_file, indent=4)
+        return 200
+
+    except (FileNotFoundError, IOError):
+        # in case anything goes wrong, revert changes
+        DRUGBANK_REGION = old_region
+        config["region"] = old_region
+        return 500
+
+
+# Start the app
 if __name__ == "__main__":
     app.run(debug=True, port=config["port"])

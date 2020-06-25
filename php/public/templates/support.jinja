@@ -32,22 +32,56 @@
           <a href="https://www.drugbankplus.com/contact/support?ref=dev.drugbankplus.com%2Fguides%2Findex">support team</a> 
           for additional help with our data and products.
         </p> 
-        <h3>Settings</h3>
+        
         <div>
-          <form id="auth_key_form" action="#" accept-charset="UTF-8" method="post">
-            <label>API Key</label>
-            <input type="text" id="auth_key_input">
-            <input type="submit" id="auth_key_submit" value="Update">
-          </form>
-          <div id="auth_key_updated" style="display: none;">
-            <p id="auth_update_message">Authentification key updated</p>
+
+          <h3>Settings</h3>
+
+          <div class="row">
+            <form class="form-horizontal" id="region_form>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="region_select">Region</label>
+                <div class="col-sm-3">
+                  <select class="form-control" id="region_select">
+                    <option value="">All</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="eu">Europe</option>
+                  </select>
+                </div>
+              </div>
+            </form>
           </div>
+
+          <br>
+
+          <form class="form-horizontal" id="auth_key_form" action="#" accept-charset="UTF-8" method="post">
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="auth_key_input">API Key</label>
+              <div class="col-sm-7">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="auth_key_input">
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary" id="auth_key_submit">Update</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div id="auth_key_alert" class="alert alert-warning alert-dismissible" style="display: none;" role="alert">
+            <p id="auth_update_message"></p>
+            <button type="button" class="close" data-hide="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        
         </div>
       </div>
     </div>
   </div>
-</main>
-<script src="javascripts/support.js"></script>
+  </main>
+  <script src="javascripts/support.js"></script>
 </body>
 
 {% endblock %}

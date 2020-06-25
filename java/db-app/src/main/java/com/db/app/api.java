@@ -18,9 +18,9 @@ import org.json.*;
 
 public class api {
 
-    public static final String DRUGBANK_API = App.apiHost;
-    public static final String DRUGBANK_API_KEY = App.authKey;
-    public static final Map<String, String> DRUGBANK_HEADERS = new HashMap<String, String>() {
+    public static String DRUGBANK_API = App.apiHost;
+    public static String DRUGBANK_API_KEY = App.authKey;
+    public static Map<String, String> DRUGBANK_HEADERS = new HashMap<String, String>() {
         {
             put("Authorization", DRUGBANK_API_KEY);
             put("Content-Type", "application/json");
