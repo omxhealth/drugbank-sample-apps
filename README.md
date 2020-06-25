@@ -3,51 +3,33 @@ Sample apps for drugbank, private for now
 
 ## Components
 
-### Java
- - Package Manager: [Apache Maven](https://maven.apache.org)
- - Microframework: [Spark](http://sparkjava.com/) 
- - HTTP Client: [`javax.net.ssl.HttpsURLConnection`](https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/HttpsURLConnection.html)
- - Template Engine: [jinjava](https://github.com/HubSpot/jinjava) (Jinja2)
- 
-### Node.js
-- Package Manager: [npm](https://www.npmjs.com/)
-- Microframework: [Express](https://expressjs.com/) 
-- HTTP Client: [axios](https://github.com/axios/axios)
-- Template Engine: [nunjucks](https://github.com/mozilla/nunjucks) (Jinja2)
+### Front-End
+- [Bootstrap](https://getbootstrap.com/)
+- [jQuery](https://jquery.com/)
+- [Select2](https://select2.org/)
+- [DataTables](https://datatables.net/)
+- [Prism](https://prismjs.com/)
 
-### PHP
-- Package Manager: [Composer](https://getcomposer.org/)
-- Microframework: [Slim](http://www.slimframework.com/) 
-- HTTP Client: [Guzzle](https://github.com/guzzle/guzzle)
-- Template Engine: [slim/twig-view](https://github.com/slimphp/Twig-View) (Twig)
-	-  Twig is very similar to Jinja2, so the Jinja2 templates are reused without issue.
+### Back-End
+|     Implementation    |     Package Manager                                                       |     Microframework                                          |     HTTP Client                                                                                                              |     Template Engine                                                     |
+|-----------------------|---------------------------------------------------------------------------|-------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+|     Java              |     [Apache Maven](https://maven.apache.org)                              |     [Spark](http://sparkjava.com/)                          |     [`javax.net.ssl.HttpsURLConnection`](https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/HttpsURLConnection.html)    |     [jinjava](https://github.com/HubSpot/jinjava)   (Jinja2)            |
+|     Node.js           |     [npm](https://www.npmjs.com/)                                         |     [Express](https://expressjs.com/)                       |     [axios](https://github.com/axios/axios)                                                                                  |     [nunjucks](https://github.com/mozilla/nunjucks)   (Jinja2)          |
+|     PHP               |     [Composer](https://getcomposer.org/)                                  |     [Slim](http://www.slimframework.com/)                   |     [Guzzle](https://github.com/guzzle/guzzle)                                                                               |     [slim/twig-view](https://github.com/slimphp/Twig-View)   (Twig)     |
+|     Python            |     [pip](https://packaging.python.org/tutorials/installing-packages/)    |     [Flask](https://flask.palletsprojects.com/en/1.1.x/)    |     [Requests](https://requests.readthedocs.io/en/master/)                                                                   |     [Jinja](https://jinja.palletsprojects.com/en/2.11.x/)   (Jinja2)    |
+|     Ruby              |     [Bundler](https://bundler.io/)                                        |     [Sinatra](http://sinatrarb.com/)                        |     [httparty](https://github.com/jnunemaker/httparty)                                                                       |     [Haml](http://haml.info/) (Haml)                                    |
 
-### Python
-- Package Manager: [pip](https://packaging.python.org/tutorials/installing-packages/)
-- Microframework: [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-- HTTP Client: [Requests](https://requests.readthedocs.io/en/master/)
-- Template Engine: [Jinja](https://jinja.palletsprojects.com/en/2.11.x/) (Jinja2)
-
-### Ruby
-- Package Manager: [Bundler](https://bundler.io/)
-- Microframework: [Sinatra](http://sinatrarb.com/)
-- HTTP Client: [httparty](https://github.com/jnunemaker/httparty)
-- Template Engine: [Haml](http://haml.info/) (Haml)
-
+##### Note: Twig is very similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
 
 # How to Use
 
-- [Java](#java)
-- [Node.js](#node.js)
-- [PHP](#php)
-- [Python](#python)
-- [Ruby](#ruby)
-
 ### General Information
+
 By default, each app should be running at http://127.0.0.1:4567/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
 
-Each implementation determines the port to run on as well as the Drugbank API host and key from the `config.json` file at the root of the repo. To change the port, API key, or API host, simply change the values in the `config.json`. 
-Note that the Java app may not like this, as when it is compiled it creates a copy for itself at `drugbank-sample-apps\java\db-app\target\classes`.
+Each implementation determines the port to run on as well as the Drugbank API host, API key, and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, API host, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
+
+##### Note: the Java app may not behave like this, as when it is compiled it creates a copy of `config.json` for itself at `drugbank-sample-apps\java\db-app\target\classes`.
 
 In the future, each app will be setup up with docker containers for fast and easy setup.
 
@@ -79,7 +61,7 @@ node app.js
 Visit the address given in the console to view the app. 
 
 ## PHP
-#### Note: due to the way Slim handles static resources, a location outside of the project could not be specified like for the other apps. Copies had to be made and placed at `drugbank-sample-apps/php/public`. Keep this in mind if you want to edit or add resources.
+##### Note: due to the way Slim handles static resources, a location outside of the project could not be specified like for the other apps. Copies had to be made and placed at `drugbank-sample-apps/php/public`. Keep this in mind if you want to edit or add resources.
 
 First, ensure that [Composer](https://getcomposer.org/) is installed.
 
@@ -96,7 +78,7 @@ where `port` is the port you want to host the app on. The port must be specified
 
 Visit `localhost:port` to view the app.
 
-To host with a different server like Apache, see Slim's [web server](http://www.slimframework.com/docs/v4/start/web-servers.html) documentation.
+To host with a different server (like Apache), see Slim's [web server](http://www.slimframework.com/docs/v4/start/web-servers.html) documentation.
 
 ## Python
 

@@ -1,23 +1,61 @@
+// Request the current API key and region for display
+setSupportSettings = function() {
+    
+    $("#auth_key_input").attr("placeholder", api_key);
+
+    // If the region is "" (all), the it will have a "/" at the end
+    if (region != "") {
+        $("#region_select").val(region.substring(0, region.length - 1));
+    } else {
+        $("#region_select").val(region);
+    }
+
+}
+
+/**
+ * Setting up the region select dropdown, which is a select2.
+ * This is outside the $(document).ready() as it flickers
+ * slightly as it changes from a regular select to a select2
+ */
+$("#region_select").select2({
+    theme: "bootstrap",
+    minimumResultsForSearch: -1, // no search bar
+    width: "resolve" 
+});
+
+/**
+ * This can be run before the DOM loads so that the values are set by
+ * the time the document finishes loading. Then the API key input and region 
+ * selector don't flicker/appear to randomly change.
+ */
+getConfig().then(function() {
+    setSupportSettings();
+});
+
 $(document).ready(function() {
 
-    // Request the current API key for display
-    $.ajax({
-        url: "/auth_key", 
-        success: function(result){
-            $("#auth_key_input").val(result);
-        }
-    })
-
+    // On region change, send the newly selected region to the server
+    $("#region_select").on("change", function(e) {
+        return $.ajax({
+            url: "/region",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                region: encodeURI($("#region_select").val())
+            }),
+            dataType: "json" 
+        });
+    });
+    
     /**
+     * API key update button.
      * On submission, send a JSON with the new key to the server.
      * The server processes the request, and returns a message and whether 
      * the key update was successful or not through http status code.
-     * This is a "PUT" request, as a value at the server is being 
-     * updated.
      */
     $("#auth_key_submit").on("click", function(e) {
         
-        e.preventDefault();
+        e.preventDefault(); // by defualt, submitting a form loads a new page
         e.stopPropagation();
 
         return $.ajax({
@@ -29,20 +67,43 @@ $(document).ready(function() {
             }),
             dataType: "json",
             success: function(result){
+                $("#auth_key_alert").fadeOut(100); // if an alert wasn't dismissed, hide it now
+                $("#auth_key_input").attr("placeholder", result["updated-key"]); // put new key
+                $("#auth_key_input").val(""); // empty the text input
                 $("#auth_update_message").text((result)["message"]); // set message
-                $("#auth_key_updated").css("display", "inline-block"); // display message
+                $("#auth_key_alert").removeClass("alert-warning"); // remove alert-warning class (makes yellow)
+                $("#auth_key_alert").addClass("alert-success"); // add alert-success class (makes blue)
+                $("#auth_key_alert").fadeIn(200); // bring in the alert
             },
 
             // An error is caused by either the new key being empty
             // or by being unable to open "config.json" to save
             error: function(xhr) {
-                $("#auth_key_input").val((result)["original-key"]); // put original key
+                var result = JSON.parse(xhr.responseText);
+
+                $("#auth_key_alert").fadeOut(100); // if an alert wasn't dismissed, hide it now
+                $("#auth_key_input").attr("placeholder", result["original-key"]); // put original key
+                $("#auth_key_input").val(""); // empty the text input
                 $("#auth_update_message").text((result)["message"]); // set message
-                $("#auth_key_updated").css("display", "inline-block"); // display message
+                $("#auth_key_alert").removeClass("alert-success"); // remove alert-success class (makes blue)
+                $("#auth_key_alert").addClass("alert-warning"); // add alert-warning class (makes yellow)
+                $("#auth_key_alert").fadeIn(200); // bring in the alert
             }
 
         });
 
+    });
+
+    /**
+     * Function for hiding alert pop up when "x" is clicked as
+     * opposed to the alert being completely removed from the DOM.
+     * This allows for resuse of the alert.
+     * Taken from https://stackoverflow.com/a/11029624/12471692.
+     */   
+    $(function(){
+        $("[data-hide]").on("click", function(){
+            $(this).closest("." + $(this).attr("data-hide")).fadeOut(200);
+        });
     });
 
     // Prevent the enter key from submitting the form

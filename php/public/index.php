@@ -34,9 +34,13 @@ try {
     exit(1);
 }
 
+// Check and set valid region
+validate_region($config);
+
 // Set variables after reading in the config
 $DRUGBANK_API = $config["api-host"];
 $DRUGBANK_API_KEY = $config["auth-key"];
+$DRUGBANK_REGION = $config["region"];
 $DRUGBANK_HEADERS = [
     "Authorization" => $DRUGBANK_API_KEY,
     "Content-Type" => "application/json",
@@ -74,6 +78,14 @@ $app->add(TwigMiddleware::create($app, $twig));
 $app->addBodyParsingMiddleware();
 
 $app->redirect("/", "/product_concepts");
+
+// GET config
+$app->get("/config", function (Request $request, Response $response) {
+    global $config;
+    $payload = json_encode($config);
+    $response->getBody()->write($payload);
+    return $response->withHeader("Content-Type", "application/json");
+});
 
 // GET render: product concepts page
 $app->get("/product_concepts", function (Request $request, Response $response) {
@@ -199,13 +211,48 @@ $app->put("/auth_key", function (Request $request, Response $response) {
     ]);
 
     $response->getBody()->write($json_response);
+    $response = $response->withStatus($status);
     return $response->withHeader("Content-Type", "application/json");
 });
 
-// Updates the auth key by writing the new value to the config file.
-// If anything goes wrong (file not found, IO exception),
-// the old key is restored
-// Returns the status code to be sent to the client (200 OK or 500 Server Error)
+// PUT: update API authorization key
+$app->put("/region", function (Request $request, Response $response) {
+    global $DRUGBANK_REGION, $config_file;
+
+    $status = 200;
+    $message = "";
+    $old_region = $DRUGBANK_REGION;
+    $json_request = $request->getParsedBody();
+    $new_region = $json_request["region"];
+
+    if ($old_region == $new_region) {
+        $message = "New region is the same as the old region";
+
+    } else {
+        $status = update_region($new_region);
+
+        if ($status == 200) {
+            $message = "Region successfully updated";
+        } else {
+            $message = "Unable to update file '$config_file' ";
+        }
+    }
+
+    $json_response = json_encode([
+        "message" => $message
+    ]);
+
+    $response->getBody()->write($json_response);
+    $response = $response->withStatus($status);
+    return $response->withHeader("Content-Type", "application/json");
+});
+
+/**
+ * Updates the auth key by writing the new value to the config file.
+ * If anything goes wrong (file not found, IO exception),
+ * the old key is restored
+ * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ */
 function update_API_key($new_key) {
     
     global $DRUGBANK_API_KEY, $config, $config_file;
@@ -235,6 +282,62 @@ function update_API_key($new_key) {
         return 500;
     }
 
+}
+
+/**
+ * Updates the auth key by writing the new value to the config file.
+ * If anything goes wrong (file not found, IO exception),
+ * the old key is restored
+ * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ */
+function update_region($new_region) {
+    
+    global $DRUGBANK_REGION, $config, $config_file;
+
+    // get the current region
+    $old_region = $DRUGBANK_REGION;
+
+    // update region
+    $DRUGBANK_REGION = $new_region;
+
+    // update local config
+    $config["region"] = $new_region;
+
+    // try to write back to config file
+    try {
+        $config_string = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $file = fopen(__DIR__ . "/../../" . $config_file, "w");
+        fwrite($file, $config_string);
+        fclose($file);
+        return 200;
+
+    } catch (Exception $e) {
+        // in case anything goes wrong, revert changes
+        $DRUGBANK_REGION = $old_region;
+        $config["region"] = $old_region;
+        return 500;
+    }
+
+}
+
+/**
+ * Checks that the region found in the config file is valid.
+ * Region can either be "us", "ca", "eu", or "" (for searching all).
+ * If the region isn't any of the above, it will default to "" (all).
+ */
+function validate_region($config) {
+    $region = strtolower($config["region"]);
+
+    switch ($region) {
+        case "us":
+        case "ca":
+        case "eu":
+            $config["region"] = $region;
+            break;
+        default:
+            $config["region"] = "";
+            break;
+    }
 }
 
 // Run app
