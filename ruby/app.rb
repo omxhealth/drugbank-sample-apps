@@ -34,7 +34,7 @@ end
 
 validate_region($config)
 
-$drugbank_api = $config["api-host"]
+$drugbank_api = "https://api.drugbankplus.com/v1/"
 $drugbank_api_key = $config["auth-key"]
 $drugbank_region = $config["region"]
 $drugbank_headers = {
@@ -50,85 +50,101 @@ def drugbank_get(route, params)
     return JSON.parse(res.body)
 end
 
-get "/" do
-    redirect "/product_concepts"
+# Creates the url needed for accessing the actual DrugBank API directly.
+# Used for display in the API demo part of the app. The url get embedded into
+# template, and is accessed on the client side. Needed mainly to insert
+# the region correctly into the url. 
+#
+# If the region is "" (all), then the api 
+# host and endpoint with no region is returned 
+# (https://api.drugbankplus.com/v1/product_concepts).
+#
+# If a region like "us" is being used, then it appends to the api host the 
+# region and a "/" before the endpoint 
+# (https://api.drugbankplus.com/v1/us/product_concepts).
+# 
+# endpoint: the API call type (product_concepts, ddi, etc)
+def getApiRoute(endpoint)
+    apiRoute = $drugbank_api + $drugbank_region
+
+    if $drugbank_region != ""
+        apiRoute = apiRoute + "/" 
+    end    
+
+    return apiRoute + endpoint
+
+end
+
+# Similar to getApiRoute(), but omits the api host. It
+# returns the API endpoint with correct region attached
+# for use with drugbank_get().
+#
+# endpoint: the API call type (product_concepts, ddi, etc)
+def getApiEndpoint(endpoint)
+    
+    apiRegion = $drugbank_region
+
+    if $drugbank_region != ""
+        apiRegion = apiRegion + "/"
+    end
+
+    return apiRegion + endpoint
+
 end   
 
-get "/config" do
-    content_type :json
-    $config.to_json
-end    
+get "/" do
+    redirect "/support"
+end     
 
 # GET render: product concepts page
 get "/product_concepts" do
-    haml :product_concepts
+    route = getApiRoute("product_concepts")
+    haml :product_concepts, :locals => {:api_route => route} 
 end
 
 # GET API call: product concepts
 get "/api/product_concepts" do
     content_type :json
-    drugbank_get("product_concepts", params).to_json
-end
-
-# GET API call: regional product concepts
-get "/api/:region/product_concepts" do
-    content_type :json
-    drugbank_get(params["region"] + "/product_concepts", params).to_json
+    route = getApiEndpoint("product_concepts")
+    drugbank_get(route, params).to_json
 end
 
 # GET API call: product concepts (x = DB ID, y = routes/strength)
 get "/api/product_concepts/:x/:y" do
     content_type :json
-    route = "product_concepts/" + params["x"] + "/" + params["y"]
-    drugbank_get(route, params).to_json
-end
-
-# GET API call: regional product concepts (x = DB ID, y = routes/strength)
-get "/api/:region/product_concepts/:x/:y" do
-    content_type :json
-    route = params["region"] + "/product_concepts/" + params["x"] + "/" + params["y"]
+    route = getApiEndpoint("product_concepts/" + params["x"] + "/" + params["y"])
     drugbank_get(route, params).to_json
 end
 
 # GET render: drug-drug interaction (ddi) page
 get "/ddi" do
-    haml :ddi
+    route = getApiRoute("ddi")
+    haml :ddi, :locals => {:api_route => route}
 end
 
 # GET API call: ddi
 get "/api/ddi" do
     content_type :json
-    drugbank_get("ddi", params).to_json
-end    
-
-# GET API call: regional ddi
-get "/api/:region/ddi" do
-    content_type :json
-    route = params["region"] + "/ddi"
+    route = getApiEndpoint("ddi")
     drugbank_get(route, params).to_json
-end    
+end     
 
 # GET render: indications page
 get "/indications" do
-    haml :indications
+    route = getApiRoute("indications")
+    haml :indications, :locals => {:api_route => route}
 end
 
 # GET API call: indications
 get "/api/indications" do
     content_type :json
-    drugbank_get("indications", params).to_json
-end 
-
-# GET API call: regional indications
-get "/api/:region/indications" do
-    content_type :json
-    route = params["region"] + "/indications"
+    route = getApiEndpoint("indications")
     drugbank_get(route, params).to_json
 end 
 
 # GET render: support page
 get "/support" do
-    haml :support
+    haml :support, :locals => {:region => $drugbank_region, :api_key => $drugbank_api_key}
 end  
 
 # PUT: update the authorization key

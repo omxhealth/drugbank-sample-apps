@@ -27,7 +27,7 @@ validateRegion(config);
 
 // Set variables from config
 let port = config["port"]; // the port the server will be hosted on
-let DRUGBANK_API = config["api-host"]; // the DrugBank API link
+let DRUGBANK_API = "https://api.drugbankplus.com/v1/"; // the DrugBank API link
 let DRUGBANK_REGION = config["region"]; // the region to get results from
 let DRUGBANK_API_KEY = config["auth-key"]; // DrugBank API key
 
@@ -44,65 +44,43 @@ let DRUGBANK_HEADERS =
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); 
 
 app.get("/", function (req, res) {
-    res.redirect("/product_concepts");
-});
-
-// GET config json
-// Used to give the front-end access to the
-// config file (for the API host and region)
-app.get("/config", function (req, res) {
-    res.json(config);
+    res.redirect("/support");
 });
 
 /* Set product concepts routes */   
 
 // GET render: product concepts page    
 app.get("/product_concepts", function (req, res) {
-    res.render("product_concepts.jinja");
+    let route = getApiRoute("product_concepts");
+    res.render("product_concepts.jinja", {api_route : route});
 });  
 
 // GET API call: product concepts
 app.get("/api/product_concepts", async function (req, res) {
-    let data = await drugbank_get("product_concepts", req.query);
-    res.json(data);
-});
-
-// GET API call: regional product concepts
-app.get("/api/:region/product_concepts", async function (req, res) {
-    let data = await drugbank_get(req.params.region + "/product_concepts", req.query);
+    let route = getApiEndpoint("product_concepts");
+    let data = await drugbank_get(route, req.query);
     res.json(data);
 });
 
 // GET API call: product concepts (x = DB ID, y = routes/strength)
 app.get("/api/product_concepts/:x/:y", async function (req, res) {
-    let data = await drugbank_get("product_concepts/" + req.params.x + "/" + 
-        req.params.y, req.query);
+    let route = getApiEndpoint("product_concepts/" + req.params.x + "/" + req.params.y);
+    let data = await drugbank_get(route, req.query);
     res.json(data);
-});
-
-// GET API call: regional product concepts (x = DB ID, y = routes/strength)
-app.get("/api/:region/product_concepts/:x/:y", async function (req, res) {
-    let data = await drugbank_get(req.params.region + "/product_concepts/" + 
-        req.params.x + "/" + req.params.y, req.query);
-    res.json(data);    
 });
 
 /* Set drug-drug interactions routes */
 
 // GET render: drug-drug interations (ddi) page    
 app.get("/ddi", function (req, res) {
-    res.render("ddi.jinja");
+    let route = getApiRoute("ddi");
+    res.render("ddi.jinja", {api_route : route});
 });
 
 // GET API call: ddi
 app.get("/api/ddi", async function (req, res) {
-    let data = await drugbank_get("ddi", req.query);
-    res.json(data);
-});
-
-// GET API call: regional ddi
-app.get("/api/:region/ddi", async function (req, res) {
-    let data = await drugbank_get(req.params.region + "/ddi", req.query);
+    let route = getApiEndpoint("ddi");
+    let data = await drugbank_get(route, req.query);
     res.json(data);
 });
 
@@ -110,33 +88,22 @@ app.get("/api/:region/ddi", async function (req, res) {
 
 // GET render: indications page    
 app.get("/indications", function (req, res) {
-    res.render("indications.jinja");
+    let route = getApiRoute("indications");
+    res.render("indications.jinja", {api_route : route});
 });
 
 // GET API call: indications
 app.get("/api/indications", async function (req, res) {
-    let data = await drugbank_get("indications", req.query);
+    let route = getApiEndpoint("indications");
+    let data = await drugbank_get(route, req.query);
     res.json(data);
-});
-
-// GET API call: regional indications
-app.get("/api/:region/indications", async function (req, res) {
-    let data = await drugbank_get(req.params.region + "/indications", req.query);
-    res.json(data);
-});
-
-/* Set alternative drugs routes */
-
-// GET render: alternative drugs page    
-app.get("/alternative_drugs", function (req, res) {
-    res.render("alternative_drugs.jinja");
 });
 
 /* Set support page routes */
 
 // GET render: support page
 app.get("/support", function (req, res) {
-    res.render("support.jinja");
+    res.render("support.jinja", {region : DRUGBANK_REGION, api_key : DRUGBANK_API_KEY});
 });
 
 // PUT: update API authorization key 
@@ -246,6 +213,53 @@ function validateRegion(config) {
             config["region"] = "";
             break;
     }
+
+}
+
+/**
+ * Creates the url needed for accessing the actual DrugBank API directly.
+ * Used for display in the API demo part of the app. The url get embedded into
+ * template, and is accessed on the client side. Needed mainly to insert
+ * the region correctly into the url. 
+ * 
+ * If the region is "" (all), then the api 
+ * host and endpoint with no region is returned 
+ * (https://api.drugbankplus.com/v1/product_concepts).
+ * 
+ * If a region like "us" is being used, then it appends to the api host the 
+ * region and a "/" before the endpoint 
+ * (https://api.drugbankplus.com/v1/us/product_concepts).
+ * 
+ * @param {*} endpoint API call type (product_concepts, ddi, etc)
+ */
+function getApiRoute(endpoint) {
+    
+    let apiRoute = DRUGBANK_API + DRUGBANK_REGION;
+
+    if (DRUGBANK_REGION != "") {
+        apiRoute = apiRoute + "/";
+    } 
+
+    return apiRoute + endpoint;
+
+}
+
+/**
+ * Similar to getApiRoute(), but omits the api host. It
+ * returns the API endpoint with correct region attached
+ * for use with drugbank_get().
+ * 
+ * @param {*} endpoint API call type (product_concepts, ddi, etc)
+ */
+function getApiEndpoint(endpoint) {
+    
+    let apiRegion = DRUGBANK_REGION;
+
+    if (DRUGBANK_REGION != "") {
+        apiRegion = apiRegion + "/";
+    } 
+
+    return apiRegion + endpoint;
 
 }
 

@@ -1,15 +1,10 @@
+var api_key = $(".main-container")[0].attributes["api_key"].value;
+var region = $(".main-container")[0].attributes["region"].value;
+
 // Request the current API key and region for display
 setSupportSettings = function() {
-    
     $("#auth_key_input").attr("placeholder", api_key);
-
-    // If the region is "" (all), the it will have a "/" at the end
-    if (region != "") {
-        $("#region_select").val(region.substring(0, region.length - 1));
-    } else {
-        $("#region_select").val(region);
-    }
-
+    $("#region_select").val(region);
 }
 
 /**
@@ -23,14 +18,7 @@ $("#region_select").select2({
     width: "resolve" 
 });
 
-/**
- * This can be run before the DOM loads so that the values are set by
- * the time the document finishes loading. Then the API key input and region 
- * selector don't flicker/appear to randomly change.
- */
-getConfig().then(function() {
-    setSupportSettings();
-});
+setSupportSettings(); // set the current region and display api key
 
 $(document).ready(function() {
 
@@ -55,7 +43,7 @@ $(document).ready(function() {
      */
     $("#auth_key_submit").on("click", function(e) {
         
-        e.preventDefault(); // by defualt, submitting a form loads a new page
+        e.preventDefault(); // by default, submitting a form loads a new page
         e.stopPropagation();
 
         return $.ajax({
@@ -80,7 +68,6 @@ $(document).ready(function() {
             // or by being unable to open "config.json" to save
             error: function(xhr) {
                 var result = JSON.parse(xhr.responseText);
-
                 $("#auth_key_alert").fadeOut(100); // if an alert wasn't dismissed, hide it now
                 $("#auth_key_input").attr("placeholder", result["original-key"]); // put original key
                 $("#auth_key_input").val(""); // empty the text input
