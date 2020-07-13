@@ -7,6 +7,11 @@
  * to flicker when the page loads and they convert to select2s.
  */
 
+var api_route = $(".main-container")[0].attributes["api_route"].value;
+var products_table = $('.products-table').DataTable({
+    order: [[0, "desc"]]
+}); 
+
 getStrengths = function (d) {
     return d.ingredients.map(function (i) {
         return i.name + " " + i.strength.number + " " + i.strength.unit;
@@ -25,13 +30,8 @@ loadTableResults = function (products_table, data) {
         });
         products_table.draw();
     }
+    
 };
-
-getConfig();
-
-var products_table = $('.products-table').DataTable({
-    order: [[0, "desc"]]
-});
 
 // Activate the drug search input
 $(".drug_autocomplete").select2({
@@ -45,7 +45,7 @@ $(".drug_autocomplete").select2({
         return $('<span>' + strip_em_tags(d.text) + '</span>');
     },
     ajax: {
-        url: localhost + region + encodeURI("product_concepts"),
+        url: localhost + encodeURI("product_concepts"),
         delay: 100,
         data: function (params) {
             return {
@@ -63,13 +63,15 @@ $(".drug_autocomplete").select2({
             };
         },
         success: function (data) {
-            var url = encodeURI(api_host + region + "product_concepts?q=" + $(".select2-search__field").val());
+            var url = api_route + encodeURI("?q=" + $(".select2-search__field").val());
             displayRequest(url, data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             handleError(jqXHR, ".drug_autocomplete");
         }
+
     }
+
 });
 
 // Load the product concept routes when a drug is selected
@@ -77,30 +79,36 @@ $("#product-concepts-tutorial .drug_autocomplete").on("change", function (e) {
     $(".route_autocomplete").empty();
     $(".strength_autocomplete").empty();
     clearTableResults(products_table);
-    if ($(this).val()) {
-        var path = encodeURI(region + "product_concepts/" + $(this).val() + "/routes")
-        $.ajax({
-            url: localhost + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_host + path, data);
-                data.map(function (d) {
-                    return {
-                        route: d.route,
-                        id: d.drugbank_pcid
-                    };
-                }).sort(function (a, b) {
-                    return a.route.localeCompare(b.route);
-                }).forEach(function (r) {
-                    $(".route_autocomplete").append(new Option(r.route, r.id, false, false));
-                });
-                $(".route_autocomplete").val(null).trigger('change');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
-            }
-        });
+
+    if (!$(this).val()) {
+        return;
     }
+
+    var path = encodeURI("/" + $(this).val() + "/routes");
+
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data);
+            data.map(function (d) {
+                return {
+                    route: d.route,
+                    id: d.drugbank_pcid
+                };
+            }).sort(function (a, b) {
+                return a.route.localeCompare(b.route);
+            }).forEach(function (r) {
+                $(".route_autocomplete").append(new Option(r.route, r.id, false, false));
+            });
+            $(".route_autocomplete").val(null).trigger('change');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".drug_autocomplete");
+        }
+
+    });
+
 });
 
 // Activate the route input
@@ -113,28 +121,34 @@ $(".route_autocomplete").select2({
 $("#product-concepts-tutorial .route_autocomplete").on("change", function (e) {
     $(".strength_autocomplete").empty();
     clearTableResults(products_table);
-    if ($(this).val()) {
-        var path = encodeURI(region + "product_concepts/" + $(this).val() + "/strengths")
-        $.ajax({
-            url: localhost + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_host + path, data);
-                data.map(function (d) {
-                    return {
-                        strength: d.name,
-                        id: d.drugbank_pcid
-                    };
-                }).sort().forEach(function (r) {
-                    $(".strength_autocomplete").append(new Option(r.strength, r.id, false, false));
-                });
-                $(".strength_autocomplete").val(null).trigger('change');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".route_autocomplete");
-            }
-        });
+    
+    if (!$(this).val()) {
+        return;
     }
+        
+    var path = encodeURI("/" + $(this).val() + "/strengths");
+
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data);
+            data.map(function (d) {
+                return {
+                    strength: d.name,
+                    id: d.drugbank_pcid
+                };
+            }).sort().forEach(function (r) {
+                $(".strength_autocomplete").append(new Option(r.strength, r.id, false, false));
+            });
+            $(".strength_autocomplete").val(null).trigger('change');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".route_autocomplete");
+        }
+
+    });
+
 });
 
 // Activate the strength input
@@ -146,21 +160,27 @@ $(".strength_autocomplete").select2({
 // Load the product concepts when a strength is selected
 $("#product-concepts-tutorial .strength_autocomplete").on("change", function (e) {
     clearTableResults(products_table);
-    if ($(this).val()) {
-        $("#loader").show();
-        var path = encodeURI(region + "product_concepts/" + $(this).val() + "/products")
-        $.ajax({
-            url: localhost + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_host + path, data);
-                loadTableResults(products_table, data);
-                $("#loader").hide();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".strength_autocomplete");
-                $("#loader").hide();
-            }
-        });
+    
+    if (!$(this).val()) {
+        return;
     }
+
+    var path = encodeURI("/" + $(this).val() + "/products");
+    $("#loader").show();
+
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data);
+            loadTableResults(products_table, data);
+            $("#loader").hide();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".strength_autocomplete");
+            $("#loader").hide();
+        }
+
+    });
+
 });

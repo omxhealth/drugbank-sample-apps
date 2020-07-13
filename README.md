@@ -19,7 +19,7 @@ Sample apps for drugbank, private for now
 |     Python            |     [pip](https://packaging.python.org/tutorials/installing-packages/)    |     [Flask](https://flask.palletsprojects.com/en/1.1.x/)    |     [Requests](https://requests.readthedocs.io/en/master/)                                                                   |     [Jinja](https://jinja.palletsprojects.com/en/2.11.x/)   (Jinja2)    |
 |     Ruby              |     [Bundler](https://bundler.io/)                                        |     [Sinatra](http://sinatrarb.com/)                        |     [httparty](https://github.com/jnunemaker/httparty)                                                                       |     [Haml](http://haml.info/) (Haml)                                    |
 
-##### Note: Twig is very similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
+##### Note: Twig is similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
 
 # How to Use
 
@@ -27,7 +27,7 @@ Sample apps for drugbank, private for now
 
 By default, each app should be running at http://127.0.0.1:4567/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
 
-Each implementation determines the port to run on as well as the Drugbank API host, API key, and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, API host, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
+Each implementation determines the port to run on as well as the DrugBank API key and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
 
 ##### Note: the Java app may not behave like this, as when it is compiled it creates a copy of `config.json` for itself at `drugbank-sample-apps\java\db-app\target\classes`.
 
@@ -61,7 +61,7 @@ node app.js
 Visit the address given in the console to view the app. 
 
 ## PHP
-##### Note: due to the way Slim handles static resources, a location outside of the project could not be specified like for the other apps. Copies had to be made and placed at `drugbank-sample-apps/php/public`. Keep this in mind if you want to edit or add resources.
+##### Note: due to the way Slim handles static resources, a location outside of the project could not be specified like for the other apps. Copies of the JavaScript and CSS files had to be made and placed at `drugbank-sample-apps/php/public`. Keep this in mind if you want to edit or add resources.
 
 First, ensure that [Composer](https://getcomposer.org/) is installed.
 

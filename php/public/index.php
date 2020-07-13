@@ -38,7 +38,7 @@ try {
 validate_region($config);
 
 // Set variables after reading in the config
-$DRUGBANK_API = $config["api-host"];
+$DRUGBANK_API = "https://api.drugbankplus.com/v1/";
 $DRUGBANK_API_KEY = $config["auth-key"];
 $DRUGBANK_REGION = $config["region"];
 $DRUGBANK_HEADERS = [
@@ -69,7 +69,8 @@ function drugbank_get($route, $params) {
 $app = AppFactory::create();
 
 // Create Twig
-$twig = Twig::create("../resources/templates", ["cache" => "./cache"]);
+// Uses the jinja templates as twig is similar enough for them to work
+$twig = Twig::create("../resources/templates", ["cache" => false]);
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));
@@ -77,33 +78,21 @@ $app->add(TwigMiddleware::create($app, $twig));
 // Add middleware to parse HTTP request bodies
 $app->addBodyParsingMiddleware();
 
-$app->redirect("/", "/product_concepts");
-
-// GET config
-$app->get("/config", function (Request $request, Response $response) {
-    global $config;
-    $payload = json_encode($config);
-    $response->getBody()->write($payload);
-    return $response->withHeader("Content-Type", "application/json");
-});
+$app->redirect("/", "/support");
 
 // GET render: product concepts page
 $app->get("/product_concepts", function (Request $request, Response $response) {
+    $route = getApiRoute("product_concepts");
     $view = Twig::fromRequest($request);
-    return $view->render($response, "product_concepts.jinja");
+    return $view->render($response, "product_concepts.jinja", array(
+        "api_route" => $route
+    ));
 });
 
 // GET API call: product concepts
 $app->get("/api/product_concepts", function (Request $request, Response $response) {
-    $payload = drugbank_get("product_concepts", $request->getQueryParams());
-    $response->getBody()->write($payload);
-    return $response->withHeader("Content-Type", "application/json");
-});
-
-// GET API call: regional product concepts
-$app->get("/api/{region}/product_concepts", 
-        function (Request $request, Response $response, $args) {
-    $payload = drugbank_get($args["region"] . "/product_concepts", $request->getQueryParams());
+    $route = getApiEndpoint("product_concepts");
+    $payload = drugbank_get($route, $request->getQueryParams());
     $response->getBody()->write($payload);
     return $response->withHeader("Content-Type", "application/json");
 });
@@ -111,70 +100,53 @@ $app->get("/api/{region}/product_concepts",
 // GET API call: product concepts (x = DB ID, y = routes/strength)
 $app->get("/api/product_concepts/{x}/{y}", 
         function (Request $request, Response $response, $args) {
-    $payload = drugbank_get("product_concepts/" . $args["x"] . "/" . $args["y"], $request->getQueryParams());
-    $response->getBody()->write($payload);
-    return $response->withHeader("Content-Type", "application/json");
-});
-
-// GET API call: product concepts (x = DB ID, y = routes/strength)
-$app->get("/api/{region}/product_concepts/{x}/{y}", 
-        function (Request $request, Response $response, $args) {
-    $payload = drugbank_get($args["region"] . "/product_concepts/" . $args["x"] . "/" . $args["y"], $request->getQueryParams());
+    $route = getApiEndpoint("product_concepts/" . $args["x"] . "/" . $args["y"]);        
+    $payload = drugbank_get($route, $request->getQueryParams());
     $response->getBody()->write($payload);
     return $response->withHeader("Content-Type", "application/json");
 });
 
 // GET render: ddi page
 $app->get("/ddi", function (Request $request, Response $response) {
+    $route = getApiRoute("ddi");
     $view = Twig::fromRequest($request);
-    return $view->render($response, "ddi.jinja");
+    return $view->render($response, "ddi.jinja", array("api_route" => $route));
 });
 
 // GET API call: ddi
 $app->get("/api/ddi", function (Request $request, Response $response) {
-    $payload = drugbank_get("ddi", $request->getQueryParams());
-    $response->getBody()->write($payload);
-    return $response->withHeader("Content-Type", "application/json");
-});
-
-// GET API call: regional ddi
-$app->get("/api/{region}/ddi", function (Request $request, Response $response, $args) {
-    $payload = drugbank_get($args["region"] . "/ddi", $request->getQueryParams());
+    $route = getApiEndpoint("ddi");
+    $payload = drugbank_get($route, $request->getQueryParams());
     $response->getBody()->write($payload);
     return $response->withHeader("Content-Type", "application/json");
 });
 
 // GET render: indications page
 $app->get("/indications", function (Request $request, Response $response) {
+    $route = getApiRoute("indications");
     $view = Twig::fromRequest($request);
-    return $view->render($response, "indications.jinja");
+    return $view->render($response, "indications.jinja", array("api_route" => $route));
 });
 
 // GET API call: indications
 $app->get("/api/indications", function (Request $request, Response $response) {
-    $payload = drugbank_get("indications", $request->getQueryParams());
-    $response->getBody()->write($payload);
-    return $response->withHeader("Content-Type", "application/json");
-});
-
-// GET API call: regional indications
-$app->get("/api/{region}/indications", function (Request $request, Response $response, $args) {
-    $payload = drugbank_get($args["region"] . "/indications", $request->getQueryParams());
+    $route = getApiEndpoint("indications");
+    $payload = drugbank_get($route, $request->getQueryParams());
     $response->getBody()->write($payload);
     return $response->withHeader("Content-Type", "application/json");
 });
 
 // GET render: support page
 $app->get("/support", function (Request $request, Response $response) {
-    $view = Twig::fromRequest($request);
-    return $view->render($response, "support.jinja");
-});
 
-// GET: current API authorization key
-$app->get("/auth_key", function (Request $request, Response $response) {
-    global $DRUGBANK_API_KEY;
-    $response->getBody()->write($DRUGBANK_API_KEY);
-    return $response;
+    global $DRUGBANK_REGION, $DRUGBANK_API_KEY;
+
+    $view = Twig::fromRequest($request);
+    return $view->render($response, "support.jinja", array(
+        "region" => $DRUGBANK_REGION,
+        "api_key" => $DRUGBANK_API_KEY
+    ));
+
 });
 
 // PUT: update API authorization key
@@ -246,6 +218,57 @@ $app->put("/region", function (Request $request, Response $response) {
     $response = $response->withStatus($status);
     return $response->withHeader("Content-Type", "application/json");
 });
+
+/**
+ * Creates the url needed for accessing the actual DrugBank API directly.
+ * Used for display in the API demo part of the app. The url get embedded into
+ * template, and is accessed on the client side. Needed mainly to insert
+ * the region correctly into the url. 
+ * 
+ * If the region is "" (all), then the api 
+ * host and endpoint with no region is returned 
+ * (https://api.drugbankplus.com/v1/product_concepts).
+ * 
+ * If a region like "us" is being used, then it appends to the api host the 
+ * region and a "/" before the endpoint 
+ * (https://api.drugbankplus.com/v1/us/product_concepts).
+ * 
+ * @param {*} endpoint API call type (product_concepts, ddi, etc)
+ */
+function getApiRoute($endpoint) {
+    
+    global $DRUGBANK_API, $DRUGBANK_REGION;
+
+    $apiRoute = $DRUGBANK_API . $DRUGBANK_REGION;
+
+    if ($DRUGBANK_REGION != "") {
+        $apiRoute = $apiRoute . "/";
+    } 
+
+    return $apiRoute . $endpoint;
+
+}
+
+/**
+ * Similar to getApiRoute(), but omits the api host. It
+ * returns the API endpoint with correct region attached
+ * for use with drugbank_get().
+ * 
+ * @param {*} endpoint API call type (product_concepts, ddi, etc)
+ */
+function getApiEndpoint($endpoint) {
+    
+    global $DRUGBANK_REGION;
+
+    $apiRegion = $DRUGBANK_REGION;
+
+    if ($DRUGBANK_REGION != "") {
+        $apiRegion = $apiRegion . "/";
+    } 
+
+    return $apiRegion . $endpoint;
+
+}
 
 /**
  * Updates the auth key by writing the new value to the config file.
