@@ -1,3 +1,5 @@
+var api_route = $(".main-container")[0].attributes["api_route"].value;
+
 activeDrugList = function (interactions_table, search, api_host) {
 
     // Add handler to remove product on click and update results
@@ -16,7 +18,7 @@ activeDrugList = function (interactions_table, search, api_host) {
 };
 
 loadTableResults = function (interactions_table, search) {
-    var codes, ddi_url;
+    var codes, ddi_params;
 
     // Empty the interactions table
     clearTableResults(interactions_table);
@@ -30,19 +32,18 @@ loadTableResults = function (interactions_table, search) {
             return $(this).data("code");
         }).toArray().join();
 
-        ddi_url = "ddi?product_concept_id=" + codes;
+        ddi_params = "?product_concept_id=" + codes;
 
         return $.ajax({
-            url: localhost + region + encodeURI(ddi_url),
+            url: localhost + encodeURI("ddi" + ddi_params),
             // Brief delay to a) work around a select2 bug that is not patched in the version
             // included in rails-select2 (https://github.com/select2/select2/issues/4205)
             // and b) reduce the number of requests sent
             delay: 100,
             success: function (data) {
-                var search_url;
 
                 // Fill the side display
-                search_url = encodeURI(api_host + region + ddi_url);
+                var search_url = encodeURI(api_route + ddi_params);
                 displayRequest(search_url, data);
 
                 // Fill the table
@@ -64,8 +65,6 @@ loadTableResults = function (interactions_table, search) {
 
 $(document).ready(function () {
 
-    getConfig();
-
     var interactions_table = $('.interactions-table').DataTable({
         order: [[0, "desc"]]
     });
@@ -82,7 +81,7 @@ $(document).ready(function () {
             return $('<span>' + strip_em_tags(d.text) + '</span>');
         },
         ajax: {
-            url: localhost + region + encodeURI("product_concepts"),
+            url: localhost + encodeURI("product_concepts"),
             delay: 100,
             data: function (params) {
                 return {
@@ -119,10 +118,10 @@ $(document).ready(function () {
             // Add the product to our list
             text = $(this).find(`option[value=${$(this).val()}]`).text();
             $("#drug-product-list").append(`<div class='drug-product btn btn-md btn-label' data-code='${$(this).val()}'>${text}<span class='glyphicon glyphicon-remove'></span></div>`);
-            activeDrugList(interactions_table, this, api_host);
+            activeDrugList(interactions_table, this, api_route);
 
             // Update the results table
-            loadTableResults(interactions_table, this, api_host);
+            loadTableResults(interactions_table, this, api_route);
 
             // Clear the drug product search
             $(".drug_autocomplete").val(null).trigger('change');

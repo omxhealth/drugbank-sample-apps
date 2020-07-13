@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 public class App {
 
     protected static String authKey = "";
-    protected static String apiHost = "";
+    protected static String apiHost = "https://api.drugbankplus.com/v1/";
     protected static String region = "";
     protected static JSONObject config;
 
@@ -51,109 +51,103 @@ public class App {
         config = loadConfig();
         setupServer(config);
 
+        logger.info("API Host: " + apiHost);
         logger.info("Working Path: " + System.getProperty("user.dir").toString());
 
         // Template engine setup
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
 
-        redirect.get("/", "/product_concepts");
-
-        // GET config settings
-        // Used to give the front-end access to the
-        // config file (for the API host and region)
-        get("/config", (req, res) -> {
-            res.type("application/json");
-            return config;
-        });
+        redirect.get("/", "/support");
 
         /* Set product concepts routes */
 
         // GET render: product concepts page 
-        get("/product_concepts", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "product_concepts.jinja"), engine);
+        get("/product_concepts", (req, res) -> {
+            String route = getApiRoute("product_concepts");
+            Map<String, Object> attributes = new HashMap<>();
+
+			attributes.put("api_route", route);
+
+            return engine.render( 
+                new ModelAndView(attributes, "product_concepts.jinja")
+            );
+        });    
 
         // GET API call: product concepts
         get("/api/product_concepts", (req, res) -> {
+            String route = getApiEndpoint("product_concepts");
             final Map<String, String> params = setParams(req);
             res.type("application/json");
-            return api.drugbank_get("product_concepts", params).getData().toString();
-        });
-
-        // GET API call: regional product concepts
-        get("/api/*/product_concepts", (req, res) -> {
-            final Map<String, String> params = setParams(req);
-            res.type("application/json");
-            return api.drugbank_get(req.splat()[0] + "/product_concepts", 
-                    params).getData().toString();
+            return api.drugbank_get(route, params).getData().toString();
         });
 
         // GET API call: product concepts (DB ID, routes/strength)
         get("/api/product_concepts/*/*", (req, res) -> {
+            String route = getApiEndpoint(
+                "product_concepts/" + req.splat()[0] + "/" + req.splat()[1]);
             final Map<String, String> params = setParams(req);
             res.type("application/json");
-            return api.drugbank_get("product_concepts/" + req.splat()[0] + 
-                    "/" + req.splat()[1], params).getData().toString();
-        });
-
-        // GET API call: regional product concepts (DB ID, routes/strength)
-        get("/api/*/product_concepts/*/*", (req, res) -> {
-            final Map<String, String> params = setParams(req);
-            res.type("application/json");
-            return api.drugbank_get(req.splat()[0] + "/product_concepts/" + 
-                    req.splat()[1] + "/" + req.splat()[2], params).getData().toString();
+            return api.drugbank_get(route, params).getData().toString();
         });
 
         /* Set drug-drug interactions routes */
 
         // GET render: drug-drug interations (ddi) page 
-        get("/ddi", (req, res) -> new ModelAndView(new HashMap<>(), "ddi.jinja"), engine);
+        get("/ddi", (req, res) -> {
+            String route = getApiRoute("ddi");
+            Map<String, Object> attributes = new HashMap<>();
+
+			attributes.put("api_route", route);
+
+            return engine.render( 
+                new ModelAndView(attributes, "ddi.jinja")
+            );
+        });    
 
         // GET API call: ddi
         get("/api/ddi", (req, res) -> {
+            String route = getApiEndpoint("ddi");
             final Map<String, String> params = setParams(req);
             res.type("application/json");
-            return api.drugbank_get("ddi", params).getData().toString();
-        });
-
-        // GET API call: regional ddi
-        get("/api/*/ddi", (req, res) -> {
-            final Map<String, String> params = setParams(req);
-            res.type("application/json");
-            return api.drugbank_get(req.splat()[0] + "/ddi", params).getData().toString();
+            return api.drugbank_get(route, params).getData().toString();
         });
 
         /* Set indications routes */
 
         // GET render: indications page 
-        get("/indications", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "indications.jinja"), engine);
+        get("/indications", (req, res) -> {
+            String route = getApiRoute("indications");
+            Map<String, Object> attributes = new HashMap<>();
+
+			attributes.put("api_route", route);
+
+            return engine.render( 
+                new ModelAndView(attributes, "indications.jinja")
+            );
+        });    
 
         // GET API call: indications
         get("/api/indications", (req, res) -> {
+            String route = getApiEndpoint("indications");
             final Map<String, String> params = setParams(req);
             res.type("application/json");
-            return api.drugbank_get("indications", params).getData().toString();
-        });
-
-        // GET API call: regional indications
-        get("/api/*/indications", (req, res) -> {
-            final Map<String, String> params = setParams(req);
-            res.type("application/json");
-            return api.drugbank_get(req.splat()[0] + "/indications", 
-                    params).getData().toString();
+            return api.drugbank_get(route, params).getData().toString();
         });
 
         /* Set support page routes */
 
         // GET render: support page
-        get("/support", (req, res) -> 
-                new ModelAndView(new HashMap<>(), "support.jinja"), engine);
+        get("/support", (req, res) -> {
+            Map<String, Object> attributes = new HashMap<>();
 
-        // GET: current API authorization key
-        get("/auth_key", (req, res) -> {
-            return authKey;
-        });
+            attributes.put("region", region);
+            attributes.put("api_key", authKey);
+
+            return engine.render( 
+                new ModelAndView(attributes, "support.jinja")
+            );
+        });    
 
         // PUT: update API authorization key 
         put("/auth_key", (req, res) -> {
@@ -347,21 +341,6 @@ public class App {
         }
 
         try {
-            apiHost = config.getString("api-host");
-
-            // if the URL to the API is missing
-            // the last slash, put it at the end
-            if (!apiHost.substring(apiHost.length() - 1).equals("/")) {
-                apiHost = apiHost + "/";
-            }
-
-            logger.info("API Host: " + apiHost);
-
-        } catch (final Exception e) {
-            logger.error("No host specified", e);
-        }
-
-        try {
             authKey = config.getString("auth-key");
             logger.info("Authentication: " + authKey);
         } catch (final Exception e) {
@@ -408,6 +387,53 @@ public class App {
         final ObjectMapper mapper = new ObjectMapper();
         final Object json = mapper.readValue(config.toString(), Object.class);
         Files.write(Paths.get("../../" + configFile), mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(json));
+    }
+
+    /**
+     * Creates the url needed for accessing the actual DrugBank API directly.
+     * Used for display in the API demo part of the app. The url get embedded into
+     * template, and is accessed on the client side. Needed mainly to insert
+     * the region correctly into the url. 
+     * 
+     * If the region is "" (all), then the api 
+     * host and endpoint with no region is returned 
+     * (https://api.drugbankplus.com/v1/product_concepts).
+     * 
+     * If a region like "us" is being used, then it appends to the api host the 
+     * region and a "/" before the endpoint 
+     * (https://api.drugbankplus.com/v1/us/product_concepts).
+     * 
+     * @param {*} endpoint API call type (product_concepts, ddi, etc)
+     */
+    public static String getApiRoute(String endpoint) {
+        
+        String apiRoute = apiHost + region;
+
+        if (region != "") {
+            apiRoute = apiRoute + "/";
+        } 
+
+        return apiRoute + endpoint;
+
+    }
+
+    /**
+     * Similar to getApiRoute(), but omits the api host. It
+     * returns the API endpoint with correct region attached
+     * for use with drugbank_get().
+     * 
+     * @param {*} endpoint API call type (product_concepts, ddi, etc)
+     */
+    public static String getApiEndpoint(String endpoint) {
+        
+        String apiRegion = region;
+
+        if (region != "") {
+            apiRegion = apiRegion + "/";
+        } 
+
+        return apiRegion + endpoint;
+
     }
 
 }
