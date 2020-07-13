@@ -1,3 +1,5 @@
+var api_route = $(".main-container")[0].attributes["api_route"].value;
+
 getUsage = function(indication) {
     var usages;
     usages = [];
@@ -30,8 +32,6 @@ loadTableResults = function(indications_table, data, options) {
   };
 
 $(document).ready(function() {
-    
-    getConfig();
         
     if (document.getElementById("kind_select")) {
         options = {};
@@ -48,7 +48,7 @@ $(document).ready(function() {
     
     // Search indications when form is submitted.
     $("#indications-tutorial #indication_search").on("click", function(e) {
-        var indications_url, kind, more, off_label, otc_use, q, url;
+        var indications_params, kind, more, off_label, otc_use, q, url;
         
         e.preventDefault();
         e.stopPropagation();
@@ -64,35 +64,34 @@ $(document).ready(function() {
             kind = $("#kind_select").val();
             off_label = $("#off_label_select").val();
             otc_use = $("#otc_use_select").val();
-            indications_url = "indications?q=" + q;
+            indications_params = "?q=" + q;
             
             if (more) {
-                indications_url += "&more=" + more;
+                indications_params += "&more=" + more;
             }
             if (kind) {
-                indications_url += "&kind=" + kind.join(",");
+                indications_params += "&kind=" + kind.join(",");
             }
             if (off_label) {
-                indications_url += "&off_label=" + off_label;
+                indications_params += "&off_label=" + off_label;
             }
             if (otc_use) {
-                indications_url += "&otc_use=" + otc_use;
+                indications_params += "&otc_use=" + otc_use;
             }
 
             return $.ajax({
-                url: localhost + region + encodeURI(indications_url),
+                url: localhost + encodeURI("indications" + indications_params),
                 // Brief delay to a) work around a select2 bug that is not patched in the version
                 // included in rails-select2 (https://github.com/select2/select2/issues/4205)
                 // and b) reduce the number of requests sent
                 delay: 100,
                 data: {
-                    request_path: encodeURI(indications_url)
+                    request_path: encodeURI(indications_params)
                 },
                 success: function(data) {
-                    var search_url;
-                    
+
                     // Fill the side display
-                    search_url = encodeURI(api_host + region + indications_url);
+                    var search_url = encodeURI(api_route + indications_params);
                     displayRequest(search_url, data);
 
                     // Update the results table
