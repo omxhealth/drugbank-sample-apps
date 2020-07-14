@@ -1,10 +1,3 @@
-/**  
- * NOTE: The localhost needs to be replaced with the url of the web service
- * being used to access the DrugBank API, and the urls and parameters
- * in the AJAX calls below will need to be updated accordingly.
- * This example app assumes the request urls are sent to the included locally hosted server. 
- */
-
 var localhost = "/api/"; // for connecting to the locally hosted server
 
 highlight_name = function(concept) {
@@ -39,6 +32,13 @@ displayRequest = function(url, data) {
     $(".api-response").html(Prism.highlight(JSON.stringify((data), null, 2), Prism.languages.json));
 };
 
+// Clear the API request and response display on the page
+clearDisplayRequest = function() {
+    $(".http-request").html(null);
+    $(".shell-command").html(null);
+    $(".api-response").html(null);
+};
+
 handleError = function(jqXHR, element) {
     var message;
     if ((jqXHR.status && jqXHR.status === 0) || (jqXHR.statusText && jqXHR.statusText === 'abort')) {
@@ -57,3 +57,56 @@ handleError = function(jqXHR, element) {
         return alert(message.replace(/(<([^>]+)>)/ig,"") + ". Please wait and try again or contact the DrugBank Team.");
     }
 };
+
+/**
+ * Javascript for underlining menu items.
+ * Credit: https://css-tricks.com/jquery-magicline-navigation
+ */
+navUnderlineSetup = function() {
+
+    // First add the underline to the navbar
+    $(".navbar-nav").append("<li id='magic-line'></li>");
+   
+    var $magicLine = $("#magic-line");
+    var $el, leftPos, newWidth;
+
+    // The not("#magic-line") is here because the console will through errors
+    // if you hover over the magic line because it has no children
+    $(".brand-image, .navbar-nav li").not("#magic-line").hover(
+        function() {
+            $el = $(this).children();
+            leftPos = $el.position().left;
+            newWidth = $el.parent().width();
+            $magicLine.stop().animate({
+                left: leftPos,
+                width: newWidth
+            });
+        },
+        function() {
+            $magicLine.stop().animate({
+                left: $magicLine.data("origLeft"),
+                width: $magicLine.data("origWidth")
+            });
+        }
+    );
+    
+    navUnderlineMover(); // initial move into position
+
+    // if the window is resized, the magic-line values 
+    // need to be updated to work properly
+    window.addEventListener("resize", navUnderlineMover());
+
+};
+
+/**
+ * Moves the underline on nav items to the correct position.
+ * Called on setup to get initial location, then called whenever
+ * the window is resized.
+ */
+navUnderlineMover = function() {
+    $("#magic-line")
+        .width($(".active").children().width())
+        .css("left", $(".active a").position().left)
+        .data("origLeft", $("#magic-line").position().left)
+        .data("origWidth", $("#magic-line").width());   
+} 

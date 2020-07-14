@@ -1,0 +1,485 @@
+/**
+ * main.scss
+ *
+ * Font definitions and styling for elements that nearly 
+ * every page has (navbar, rows and columns, search bar, etc).
+ */
+@font-face {
+  font-family: Gemeli;
+  src: url("../fonts/GemeliWeb-Regular.eot") format("embedded-opentype"), url("../fonts/GemeliWeb-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Gemeli;
+  src: url("../fonts/GemeliWeb-Bold.eot") format("embedded-opentype"), url("../fonts/GemeliWeb-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Gemeli;
+  src: url("../fonts/GemeliWeb-Light.eot") format("embedded-opentype"), url("../fonts/GemeliWeb-Light.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#main-nav {
+  top: 0px;
+  min-height: 62px;
+  padding-left: 0;
+  background: #FF00B8 0% 0% no-repeat padding-box;
+  -webkit-box-shadow: 0px 3px 6px #00000029;
+          box-shadow: 0px 3px 6px #00000029;
+  opacity: 1;
+}
+
+.db-logo {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  margin-left: 40px;
+}
+
+.db-logo svg {
+  height: 19px;
+  padding: 0;
+  fill: white;
+  width: 168px;
+}
+
+.navbar-nav {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.nav-link {
+  font: Bold 16px/20px Gemeli;
+  letter-spacing: 0px;
+  color: #FFFFFF !important;
+  opacity: 1;
+  text-transform: uppercase;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.nav-item {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+#magic-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 4px;
+  background: #FFFFFF;
+  z-index: 10000;
+}
+
+button navbar-toggler {
+  border: none;
+  border-color: transparent;
+}
+
+main {
+  margin-top: 62px;
+}
+
+.main-row {
+  height: calc(100vh - 62px);
+}
+
+.col-search {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  z-index: 0;
+}
+
+.section-search {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background: #172042 0% 0% no-repeat padding-box;
+  border-bottom: 1px solid #707070;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: auto;
+  min-height: 218px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  line-height: 24px;
+  padding: 0 10%;
+  text-align: left;
+  text-rendering: optimizelegibility;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.section-search-form {
+  width: 100%;
+}
+
+.search-title {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  text-align: left;
+  font: normal 20px/24px Gemeli;
+  letter-spacing: 1.1px;
+  color: white;
+  opacity: 1;
+  text-rendering: optimizelegibility;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.form-group.search-group {
+  margin-bottom: 0px;
+}
+
+.term-group {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 0 !important;
+  overflow-y: auto;
+}
+
+.route-term, .form-term, .strength-term {
+  display: none;
+}
+
+.search-term {
+  background: #F3F3FC 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.search-term p {
+  font: normal 14px/24px Gemeli;
+  letter-spacing: 0px;
+  color: #172042;
+  padding: auto;
+  display: inline-block;
+  text-transform: uppercase;
+  padding: 0 20px;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.select-row {
+  margin-bottom: 8rem;
+}
+
+.search-help {
+  text-align: left;
+  font: 200 22px/32px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  opacity: 1;
+  margin: 65px 25% 0 25%;
+}
+
+.select-container {
+  margin-top: 65px;
+  margin-left: 0;
+  margin-right: 17%;
+  margin-bottom: 35px !important;
+}
+
+.select-header {
+  text-align: left;
+  font: 200 16px/14px Gemeli;
+  letter-spacing: 1.47px;
+  color: #172042;
+  opacity: 1;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.search-row {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  -webkit-box-shadow: 0px 0px 6px #00000029;
+          box-shadow: 0px 0px 6px #00000029;
+  opacity: 1;
+  height: 8rem;
+  bottom: 0;
+  position: absolute;
+}
+
+.col.text-center {
+  vertical-align: middle;
+  margin: auto;
+}
+
+.search-button {
+  border: none;
+  color: white;
+  padding: 10px 45px;
+  padding-right: 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  -webkit-transition-duration: 0.4s;
+          transition-duration: 0.4s;
+  cursor: pointer;
+  font: normal 28px/34px Gemeli;
+  text-transform: uppercase;
+  letter-spacing: 1.54px;
+  background: #FF00B8 0% 0% no-repeat padding-box;
+  border-radius: 26px;
+  opacity: 1;
+}
+
+.search-button:hover {
+  background-color: #B20080;
+  color: white;
+  border-color: #B20080;
+}
+
+.search-icon-submit {
+  fill: white;
+  width: 34px;
+  height: 30px;
+  vertical-align: bottom;
+  padding-left: 8px;
+  cursor: pointer;
+}
+
+.search-icon-submit use {
+  height: 2rem;
+  width: 2rem;
+  vertical-align: middle;
+}
+
+.search-button-reset {
+  color: #FF00B8;
+  background-color: white;
+  border: 3px solid #FF00B8;
+  padding: 10px 35px;
+}
+
+.search-button-reset svg {
+  display: none;
+}
+
+.col-demo {
+  background: #F3F3FB 0% 0% no-repeat padding-box;
+  -webkit-box-shadow: 0px 5px 10px #00000029;
+          box-shadow: 0px 5px 10px #00000029;
+  opacity: 1;
+  padding-top: 62px;
+  overflow: auto;
+}
+
+.demo-title {
+  text-align: left;
+  font: normal 31px/50px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  opacity: 1;
+  padding-left: 50px;
+  padding-right: 65px;
+  margin-bottom: 18px;
+}
+
+.demo-desc {
+  text-align: left;
+  font: 200 18px/24px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  opacity: 1;
+  padding-left: 50px;
+  padding-right: 65px;
+}
+
+.tab-content {
+  padding-left: 50px;
+  padding-right: 65px;
+}
+
+/**
+ * Styling for the HTTP request, shell command, 
+ * and API response text displays.
+ *
+ * PrismJS 1.16.0
+ * This theme has been customized for drugbankplus.com
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #fff;
+  background: none;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 5px 0;
+  overflow: auto;
+  margin-bottom: 15px;
+  border-radius: 7px;
+  opacity: 1;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #161F44;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray;
+}
+
+.token.punctuation {
+  color: #fff;
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #727DD4;
+}
+
+.token.boolean,
+.token.number {
+  color: #B2B7EA;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #FF02AF;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: white;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #b3b3b3;
+}
+
+.token.keyword {
+  color: #B2B7EA;
+}
+
+.token.regex,
+.token.important {
+  color: #b3b3b3;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.example-header {
+  text-align: left;
+  font: normal 14px/24px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  opacity: 1;
+}
+
+.example-header.example-header-response {
+  padding-top: 40px;
+}
+
+pre.api-box {
+  height: 320px;
+}
+
+#loader {
+  display: none;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  z-index: 999;
+}
+
+.pill {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  position: absolute;
+  bottom: 50%;
+  height: 4rem;
+}
+/*# sourceMappingURL=main.css.map */
