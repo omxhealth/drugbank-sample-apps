@@ -1,73 +1,195 @@
-{% extends "base.jinja" %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DrugBank Sample App</title>
+  
+  <link rel="stylesheet" href="stylesheets/main.css">
+  <link rel="stylesheet" href="stylesheets/db-datatables.css">
+  <link rel="stylesheet" href="stylesheets/select2-theme-modified-material.css">
+  <link rel="stylesheet" href="stylesheets/select2-theme-modified-bootstrap.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" media="all" href="stylesheets/datatables.min.css">
+  <link rel="stylesheet" media="all" href="stylesheets/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/loadingio/loading.css@v2.0.0/dist/loading.min.css"/>
 
-<body class="c-guides-tutorials a-product_concepts">
-  <main class="container-fluid" role="main">
-    <div class="help-container main-container" api_route="{{api_route}}">
-      <div class="content-container">
-        <div class="help-content stretch-content tutorial-content" id="product-concepts-tutorial">
-          <div class="content-items">
-            <h3 id="select-a-specific-product-code">Product Concept Search</h3>
-            <p>Select a drug, route and strength below to find matching product concepts.</p>
-            <div class="example-box container-fluid" id="step-4">
-              <div class="row">
-                <div class="example-col col-sm-4">
-                  <div id="loader"><img src="images/pill.gif" alt="Pill"></div>
-                  <div class="form-group">
-                    <label for="Drug">Drug</label>
-                    <select name="drug_search_4" id="drug_search_4" class="drug_autocomplete" data-url="https://dev.drugbankplus.com/guides/tutorials/api_request" data-step="4"></select>
-                  </div>
-                  <div class="form-group">
-                    <label for="Route">Route</label>
-                    <select name="route_search_4" id="route_search_4" class="route_autocomplete" data-url="https://dev.drugbankplus.com/guides/tutorials/api_request" data-step="4"></select>
-                  </div>
-                  <div class="form-group">
-                    <label for="Strength">Strength</label>
-                    <select name="strength_search_4" id="strength_search_4" class="strength_autocomplete" data-url="https://dev.drugbankplus.com/guides/tutorials/api_request" data-step="4"></select>
-                  </div>
-                </div>
-                <div class="code-col col-sm-8">
-                  <ul class="nav nav-pills" role="tablist">
-                    <li class="active" role="presentation"><a data-toggle="tab" href="#http-4" role="tab">Request</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#api-4" role="tab">Response</a></li>
-                  </ul>
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="http-4" role="tabpanel">
-                      <div class="example-header">HTTP Request</div>
-                      <pre class=" language-http"><code class=" http-request language-http"></code></pre>
-                      <div class="example-header">Shell Command</div>
-                      <pre class="shell-box language-http"><code class=" shell-command language-http"></code></pre>
-                    </div>
-                    <div class="tab-pane" id="api-4" role="tabpanel">
-                      <div class="example-header">API Response</div>
-                      <pre class="api-box language-json"><code class=" api-response language-json"></code></pre>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <table class="table table-striped products-table">
-                    <thead>
-                      <tr role="row">
-                        <th>Name</th>
-                        <th>Dosage</th>
-                        <th>Strength</th>
-                        <th>Route</th>
-                        <th>Labeller</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous"></script>
+    
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+  <script src="javascripts/prism.js"></script>
+  <script src="javascripts/datatables.min.js"></script>
+  <script src="javascripts/dataTables.bootstrap4.min.js"></script>
+  <script src="javascripts/shared.js"></script>
+  
+</head>
+<body>
+
+  <header>
+    <nav class="navbar fixed-top navbar-expand-xl navbar-light" id="main-nav">
+      <a class="navbar-brand db-logo" href="/">
+        <svg class="brand-image">
+          <use xlink:href="images/svg-defs.svg#db-logo" />
+        </svg>
+      </a>
+
+      <!-- Toggler/collapse Button -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="ml-auto"></ul>
+        <ul class="navbar-nav">
+          <li id="drug_lookup_nav" class="nav-item">
+            <a class="nav-link" href="#">Drug Lookup</a>
+          </li>
+          <li id="alternative_drugs_nav" class="nav-item">
+            <a class="nav-link" href="#">Alternative Drug Lookup</a>
+          </li>
+          <li id="ddi_nav" class="nav-item">
+            <a class="nav-link" href="#">Drug-Drug Interactions</a>
+          </li>
+          <li id="product_concepts_nav" class="nav-item">
+            <a class="nav-link" href="#">Product Concepts</a>
+          </li>
+          <li id="indications_nav" class="nav-item">
+            <a class="nav-link" href="#">Indications</a>
+          </li>
+        </ul>
+        
+      </div>
+      
+    </nav>
+    
+  </header>
+
+  <main role="main" api_route="{{api_route}}">
+    <div class="container-fluid">
+      <div class="row main-row">
+        
+        <div class="col-xl-7 col-search">
+
+          <div id="loader">
+            <div class="ld ld-flip-v pill">
+              <svg>
+                <use xlink:href="images/svg-defs.svg#loading-icon"/>
+              </svg>
             </div>
           </div>
+        
+          <div class="section-search">
+            <form class="section-search-form">
+              <div class="search-title">Product Concepts Search</div>
+              <div class="form-group search-group">
+                <select class="drug_autocomplete"></select>
+              </div>
+              <div class="form-group term-group">
+                <div class="search-term"><p class="route-term"></p></div>
+                <div class="search-term"><p class="form-term"></p></div>
+                <div class="search-term"><p class="strength-term"></p></div>
+              </div>
+            </form>
+          </div>
+
+          <div class="row select-row">
+
+            <div class="col-5">
+              <p class="search-help">
+                Specify any of the following attributes to search available drug products.
+              </p>
+            </div>
+
+            <div class="col-7">
+
+              <div class="select-container">
+
+                <div class="form-group">
+                  <label for="route-select" class="select-header">Route</label>
+                  <select id="route-select" class="route_autocomplete form-control"></select>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-select" class="select-header">Form</label>
+                  <select id="form-select" class="form_autocomplete form-control"></select>
+                </div>
+
+                <div class="form-group">
+                  <label for="strength-select" class="select-header">Strength</label>
+                  <select id="strength-select" class="strength_autocomplete form-control"></select>
+                </div>
+                
+                <div class="form-group" style="display: none;">
+                  <label for="dosage-select" class="select-header">Dosage</label>
+                  <select id="dosage-select" class="dosage_autocomplete form-control"></select>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row results-row" style="display: none;">
+            <div class="col-sm-12">
+              <table class="table products-table">
+                <thead>
+                  <tr role="row">
+                    <th>Name</th>
+                    <th>Form</th>
+                    <th>Strength</th>
+                    <th>Route</th>
+                    <th>Labeller</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row search-row container-fluid no-gutters">
+            <div class="col text-center">
+              <button class="search-button">
+                <span>
+                  <span class="search-button-text">Search</span>
+                  <svg class="search-icon-submit">
+                    <use xlink:href="images/svg-defs.svg#search-icon" />
+                  </svg>
+                </span> 
+              </button> 
+            </div>
+          </div>
+
         </div>
+
+        <div class="col-xl-5 col-demo">
+          <h2 class="demo-title">Product Concept Search</h2>
+          <p class=demo-desc>Our sample application will show you how an 
+            end user can search for a drug product by specifying known 
+            product attributes.
+            <br><br>
+            To help get you started, this side panel 
+            will show you the API queries made in real-time, 
+            and the API responses returned. 
+            <br><br>
+          </p>  
+          <div class="tab-content">
+            <div class="example-header">HTTP Request</div>
+            <pre class=" language-http"><code class=" http-request language-http"></code></pre>
+            <div class="example-header">Shell Command</div>
+            <pre class="shell-box language-http"><code class=" shell-command language-http"></code></pre>
+            <div class="example-header example-header-response">API Response</div>
+            <pre class="api-box language-json"><code class=" api-response language-json"></code></pre>     
+          </div>
+        </div>
+
       </div>
-    </div>
+    </div>  
   </main>
   <script src="javascripts/product_concepts.js"></script>
 </body>
-
 </html>
-{% endblock %}
