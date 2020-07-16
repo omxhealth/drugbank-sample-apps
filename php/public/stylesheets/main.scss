@@ -227,8 +227,8 @@ main {
 // Container for the icons under the search 
 // bar showing the parameters of the search
 .term-group {
-    display: block;
-    margin-top: 0px;
+    display: none;
+    margin-top: 10px;
     margin-bottom: 0 !important;
     overflow-y: auto;
 }
@@ -245,7 +245,6 @@ main {
     height: auto;
     margin-right: 10px;
     margin-top: 10px;
-    display: none;
 }
 
 // The text of the icons under the search bar

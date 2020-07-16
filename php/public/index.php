@@ -82,10 +82,12 @@ $app->redirect("/", "/support");
 
 // GET render: product concepts page
 $app->get("/product_concepts", function (Request $request, Response $response) {
+    global $DRUGBANK_API_KEY;
     $route = getApiRoute("product_concepts");
     $view = Twig::fromRequest($request);
     return $view->render($response, "product_concepts.jinja", array(
-        "api_route" => $route
+        "api_route" => $route,
+        "api_key" => $DRUGBANK_API_KEY
     ));
 });
 
