@@ -67,7 +67,8 @@ public class App {
             String route = getApiRoute("product_concepts");
             Map<String, Object> attributes = new HashMap<>();
 
-			attributes.put("api_route", route);
+            attributes.put("api_route", route);
+            attributes.put("api_key", authKey);
 
             return engine.render( 
                 new ModelAndView(attributes, "product_concepts.jinja")

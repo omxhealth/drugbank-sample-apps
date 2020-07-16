@@ -7,13 +7,14 @@
  * to flicker when the page loads and they convert to select2s.
  */
 
+api_key = getApiKey();
 var api_route = $("main")[0].attributes["api_route"].value;
-var db_id;
+var db_id; // the idea to use in the final search
 var products_table = $('.products-table').DataTable({
     order: [[0, "desc"]],
     "columnDefs": [
         { className: "product_concepts_name", "targets": [0] }
-    ]
+    ],
 });
 
 getStrengths = function (d) {
@@ -28,30 +29,21 @@ getStrengths = function (d) {
  * form, strength, route, and labeller
  */
 loadTableResults = function (products_table, data) {
-    if ($(".drug_autocomplete").val() && $(".route_autocomplete").val() && 
-            $(".form_autocomplete").val() && $(".strength_autocomplete").val()) {
-        data.forEach(function (d) {
-            products_table.row.add([d.name, d.dosage_form, getStrengths(d), d.route, d.labeller.name]);
-        });
-        products_table.draw();
-    }
-    
+    data.forEach(function (d) {
+        products_table.row.add([d.name, d.dosage_form, getStrengths(d), d.route, d.labeller.name]);
+    });
+    products_table.draw();
 };
 
-$(document).ready(function() {
-
-    $("#product_concepts_nav").addClass("active");
-    navUnderlineSetup();
-
-    $(".search-button").attr("disabled", true);
-    $(".route_autocomplete").attr("disabled", true);
-    $(".strength_autocomplete").attr("disabled", true);
-    $(".form_autocomplete").attr("disabled", true);
-
-    // Replace and restyle the searchbar for the results table
+/**
+ * Replaces the table search bar with a DrugBank themed one
+ */
+restyleDatatableFilter = function() {
+    
+    // Replace and the searchbar for the results table
     var tableSearchInput = 
         "<div class=\"input-group\"> \
-            <input placeholder=\"Search within results\" type=\"search\" id=\"example-search-input1\" class=\"form-control rounded-pill py-2 pr-5 mr-1\"> \
+            <input aria-controls=\"DataTables_Table_0\" placeholder=\"Search within results\" type=\"search\" id=\"example-search-input1\" class=\"form-control rounded-pill py-2 pr-5 mr-1\"> \
             <span class=\"input-group-append\"> \
                 <div class=\"input-group-text border-0 bg-transparent ml-n5\"> \
                     <svg class=\"search-icon\">\
@@ -62,6 +54,125 @@ $(document).ready(function() {
         </div>";
 
     $(".dataTables_filter label").html(tableSearchInput);
+
+    // To get the restyled search input to work, need to set any input
+    // detected to call the filter function from datatables
+    $(document).on('keyup', "input[type='search']", function(){
+        var oTable = $('.dataTable').dataTable();
+        oTable.fnFilter($(this).val());
+    });
+
+}
+
+/**
+ * Loads the results of the search into the table, then hides
+ * the search area and displays the table. Also changes the 
+ * search button function to reset the search (searchReset()).
+ * 
+ * @param {*} data the data obtained from the search ajax call
+ */
+loadResults = function (data) {
+
+    loadTableResults(products_table, data);
+
+    $(".select-row").hide();
+    $(".results-row").show();
+
+    $(".search-button").addClass("search-button-reset");
+    $(".search-button-text").html("Reset Search");
+    
+}
+
+// Displays the selected search parameters below the
+// search bar after a search is sent
+showSearchTerms = function() {
+
+    if ($(".route_autocomplete").val()) {
+        
+        $(".term-group").css('margin-top', '10px');
+        
+        $("#route-term-container").css('display', 'inline-block');
+        $(".route-term").html($(".route_autocomplete").select2("data")[0].text);
+
+    } else {
+        return;
+    }
+
+    if ($(".form_autocomplete").val()) {
+        
+        $("#form-term-container").css('display', 'inline-block');
+        $(".form-term").html(
+            $(".form_autocomplete").select2("data")[0].text
+        );
+    }
+
+    if ($(".strength_autocomplete").val()) {
+        
+        $("#strength-term-container").css('display', 'inline-block');
+        $(".strength-term").html(
+            $(".strength_autocomplete").select2("data")[0].text
+        );
+    }
+
+}
+
+/**
+ * Resets the page after a search is performed by
+ * clearing the results table, hiding it, clearing and hiding
+ * the search terms below the search bar, clearing the search dropdowns,
+ * and disaplying the form selects again.
+ */
+searchReset = function() {
+
+    $("#loader").show();
+
+    $(".drug_autocomplete").val(null).trigger("change");
+    clearDisplayRequest();
+    clearSearchTermsDisplay();
+    
+    $(".results-row").hide();
+    $(".select-row").show();
+
+    $(".search-button").removeClass("search-button-reset");
+    $(".search-button-text").html("Search");
+
+    clearTableResults(products_table);
+
+    $("#loader").hide();
+
+}
+
+// Clears and hides the terms below the search bar.
+// For use after the "reset search" button is clicked.
+clearSearchTermsDisplay = function() {
+
+    // Remove top margin for the group so the search bar is
+    // vertically centered in its container
+    $(".term-group").css("margin-top", "0");
+
+    // Clear the values
+    $(".route-term").html(null);
+    $(".form-term").html(null);
+    $(".strength-term").html(null);
+
+    // Hide the containers
+    $("#route-term-container").hide();
+    $("#form-term-container").hide();
+    $("#strength-term-container").hide();
+}
+
+$(document).ready(function() {
+
+    $(".results-row").hide();
+    $(".search-button").attr("disabled", true);
+    $(".route_autocomplete").attr("disabled", true);
+    $(".strength_autocomplete").attr("disabled", true);
+    $(".form_autocomplete").attr("disabled", true);
+
+    $("#product_concepts_nav").addClass("active");
+    navUnderlineSetup();
+
+    restyleDatatableFilter();
 
     // Activate the drug search input
     $(".drug_autocomplete").select2({
@@ -124,10 +235,12 @@ $(document).ready(function() {
 
         if (!$(this).val()) {
             $(".search-button").attr("disabled", true);
+            $(".search-button").addClass("search-button-disabled");
             return;
         }
         
         $(".search-button").attr("disabled", false);
+        $(".search-button").removeClass("search-button-disabled");
 
         var path = encodeURI("/" + $(this).val() + "/routes");
         db_id = $(this).val();
@@ -275,8 +388,6 @@ $(document).ready(function() {
             return;
         }
 
-        showSearchTerms();
-
         $("#loader").show();
         clearTableResults(products_table);
 
@@ -287,6 +398,7 @@ $(document).ready(function() {
             delay: 100,
             success: function (data) {
                 displayRequest(api_route + path, data);
+                showSearchTerms();
                 loadResults(data);
                 $("#loader").hide();
             },
@@ -300,66 +412,3 @@ $(document).ready(function() {
     });
 
 });
-
-function loadResults(data) {
-
-    loadTableResults(products_table, data);
-
-    $(".select-row").hide();
-    $(".results-row").show();
-
-    $(".search-button").addClass("search-button-reset");
-    $(".search-button-text").html("Reset Search");
-    
-}
-
-function searchReset() {
-
-    $("#loader").show();
-
-    $(".drug_autocomplete").val(null).trigger("change");
-    clearDisplayRequest();
-    clearSearchTerms();
-    
-    $(".results-row").hide();
-    $(".select-row").show();
-
-    $(".search-button").removeClass("search-button-reset");
-    $(".search-button-text").html("Search");
-
-    clearTableResults(products_table);
-
-    $("#loader").hide();
-
-}
-
-function showSearchTerms() {
-
-    if ($(".route_autocomplete").val()) {
-        $(".route-term").show().html(
-            $(".route_autocomplete").select2("data")[0].text
-        );
-    }
-
-    if ($(".form_autocomplete").val()) {
-        $(".form-term").show().html(
-            $(".form_autocomplete").select2("data")[0].text
-        );
-    }
-
-    if ($(".strength_autocomplete").val()) {
-        $(".strength-term").show().html(
-            $(".strength_autocomplete").select2("data")[0].text
-        );
-    }
-
-    $(".term-group").css('display', 'flex');
-
-}
-
-function clearSearchTerms() {
-    $(".term-group").hide();
-    $(".route-term").hide().html(null);
-    $(".form-term").hide().html(null);
-    $(".strength-term").hide().html(null);
-}

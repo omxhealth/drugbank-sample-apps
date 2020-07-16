@@ -52,7 +52,7 @@ app.get("/", function (req, res) {
 // GET render: product concepts page    
 app.get("/product_concepts", function (req, res) {
     let route = getApiRoute("product_concepts");
-    res.render("product_concepts.jinja", {api_route : route});
+    res.render("product_concepts.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
 });  
 
 // GET API call: product concepts
