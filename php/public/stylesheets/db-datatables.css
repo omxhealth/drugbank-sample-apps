@@ -1,0 +1,61 @@
+/**
+ * db-datatables.scss
+ *
+ * Modifications made to the datatables css for the sample app.
+ */
+.results-row {
+  margin: 0 5% 8rem 5% !important;
+  padding: 40px 0;
+}
+
+.dataTables_wrapper .row:nth-child(2) {
+  overflow: auto;
+}
+
+.dataTables_filter label {
+  min-width: 75%;
+}
+
+.dataTables_filter label .input-group input {
+  background-color: #F3F3FC;
+  padding-left: 1rem;
+  font: 200 1rem/18px Gemeli;
+}
+
+.input-group-append .input-group-text svg {
+  z-index: 1000000;
+  fill: black;
+  height: 1.5rem;
+  opacity: 0.5;
+}
+
+th {
+  border-top: none !important;
+  border-bottom: 0.5px solid #172042 !important;
+  text-transform: uppercase;
+  text-align: left;
+  font: 200 16px/14px Gemeli;
+  letter-spacing: 1.47px;
+  color: #172042;
+  opacity: 1;
+}
+
+td {
+  border: none !important;
+}
+
+tbody, .dataTables_length, .dataTables_info, .dataTables_paginate {
+  font-family: Gemeli;
+  font-weight: 200;
+  color: #172042;
+}
+
+td.product_concepts_name {
+  font-weight: bold;
+}
+
+.page-item.active .page-link {
+  background-color: #FF00B8 !important;
+  border-color: #FF00B8 !important;
+}
+/*# sourceMappingURL=db-datatables.css.map */

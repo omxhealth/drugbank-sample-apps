@@ -1,4 +1,5 @@
 var localhost = "/api/"; // for connecting to the locally hosted server
+var api_key;
 
 highlight_name = function(concept) {
     var name = concept.name;
@@ -28,7 +29,7 @@ clearTableResults = function(table) {
 // Display the API request and response on the page
 displayRequest = function(url, data) {
     $(".http-request").html("GET " + url);
-    $(".shell-command").html("curl -L '" + url + "' -H 'Authorization: mytoken'");
+    $(".shell-command").html("curl -L '" + url + "' -H 'Authorization: '" + api_key + "'");
     $(".api-response").html(Prism.highlight(JSON.stringify((data), null, 2), Prism.languages.json));
 };
 
@@ -94,8 +95,8 @@ navUnderlineSetup = function() {
 
     // if the window is resized, the magic-line values 
     // need to be updated to work properly
-    window.addEventListener("resize", navUnderlineMover());
-
+    $(window).resize(navUnderlineMover);
+    
 };
 
 /**
@@ -110,3 +111,15 @@ navUnderlineMover = function() {
         .data("origLeft", $("#magic-line").position().left)
         .data("origWidth", $("#magic-line").width());   
 } 
+
+// Pulls the API key from the template for use in shell command display.
+// If not present, uses placeholder "mytoken"
+getApiKey = function() {
+    
+    try {
+        return $("main")[0].attributes["api_key"].value;
+    } catch(err) {
+        return "mytoken"
+    }
+    
+}

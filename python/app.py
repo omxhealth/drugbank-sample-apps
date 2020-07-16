@@ -171,7 +171,7 @@ def default_page():
 @app.route("/product_concepts", methods=["GET"])
 def product_concepts_page():
     route = getApiRoute("product_concepts")
-    return render_template("product_concepts.jinja", api_route=route)
+    return render_template("product_concepts.jinja", api_route=route, api_key=DRUGBANK_API_KEY)
 
 
 # GET API call: product concepts
