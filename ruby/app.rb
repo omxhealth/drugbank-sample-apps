@@ -99,7 +99,7 @@ end
 # GET render: product concepts page
 get "/product_concepts" do
     route = getApiRoute("product_concepts")
-    haml :product_concepts, :locals => {:api_route => route} 
+    haml :product_concepts, :locals => {:api_route => route, :api_key => $drugbank_api_key} 
 end
 
 # GET API call: product concepts
