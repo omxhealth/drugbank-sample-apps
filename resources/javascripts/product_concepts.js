@@ -1,5 +1,5 @@
 /**
- * Drugbank API Sample App
+ * DrugBank API Sample App
  * product_concepts.js
  * 
  * Functions for the product concepts search page.
@@ -8,14 +8,82 @@
  */
 
 api_key = getApiKey();
-var api_route = $("main")[0].attributes["api_route"].value;
+var drugSelect // used for clearing the drug search bar
 var db_id; // the idea to use in the final search
+var api_route = $("main")[0].attributes["api_route"].value;
 var products_table = $('.products-table').DataTable({
     order: [[0, "desc"]],
     "columnDefs": [
         { className: "product_concepts_name", "targets": [0] }
     ],
 });
+
+/** 
+ * Loads the product concept routes when a drug is selected.
+ * 
+ * Needs its own standalone function (not in an event wrapper) 
+ * due to how Selectize.js handles events.
+ * 
+ * val is the value in the drug autocomplete. If no value,
+ * then everything is cleared and readied for a fresh search
+ */
+function searchChange(val) {
+
+    // If the drug_autocomplete changed to anything (including emptied),
+    // empty the other autocomplete forms and disable them.
+    // route_autocomplete will be enabled if an actual val is detected
+    $(".route_autocomplete").empty();
+    $(".form_autocomplete").empty();
+    $(".strength_autocomplete").empty();
+
+    $(".route_autocomplete").attr("disabled", true);
+    $(".form_autocomplete").attr("disabled", true);
+    $(".strength_autocomplete").attr("disabled", true);
+
+    // If drug_autocomplete's value was changed to be empty
+    if (!val) {
+
+        //clear drug autocomplete
+        drugSelect[0].selectize.clear(); // removes value from drug autocomplete
+        drugSelect[0].selectize.clearOptions(); // removes dropdown choices from drug autocomplete
+        
+        // disable search button
+        $(".search-button").attr("disabled", true); 
+        $(".search-button").addClass("search-button-disabled");
+
+        return;
+    }
+    
+    $(".search-button").attr("disabled", false);
+    $(".search-button").removeClass("search-button-disabled");
+
+    var path = encodeURI("/" + val + "/routes");
+    db_id = val;
+
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data);
+            data.map(function (d) {
+                return {
+                    route: d.route,
+                    id: d.drugbank_pcid
+                };
+            }).sort(function (a, b) {
+                return a.route.localeCompare(b.route);
+            }).forEach(function (r) {
+                $(".route_autocomplete").append(new Option(r.route, r.id, false, false));
+            });
+            $(".route_autocomplete").val(null).trigger('change');
+            $(".route_autocomplete").attr("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".drug_autocomplete");
+        }
+
+    });
+};
 
 getStrengths = function (d) {
     return d.ingredients.map(function (i) {
@@ -126,7 +194,8 @@ searchReset = function() {
 
     $("#loader").show();
 
-    $(".drug_autocomplete").val(null).trigger("change");
+    //$(".drug_autocomplete").val(null).trigger("change");
+    searchChange(null);
     clearDisplayRequest();
     clearSearchTermsDisplay();
     
@@ -173,103 +242,45 @@ $(document).ready(function() {
     navUnderlineSetup();
 
     restyleDatatableFilter();
-
-    // Activate the drug search input
-    $(".drug_autocomplete").select2({
-        theme: "material",
+    
+    drugSelect = $(".drug_autocomplete").selectize({
+        valueField: "drugbank_pcid",
+        labelField: "name",
+        searchField: "name",
+        create: false,
+        persist: false,
         placeholder: "Search by brand or active ingredient",
-        minimumInputLength: 3,
-        templateResult: function (d) {
-            return $('<span>' + em_to_u_tags(d.text) + '</span>');
+        onChange:  function(value) {
+            searchChange(value);
         },
-        templateSelection: function (d) {
-            return $('<span>' + strip_em_tags(d.text) + '</span>');
-        },
-        ajax: {
-            url: localhost + encodeURI("product_concepts"),
-            delay: 100,
-            data: function (params) {
-                return {
-                    q: encodeURI(params.term)
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: $.map(data, function (i) {
-                        return {
-                            id: i.drugbank_pcid,
-                            text: highlight_name(i)
-                        };
-                    })
-                };
-            },
-            success: function (data) {
-                var url = api_route + encodeURI("?q=" + $(".select2-search__field").val());
-                displayRequest(url, data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
-            }
-
+        //createFilter: function(input) { return input.length >= 3; },
+        load: function(query, callback) {
+            if (!query.length) return callback();
+            $.ajax({
+                url: localhost + encodeURI("product_concepts"),
+                type: "GET",
+                data: {
+                    q: query
+                },
+                success: function (data) {
+                    var url = api_route + encodeURI("?q=" + query);
+                    displayRequest(url, data);
+                    callback(data)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    handleError(jqXHR, ".drug_autocomplete");
+                }
+    
+            });
         }
-
     });
-
+    
     // Add the search icon to the search bar
-    $(".select2-selection__arrow").html("\
-        <svg class=\"search-icon\"> \
-            <use xlink:href=\"images/svg-defs.svg#search-icon\"/> \
+    $(".selectize-control").append(
+        "<svg class=\"search-icon\">\
+          <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
         </svg>"
-    );
-
-    // Load the product concept routes when a drug is selected
-    $(".drug_autocomplete").on("change", function (e) {
-
-        $(".route_autocomplete").empty();
-        $(".form_autocomplete").empty();
-        $(".strength_autocomplete").empty();
-
-        $(".route_autocomplete").attr("disabled", true);
-        $(".form_autocomplete").attr("disabled", true);
-        $(".strength_autocomplete").attr("disabled", true);
-
-        if (!$(this).val()) {
-            $(".search-button").attr("disabled", true);
-            $(".search-button").addClass("search-button-disabled");
-            return;
-        }
-        
-        $(".search-button").attr("disabled", false);
-        $(".search-button").removeClass("search-button-disabled");
-
-        var path = encodeURI("/" + $(this).val() + "/routes");
-        db_id = $(this).val();
-
-        $.ajax({
-            url: localhost + encodeURI("product_concepts") + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_route + path, data);
-                data.map(function (d) {
-                    return {
-                        route: d.route,
-                        id: d.drugbank_pcid
-                    };
-                }).sort(function (a, b) {
-                    return a.route.localeCompare(b.route);
-                }).forEach(function (r) {
-                    $(".route_autocomplete").append(new Option(r.route, r.id, false, false));
-                });
-                $(".route_autocomplete").val(null).trigger('change');
-                $(".route_autocomplete").attr("disabled", false);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
-            }
-
-        });
-
-    });
+    ); 
 
     // Activate the route input
     $(".route_autocomplete").select2({
@@ -411,4 +422,4 @@ $(document).ready(function() {
 
     });
 
-});
+});  
