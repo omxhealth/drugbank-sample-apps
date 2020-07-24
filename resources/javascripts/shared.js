@@ -160,7 +160,11 @@ navUnderlineMover = function() {
 getApiKey = function() {
     
     try {
-        return $("main")[0].attributes["api_key"].value;
+        if ($("main")[0].attributes["api_key"].value) {
+            return $("main")[0].attributes["api_key"].value;
+        } else {
+            throw(err);
+        }    
     } catch(err) {
         return "mytoken"
     }

@@ -74,7 +74,7 @@ app.get("/api/product_concepts/:x/:y", async function (req, res) {
 // GET render: drug-drug interations (ddi) page    
 app.get("/ddi", function (req, res) {
     let route = getApiRoute("ddi");
-    res.render("ddi.jinja", {api_route : route});
+    res.render("ddi.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
 });
 
 // GET API call: ddi

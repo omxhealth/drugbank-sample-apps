@@ -91,8 +91,8 @@ searchChange = function(val) {
 
 /**
  * Loads the results from the API response into the page's table.
- * Puts into the table the each product concept's name, dosage
- * form, strength, route, and labeller
+ * Puts into the table each product concept's name, dosage
+ * form, strength, route, and labeller.
  */
 loadTableResults = function (products_table, data) {
     data.forEach(function (d) {

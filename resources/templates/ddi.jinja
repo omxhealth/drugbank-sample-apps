@@ -1,0 +1,102 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+
+  <main role="main" api_route="{{api_route}}" api_key="{{api_key}}">
+    <div class="container-fluid">
+      <div class="row main-row">
+        <div class="col-xl-7 col-search">
+
+          <div id="loader">
+            <div class="ld ld-flip-v pill">
+              <svg>
+                <use xlink:href="images/svg-defs.svg#loading-icon"/>
+              </svg>
+            </div>
+          </div>
+        
+          <div class="section-search">
+            <form class="section-search-form">
+              <div class="search-title">Drug-drug Interactions Search</div>
+              <div class="form-group search-group">
+                <select class="drug_autocomplete"></select>
+              </div>
+              <div class="form-group ddi-help">
+                <p>Add up to 40 drugs. Search by drug ingredient, product, or brand name.</p>
+              </div>
+            </form>
+          </div>
+
+          <div class="row drugs-row">
+
+            <div id="drug-product-list">
+                <div class="drug-product btn btn-md btn-label" data-code="DBPC0180857">
+                    Acetaminophen<span class="close"></span></div>
+                <div class="drug-product btn btn-md btn-label" data-code="DBPC0021865">
+                    Prilocaine<span class="close"></span></div>
+            </div>
+
+          </div>
+
+          <div class="row results-row">
+            <div class="col-sm-12">
+              <table class="table interactions-table">
+                <thead>
+                  <tr role="row">
+                    <th>Product</th>
+                    <th>Affected Product</th>
+                    <th>Severity</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row search-row container-fluid no-gutters">
+            <div class="col text-center">
+              <button class="search-button search-button-disabled">
+                <span>
+                  <span class="search-button-text">Search</span>
+                  <svg class="search-icon-submit">
+                    <use xlink:href="images/svg-defs.svg#search-icon" />
+                  </svg>
+                </span> 
+              </button> 
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="col-xl-5 col-demo">
+          <h2 class="demo-title">Drug-Drug Interactions Search</h2>
+          <p class=demo-desc>Our sample application will show you 
+            how an end user can easily search a list of drugs for 
+            potential interactions. The results include interactions 
+            between any drugs in the list, and provides users with a 
+            description and severity rating for each interaction.
+            <br><br>
+            To help get you started, this side panel 
+            will show you the API queries made in real-time, 
+            and the API responses returned. 
+            <br><br>
+          </p>  
+          <div class="tab-content">
+            <div class="example-header">HTTP Request</div>
+            <pre class=" language-http"><code class=" http-request language-http"></code></pre>
+            <div class="example-header">Shell Command</div>
+            <pre class="shell-box language-http"><code class=" shell-command language-http"></code></pre>
+            <div class="example-header example-header-response">API Response</div>
+            <pre class="api-box language-json"><code class=" api-response language-json"></code></pre>     
+          </div>
+        </div>
+
+      </div>
+    </div>  
+  </main>
+
+  <link rel="stylesheet" href="stylesheets/ddi.css">
+  <script src="javascripts/ddi.js"></script>
+
+{% endblock %}
