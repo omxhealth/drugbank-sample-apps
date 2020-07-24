@@ -1,0 +1,72 @@
+.ddi-help {
+    margin-bottom: 0;
+    text-align: left;
+    font: 200 18px Gemeli;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 0.75;
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.drugs-row {
+    margin: 2rem 10% 10rem 10%;
+    overflow-y: auto;
+}
+
+.drug-product.btn-label {
+    background: #F3F3FC;
+    border-radius: 10px;
+    opacity: 1;
+    font: normal 21px/36px Gemeli;
+    letter-spacing: 0px;
+    color: #172042;
+    opacity: 1;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em; 
+    cursor: default !important;
+}
+
+.close {
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.3;
+    margin-left: 0.5rem;
+    display: inline-block;
+    top: 1px;
+    float: none;
+    cursor: pointer;
+  }
+  .close:hover {
+    opacity: 1;
+  }
+  .close:before, .close:after {
+    position: absolute;
+    content: ' ';
+    height: 1rem;
+    width: 2px;
+    background-color: #333;
+    display: inline-block;
+  }
+  .close:before {
+    transform: rotate(45deg);
+  }
+  .close:after {
+    transform: rotate(-45deg);
+  }
+
+.drug-product.btn-primary {
+    border-color: #727DD4;
+    background-color: #727DD4;
+    font-weight: 100;
+    line-height: 1;
+}
+
+.drug-product.btn-primary:hover, .drug-product.btn-primary:focus, .drug-product.btn-primary:active {
+    border-color: #B2B7EA;
+    background-color: #B2B7EA; 
+}
+
