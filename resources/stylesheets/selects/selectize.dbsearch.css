@@ -125,11 +125,11 @@
   text-align: left;
   font: 200 40px Gemeli;
   letter-spacing: 0px;
-  color: #ABB2BF;
+  color: #fff;
 }
 .selectize-input {
   background: transparent;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #aab3c1;;
   padding: 6px 0px;
   display: inline-block;
   width: 100%;
@@ -203,7 +203,7 @@
   text-align: left;
   font: 200 40px Gemeli;
   letter-spacing: 0px;
-  color: #ABB2BF;
+  color: #fff;
   width: inherit;
   display: inline-block !important;
   padding: 0 !important;
@@ -305,7 +305,7 @@
 }
 .selectize-control.single .selectize-input,
 .selectize-control.single .selectize-input input {
-  cursor: pointer;
+  cursor: text;
 }
 .selectize-control.single .selectize-input.input-active,
 .selectize-control.single .selectize-input.input-active input {
@@ -367,6 +367,7 @@
   padding: 6px 12px;
 }
 .selectize-input {
+  transition: border-color .15s ease-in-out;
   min-height: 34px;
 }
 
@@ -374,6 +375,7 @@
   display: none;
 }
 .selectize-input.focus {
+  transition: border-color .15s ease-in-out;
   border-color: #66afe9;
   outline: 0;
 }
