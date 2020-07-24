@@ -1,5 +1,48 @@
 var localhost = "/api/"; // for connecting to the locally hosted server
-var api_key;
+
+/**
+ * Replaces the table search bar with a DrugBank themed one
+ */
+restyleDatatableFilter = function() {
+    
+    // Replace and the searchbar for the results table
+    var tableSearchInput = 
+        "<div class=\"input-group\"> \
+            <input aria-controls=\"DataTables_Table_0\" placeholder=\"Search within results\" type=\"search\" id=\"example-search-input1\" class=\"form-control rounded-pill py-2 pr-5 mr-1\"> \
+            <span class=\"input-group-append\"> \
+                <div class=\"input-group-text border-0 bg-transparent ml-n5\"> \
+                    <svg class=\"search-icon\">\
+                        <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
+                    </svg> \
+                </div> \
+            </span> \
+        </div>";
+
+    $(".dataTables_filter label").html(tableSearchInput);
+
+    // To get the restyled search input to work, need to set any input
+    // detected to call the filter function from datatables
+    $(document).on('keyup', "input[type='search']", function(){
+        var oTable = $('.dataTable').dataTable();
+        oTable.fnFilter($(this).val());
+    });
+
+}
+
+// Clears and hides the terms below the search bar.
+// For use after the "reset search" button is clicked.
+clearSearchTermsDisplay = function() {
+
+    // Remove top margin for the group so the search bar is
+    // vertically centered in its container
+    $(".term-group").css("margin-top", "0");
+
+    $(".term-group").children().each(function() {
+        $(this).children().html(null);
+        $(this).hide();
+    })
+
+}
 
 highlight_name = function(concept) {
     var name = concept.name;
@@ -27,7 +70,7 @@ clearTableResults = function(table) {
 };
 
 // Display the API request and response on the page
-displayRequest = function(url, data) {
+displayRequest = function(url, data, api_key) {
     $(".http-request").html("GET " + url);
     $(".shell-command").html("curl -L '" + url + "' -H 'Authorization: '" + api_key + "'");
     $(".api-response").html(Prism.highlight(JSON.stringify((data), null, 2), Prism.languages.json));

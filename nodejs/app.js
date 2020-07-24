@@ -89,7 +89,7 @@ app.get("/api/ddi", async function (req, res) {
 // GET render: indications page    
 app.get("/indications", function (req, res) {
     let route = getApiRoute("indications");
-    res.render("indications.jinja", {api_route : route});
+    res.render("indications.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
 });
 
 // GET API call: indications
