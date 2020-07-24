@@ -3,20 +3,24 @@
  * product_concepts.js
  * 
  * Functions for the product concepts search page.
- * There is no $(document).ready() for this file as it causes the selects
- * to flicker when the page loads and they convert to select2s.
  */
 
-api_key = getApiKey();
+var api_key = getApiKey();
 var drugSelect // used for clearing the drug search bar
-var db_id; // the idea to use in the final search
+var db_id; // the id to use in the final search
 var api_route = $("main")[0].attributes["api_route"].value;
 var products_table = $('.products-table').DataTable({
     order: [[0, "desc"]],
     "columnDefs": [
-        { className: "product_concepts_name", "targets": [0] }
+        { className: "table_col_name", "targets": [0] } // bolds the first column text
     ],
 });
+
+getStrengths = function (d) {
+    return d.ingredients.map(function (i) {
+        return i.name + " " + i.strength.number + " " + i.strength.unit;
+    }).join("<br>");
+};
 
 /** 
  * Loads the product concept routes when a drug is selected.
@@ -27,7 +31,7 @@ var products_table = $('.products-table').DataTable({
  * val is the value in the drug autocomplete. If no value,
  * then everything is cleared and readied for a fresh search
  */
-function searchChange(val) {
+searchChange = function(val) {
 
     // If the drug_autocomplete changed to anything (including emptied),
     // empty the other autocomplete forms and disable them.
@@ -64,7 +68,7 @@ function searchChange(val) {
         url: localhost + encodeURI("product_concepts") + path,
         delay: 100,
         success: function (data) {
-            displayRequest(api_route + path, data);
+            displayRequest(api_route + path, data, api_key);
             data.map(function (d) {
                 return {
                     route: d.route,
@@ -85,12 +89,6 @@ function searchChange(val) {
     });
 };
 
-getStrengths = function (d) {
-    return d.ingredients.map(function (i) {
-        return i.name + " " + i.strength.number + " " + i.strength.unit;
-    }).join("<br>");
-};
-
 /**
  * Loads the results from the API response into the page's table.
  * Puts into the table the each product concept's name, dosage
@@ -102,35 +100,6 @@ loadTableResults = function (products_table, data) {
     });
     products_table.draw();
 };
-
-/**
- * Replaces the table search bar with a DrugBank themed one
- */
-restyleDatatableFilter = function() {
-    
-    // Replace and the searchbar for the results table
-    var tableSearchInput = 
-        "<div class=\"input-group\"> \
-            <input aria-controls=\"DataTables_Table_0\" placeholder=\"Search within results\" type=\"search\" id=\"example-search-input1\" class=\"form-control rounded-pill py-2 pr-5 mr-1\"> \
-            <span class=\"input-group-append\"> \
-                <div class=\"input-group-text border-0 bg-transparent ml-n5\"> \
-                    <svg class=\"search-icon\">\
-                        <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
-                    </svg> \
-                </div> \
-            </span> \
-        </div>";
-
-    $(".dataTables_filter label").html(tableSearchInput);
-
-    // To get the restyled search input to work, need to set any input
-    // detected to call the filter function from datatables
-    $(document).on('keyup', "input[type='search']", function(){
-        var oTable = $('.dataTable').dataTable();
-        oTable.fnFilter($(this).val());
-    });
-
-}
 
 /**
  * Loads the results of the search into the table, then hides
@@ -151,35 +120,30 @@ loadResults = function (data) {
     
 }
 
-// Displays the selected search parameters below the
-// search bar after a search is sent
+/**
+ * Displays the selected search parameters below the
+ * search bar after a search is sent.
+ * Goes through the term-group children in order by indexing from 0-2 (using eq()).
+ */
 showSearchTerms = function() {
 
     if ($(".route_autocomplete").val()) {
-        
-        $(".term-group").css('margin-top', '10px');
-        
-        $("#route-term-container").css('display', 'inline-block');
-        $(".route-term").html($(".route_autocomplete").select2("data")[0].text);
+        $(".term-group").css('margin-top', '10px'); // adds margin above terms for spacing
+        $(".term-group").children().eq(0).css('display', 'inline-block');
+        $(".term-group").children().eq(0).children().html($(".route_autocomplete").select2("data")[0].text);
 
     } else {
         return;
     }
 
     if ($(".form_autocomplete").val()) {
-        
-        $("#form-term-container").css('display', 'inline-block');
-        $(".form-term").html(
-            $(".form_autocomplete").select2("data")[0].text
-        );
+        $(".term-group").children().eq(1).css('display', 'inline-block');
+        $(".term-group").children().eq(1).children().html($(".form_autocomplete").select2("data")[0].text);
     }
 
     if ($(".strength_autocomplete").val()) {
-        
-        $("#strength-term-container").css('display', 'inline-block');
-        $(".strength-term").html(
-            $(".strength_autocomplete").select2("data")[0].text
-        );
+        $(".term-group").children().eq(2).css('display', 'inline-block');
+        $(".term-group").children().eq(2).children().html($(".strength_autocomplete").select2("data")[0].text);
     }
 
 }
@@ -188,13 +152,12 @@ showSearchTerms = function() {
  * Resets the page after a search is performed by
  * clearing the results table, hiding it, clearing and hiding
  * the search terms below the search bar, clearing the search dropdowns,
- * and disaplying the form selects again.
+ * and displaying the form selects again.
  */
 searchReset = function() {
 
     $("#loader").show();
 
-    //$(".drug_autocomplete").val(null).trigger("change");
     searchChange(null);
     clearDisplayRequest();
     clearSearchTermsDisplay();
@@ -209,25 +172,6 @@ searchReset = function() {
 
     $("#loader").hide();
 
-}
-
-// Clears and hides the terms below the search bar.
-// For use after the "reset search" button is clicked.
-clearSearchTermsDisplay = function() {
-
-    // Remove top margin for the group so the search bar is
-    // vertically centered in its container
-    $(".term-group").css("margin-top", "0");
-
-    // Clear the values
-    $(".route-term").html(null);
-    $(".form-term").html(null);
-    $(".strength-term").html(null);
-
-    // Hide the containers
-    $("#route-term-container").hide();
-    $("#form-term-container").hide();
-    $("#strength-term-container").hide();
 }
 
 $(document).ready(function() {
@@ -255,7 +199,7 @@ $(document).ready(function() {
         },
         //createFilter: function(input) { return input.length >= 3; },
         load: function(query, callback) {
-            if (!query.length) return callback();
+            if (!query.length || query.length < 3) return callback();
             $.ajax({
                 url: localhost + encodeURI("product_concepts"),
                 type: "GET",
@@ -264,7 +208,7 @@ $(document).ready(function() {
                 },
                 success: function (data) {
                     var url = api_route + encodeURI("?q=" + query);
-                    displayRequest(url, data);
+                    displayRequest(url, data, api_key);
                     callback(data)
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -308,7 +252,7 @@ $(document).ready(function() {
             url: localhost + encodeURI("product_concepts") + path,
             delay: 100,
             success: function (data) {
-                displayRequest(api_route + path, data);
+                displayRequest(api_route + path, data, api_key);
                 data.map(function (d) {
                     return {
                         form: d.name,
@@ -351,7 +295,7 @@ $(document).ready(function() {
             url: localhost + encodeURI("product_concepts") + path,
             delay: 100,
             success: function (data) {
-                displayRequest(api_route + path, data);
+                displayRequest(api_route + path, data, api_key);
                 data.map(function (d) {
                     return {
                         strength: d.name,
@@ -408,7 +352,7 @@ $(document).ready(function() {
             url: localhost + encodeURI("product_concepts") + path,
             delay: 100,
             success: function (data) {
-                displayRequest(api_route + path, data);
+                displayRequest(api_route + path, data, api_key);
                 showSearchTerms();
                 loadResults(data);
                 $("#loader").hide();
