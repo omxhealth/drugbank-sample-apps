@@ -247,7 +247,7 @@ main {
   opacity: 1;
   text-rendering: optimizelegibility;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 0.75rem;
 }
 
 .search-icon {
@@ -277,7 +277,6 @@ main {
 .search-term {
   background: #F3F3FC 0% 0% no-repeat padding-box;
   border-radius: 10px;
-  min-height: 32px;
   height: auto;
   margin-right: 10px;
   margin-top: 10px;
@@ -285,16 +284,15 @@ main {
 }
 
 .search-term p {
-  font: normal 14px/24px Gemeli;
+  font: normal 14px Gemeli;
   letter-spacing: 0px;
   color: #172042;
-  padding: auto;
   display: inline-block;
   text-transform: uppercase;
-  padding: 0 20px;
+  padding: 7px 20px;
   margin: 0;
   text-align: center;
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 
 .search-row {
@@ -329,6 +327,7 @@ main {
   background: #FF00B8 0% 0% no-repeat padding-box;
   border-radius: 26px;
   opacity: 1;
+  scale: 0.8;
 }
 
 .search-button:hover {
@@ -556,4 +555,20 @@ pre.api-box {
 }
 
 /* End of styling for HTTP request, shell command, and API response text displays */
+::-webkit-input-placeholder {
+  color: #4D5672 !important;
+  opacity: 1 !important;
+}
+:-ms-input-placeholder {
+  color: #4D5672 !important;
+  opacity: 1 !important;
+}
+::-ms-input-placeholder {
+  color: #4D5672 !important;
+  opacity: 1 !important;
+}
+::placeholder {
+  color: #4D5672 !important;
+  opacity: 1 !important;
+}
 /*# sourceMappingURL=main.css.map */
