@@ -130,7 +130,7 @@
 .selectize-input {
   background: transparent;
   border-bottom: 1px solid #aab3c1;;
-  padding: 6px 0px;
+  padding: 6px 55px 6px 0px;
   display: inline-block;
   width: 100%;
   overflow: hidden;
@@ -170,7 +170,7 @@
 }
 
 .selectize-input > div {
-  width: calc(100% - 50px);
+  width: 100%;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
@@ -273,7 +273,7 @@
 .selectize-dropdown .option,
 .selectize-dropdown [data-disabled],
 .selectize-dropdown [data-disabled] [data-selectable].option {
-  cursor: inherit;
+  cursor: pointer;
   opacity: 0.5;
 }
 .selectize-dropdown [data-selectable].option {
@@ -376,7 +376,7 @@
 }
 .selectize-input.focus {
   transition: border-color .15s ease-in-out;
-  border-color: #66afe9;
+  border-color: #9393F9;
   outline: 0;
 }
 .has-error .selectize-input {
