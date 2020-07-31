@@ -14,4 +14,19 @@
     <path d="M 48.498 0.38 L 27.432 0.38 C 12.65 0.38 0.666 12.363 0.666 27.146 C 0.666 28.853 0.833 30.521 1.139 32.14 C 1.202 32.475 1.272 32.807 1.348 33.138 C 1.434 33.515 1.528 33.89 1.63 34.262 C 1.879 35.166 2.174 36.05 2.513 36.912 C 2.757 37.535 3.017 38.151 3.306 38.75 C 6.007 44.357 10.606 48.878 16.269 51.48 C 19.667 53.041 23.448 53.911 27.432 53.911 L 48.498 53.911 C 48.498 53.911 54.832 46.661 54.832 28.065 C 54.832 9.469 48.498 0.38 48.498 0.38 M 9.486 32.505 C 9.414 32.235 9.33 31.973 9.268 31.697 C 8.116 26.588 8.646 21.599 11.351 17.037 C 14.971 10.932 20.645 7.825 27.525 7.697 C 27.525 7.697 11.65 16.555 9.486 32.505" fill="#FF00B8" transform="matrix(1, 0, 0, 1, 0, 0)"></path>
   </symbol>
 
+  <symbol id="tooltip-icon" viewBox="0 0 48 48">
+    <path d="M0 0h48v48h-48z" fill="none"/><path d="M24 4c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm2 30h-4v-12h4v12zm0-16h-4v-4h4v4z"/>
+  </symbol>
+
+  <symbol id="link-arrow">
+    <g id="Group_3060" data-name="Group 3060" transform="translate(1 1.414)">
+      <g id="Group_3052" data-name="Group 3052">
+        <line id="Line_354" data-name="Line 354" x2="8.653" transform="translate(0 3.524)" fill="none" stroke="#263063" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <line id="Line_355" data-name="Line 355" x1="3.524" y1="3.524" transform="translate(5.129)" fill="none" stroke="#263063" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <line id="Line_356" data-name="Line 356" x1="3.524" y2="3.524" transform="translate(5.129 3.524)" fill="none" stroke="#263063" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+    </g>
+  </symbol>
+
+
 </svg>

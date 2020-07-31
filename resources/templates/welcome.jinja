@@ -1,0 +1,190 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+
+  <main role="main" region="{{region}}" api_key="{{api_key}}">
+    <div class="container-fluid">
+      <div class="row main-row">
+        <div class="col-xl-7 col-info">
+
+          <h1>Welcome to DrugBank’s sample app!</h1>
+          <br>
+          <p class="info-intro">
+            We’ve designed this sample app to give you an idea of how you can 
+            integrate the DrugBank API into your clinical products. We’ve included 
+            5 sample apps where you can see both front-end design alongside the API 
+            queries and results.
+          </p>
+
+          <br>
+
+          <div class="container">
+
+            <a class="welcome-section-link" href="/drugs">
+              <div class="row align-items-center feature-info-row">
+                <div class="col info-section-name">
+                  <h3>Drug Lookup</h3>
+                </div>
+                <div class="col info-section-desc">
+                  <p>Search by product name, drug ingredient, or even NDC codes.</p>
+                </div>
+              </div>
+            </a>  
+
+            <a class="welcome-section-link" href="/alternative_drugs">
+              <div class="row align-items-center feature-info-row">
+                <div class="col info-section-name">
+                  <h3>Alternative Drug Search</h3>
+                </div>
+                <div class="col info-section-desc">
+                  <p>Find alternative drugs based on a drug ingredient or product search.</p>
+                </div>
+              </div>
+            </a>
+
+            <a class="welcome-section-link" href="/ddi">
+              <div class="row align-items-center feature-info-row">
+                <div class="col info-section-name">
+                  <h3>Drug-Drug Interaction Checker</h3>
+                </div>
+                <div class="col info-section-desc">
+                  <p>Search drug to drug interactions between a list of up to 40 drug products.</p>
+                </div>
+              </div>
+            </a>
+
+            <a class="welcome-section-link" href="/product_concepts">
+              <div class="row align-items-center feature-info-row">
+                <div class="col info-section-name">
+                  <h3>Product Concepts Search</h3>
+                </div>
+                <div class="col info-section-desc">
+                  <p>A multi-step search to specify drugs and their attributes (route, strength, form, dosage)</p>
+                </div>
+              </div>
+            </a>
+
+            <a class="welcome-section-link" href="/indications">
+              <div class="row align-items-center feature-info-row">
+                <div class="col info-section-name">
+                  <h3>Search by Indication</h3>
+                </div>
+                <div class="col info-section-desc">
+                  <p>Find similar drug treatments based on indications and contraindication.</p>
+                </div>
+              </div>
+            </a>  
+
+          </div>
+
+        </div>
+        
+        <div class="col-xl-5 col-settings">
+          <h2 class="settings-section-title">Your settings</h2>
+          
+          <div class="row">  
+            <form class="form-horizontal" id="auth_key_form" action="#" accept-charset="UTF-8" method="post">
+              <div class="form-group">
+                <label class="control-label col-sm option-label" for="auth_key_input">API Key<div class="key-tooltip-container tooltip-container" data-toggle="tooltip" data-placement="top" title="Tooltip for key">
+                    <svg class="tooltip-icon">
+                      <use href="images/svg-defs.svg#tooltip-icon"/>
+                    </svg>
+                  </div>
+                </label>
+                
+                <div class="col-sm">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="auth_key_input">
+                    <button type="submit" id="auth_key_submit">Update</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div id="auth_key_alert" class="alert alert-warning alert-dismissible" style="display: none;" role="alert">
+            <p id="auth_update_message"></p>
+            <button type="button" class="close" data-hide="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="row">
+            <form class="form-horizontal" id="region_form">
+              <div class="form-group">
+                <label class="control-label col-sm option-label" for="region_select">Region<div class="tooltip-container" data-toggle="tooltip" data-placement="top" title="Tooltip for region">
+                    <svg class="tooltip-icon">
+                      <use href="images/svg-defs.svg#tooltip-icon"/>
+                    </svg>
+                  </div>
+                </label>
+                <div class="col-sm">
+                  <select class="form-control" id="region_select">
+                    <option value="">All</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="eu">Europe</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <br><br>
+
+          <h2 class="settings-section-title">Getting Started</h2>
+          <p>For help with this sample app or to view the readme, please refer to the link below:</p>
+          <ul>
+            <li>
+              <a href="https://github.com/omxhealth/drugbank-sample-apps">GitHub Repository<svg class="link-arrow" viewBox="0 0 11.067 9.876">
+                  <use href="images/svg-defs.svg#link-arrow"/>
+                </svg>
+              </a>
+            </li>
+          </ul>
+
+          <br>
+
+          <p>
+            For further assistance getting started with the API, please 
+            refer to the DrugBank Help Center, or click the relevant Help Center 
+            links below. Or contact our support centre for more help.
+          </p>
+
+          <ul>
+            <li>
+              <a href="https://docs.drugbankplus.com/v1/#drug-names-autocomplete">Search by Drug Name<svg class="link-arrow" viewBox="0 0 11.067 9.876">
+                  <use href="images/svg-defs.svg#link-arrow"/>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.drugbankplus.com/v1/#product-concepts">Product Concepts Search<svg class="link-arrow" viewBox="0 0 11.067 9.876">
+                  <use href="images/svg-defs.svg#link-arrow"/>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.drugbankplus.com/v1/#drug-drug-interactions">Drug-Drug Interactions Search<svg class="link-arrow" viewBox="0 0 11.067 9.876">
+                  <use href="images/svg-defs.svg#link-arrow"/>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.drugbankplus.com/v1/#indications">Search by Indications<svg class="link-arrow" viewBox="0 0 11.067 9.876">
+                  <use href="images/svg-defs.svg#link-arrow"/>
+                </svg>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+
+      </div>
+    </div>  
+  </main>
+
+  <link rel="stylesheet" href="stylesheets/welcome.css">
+  <script src="javascripts/welcome.js"></script>
+
+{% endblock %}

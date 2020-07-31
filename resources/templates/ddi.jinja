@@ -16,24 +16,40 @@
           </div>
         
           <div class="section-search">
+            
             <form class="section-search-form">
               <div class="search-title">Drug-drug Interactions Search</div>
               <div class="form-group search-group">
                 <select class="drug_autocomplete"></select>
               </div>
-              <div class="form-group ddi-help">
-                <p>Add up to 40 drugs. Search by drug ingredient, product, or brand name.</p>
-              </div>
             </form>
+
+            <div class="section-search-drugs">
+              <div class="search-title">Showing interactions for</div>
+              <div class="drug-group">
+                
+              </div>
+            </div>
+
           </div>
 
           <div class="row drugs-row">
 
+            <div class="ddi-help">
+                <p>Add up to 40 drugs. Search by drug ingredient, product, or brand name.</p>
+              </div>
+
             <div id="drug-product-list">
-                <div class="drug-product btn btn-md btn-label" data-code="DBPC0180857">
-                    Acetaminophen<span class="close"></span></div>
-                <div class="drug-product btn btn-md btn-label" data-code="DBPC0021865">
-                    Prilocaine<span class="close"></span></div>
+              <div class="drug-product" data-code="DBPC0180857">
+                <label>Acetaminophen</label><button type="button" class="close" data-hide="alert" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="drug-product" data-code="DBPC0021865">
+                <label>Prilocaine</label><button type="button" class="close" data-hide="alert" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
             </div>
 
           </div>
