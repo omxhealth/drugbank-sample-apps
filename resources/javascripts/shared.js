@@ -1,3 +1,18 @@
+/**
+ * DrugBank API Sample App:
+ * shared.js
+ * 
+ * Functions that are shared between multiple sections.
+ * 
+ * Most functions are for styling the pages (adding icons, 
+ * changing how the table search bar looks, displaying/clearing
+ * API info and search terms, navbar underline).
+ * 
+ * While no code here is used for the API, the variable "localhost" is for the
+ * path needed to access the local server, and getApiKey() is for grabbing your
+ * API key and displaying it in the API demo and for the welcome page.
+ */
+
 var localhost = "/api/"; // for connecting to the locally hosted server
 
 /**
@@ -5,7 +20,7 @@ var localhost = "/api/"; // for connecting to the locally hosted server
  */
 restyleDatatableFilter = function() {
     
-    // Replace and the searchbar for the results table
+    // Replace and the search bar for the results table
     var tableSearchInput = 
         "<div class=\"input-group\"> \
             <input aria-controls=\"DataTables_Table_0\" placeholder=\"Search within results\" type=\"search\" id=\"example-search-input1\" class=\"form-control rounded-pill py-2 pr-5 mr-1\"> \
@@ -43,27 +58,6 @@ clearSearchTermsDisplay = function() {
     })
 
 }
-
-highlight_name = function(concept) {
-    var name = concept.name;
-    concept.hits.forEach(function(h) {
-        name = name.replace(strip_em_tags(h.value), h.value);
-    });
-    return name;
-};
-
-strip_em_tags = function(text) {
-    return text.replace(/<\/?em>/g, "");
-};
-
-em_to_u_tags = function(text) {
-    text = text.replace("<em>", "<u>").replace("</em>", "</u>");
-    if (text.includes("<em>")) {
-        return em_to_u_tags(text);
-    } else {
-        return text;
-    }
-};
 
 clearTableResults = function(table) {
     table.clear().draw();
@@ -103,7 +97,7 @@ handleError = function(jqXHR, element) {
 };
 
 /**
- * Javascript for underlining menu items.
+ * JavaScript for underlining menu items.
  * Credit: https://css-tricks.com/jquery-magicline-navigation
  */
 navUnderlineSetup = function() {
@@ -116,7 +110,7 @@ navUnderlineSetup = function() {
 
     // The not("#magic-line") is here because the console will through errors
     // if you hover over the magic line because it has no children
-    $(".brand-image, .navbar-nav li").not("#magic-line").hover(
+    $(".db-logo, .navbar-nav li").not("#magic-line").hover(
         function() {
             $el = $(this).children();
             leftPos = $el.position().left;
@@ -148,9 +142,20 @@ navUnderlineSetup = function() {
  * the window is resized.
  */
 navUnderlineMover = function() {
+
+    var posLeft;
+
+    // Workaround for the nav brand, which is structured 
+    // away from the rest of the nav items
+    if ($(".db-logo").hasClass("active")) {
+        posLeft = $(".active").position().left + parseInt($(".active").css('marginLeft'));
+    } else {
+        posLeft = $(".active a").position().left;
+    }
+
     $("#magic-line")
         .width($(".active").children().width())
-        .css("left", $(".active a").position().left)
+        .css("left", posLeft)
         .data("origLeft", $("#magic-line").position().left)
         .data("origWidth", $("#magic-line").width());   
 } 
@@ -169,4 +174,13 @@ getApiKey = function() {
         return "mytoken"
     }
     
+}
+
+// Adds the search icon to the search bar
+addSearchIconToSelect = function() {
+    $(".selectize-control").append(
+        "<svg class=\"search-icon\">\
+          <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
+        </svg>"
+    );
 }

@@ -1,3 +1,22 @@
+/**
+ * DrugBank API Sample App:
+ * ddi.js
+ * 
+ * JavaScript that's run on the "Drug-Drug Interactions" section.
+ * Handles adding drugs (by ingredient, product, or brand name) 
+ * to a query that is then sent to the DrugBank API through
+ * the locally run server.
+ * 
+ * Most of the code here is just for functionality of the page.
+ * Parts involved in calling the API include: 
+ * 
+ *  - initializing the search bar: 
+ *      drugSelect = $(".drug_autocomplete").selectize() 
+ * 
+ *  - submitting the request on clicking the search button: 
+ *      $("button.search-button").on("click")
+ */
+
 var api_key = getApiKey();
 var drugSelect; // used for interacting with the drug search bar
 var api_route = $("main")[0].attributes["api_route"].value;
@@ -8,8 +27,18 @@ var interactions_table = $('.interactions-table').DataTable({
     ],
 });
 
-// When drug autocomplete is changed, add the selected drug 
-// to the list and check the list length
+/**
+ * DDI Page Functions
+ * 
+ * Includes functions for loading results, 
+ * adding/removing drugs to the list, and 
+ * resetting the search.
+ */
+
+/**
+ * When drug autocomplete is changed, add the selected 
+ * drug to the list and check the list length.
+ */ 
 searchChange = function (value) {
 
     // If something is selected
@@ -17,7 +46,16 @@ searchChange = function (value) {
 
         // Add the product to our list
         var text = $(".selectize-input .item").text();
-        $("#drug-product-list").append(`<div class='drug-product btn btn-md btn-label' data-code='${value}'>${text}<span class='close'></span></div>`);
+        var list_item = 
+        `<div class='drug-product' data-code='${value}'>
+          <label>${text}</label>
+          <button class='close' data-hide='alert' aria-label='Close'>
+            <span aria-hidden='true'>×</span>
+          </button>
+        </div>`
+
+        $(list_item).hide().appendTo("#drug-product-list").fadeIn(200);
+
         addDrugRemoveListener();
         checkListLength();
 
@@ -37,18 +75,27 @@ addDrugRemoveListener = function () {
 
     // Add handler to remove product on click and update results
     $("#drug-product-list .close").on('click', function (e) {
-        $(this).parent().remove();
-        checkListLength();
+
+        // Animation for removing drug from list.
+        // Set opacity to 0 (makes invisible), then hide (shift left animation),
+        // then finally remove the element entirely (then check the list length)
+        $(this).parent().animate({opacity: 0}, 75, function() {
+            $(this).hide(200, function() {
+                $(this).remove();
+                checkListLength();
+            });
+        });
+        
     });
 
 }
 
 /**
- * Checks how many drugs are in the current list, and take action
- * based on how many there are:
+ * Checks how many drugs are in the current list, 
+ * and takes action based on how many there are:
  * 
  *  0-1:  disables the search button (need more in list)
- *  2:    minimum length for interaction chcek, so search button is enabled
+ *  2:    minimum length for interaction check, so search button is enabled
  *  40:   the max amount of items that can be in the list. Disables the drug search
  *        so more drugs can't be added to the list.
  *  39:   One less than the max amount, so the drug search is enabled.
@@ -85,7 +132,7 @@ checkListLength = function() {
  * the search area and displays the table. Also changes the 
  * search button function to reset the search (searchReset()).
  * 
- * @param {*} data the data obtained from the search ajax call
+ * @param {*} data the data obtained from the ajax call
  */
 loadResults = function (data) {
 
@@ -93,6 +140,9 @@ loadResults = function (data) {
 
     $(".drugs-row").hide();
     $(".results-row").show();
+
+    $(".section-search-drugs").show();
+    $(".section-search-form").hide();
 
     $(".search-button").addClass("search-button-reset");
     $(".search-button-text").html("Reset Search");
@@ -128,11 +178,19 @@ searchReset = function() {
     //     $(this).trigger("click");
     // });
 
+    // Removes all drugs from the results display
+    $(".drug-group").children().each(function() {
+        $(this).remove();
+    })
+
     clearDisplayRequest();
     clearSearchTermsDisplay();
     
     $(".results-row").hide();
     $(".drugs-row").show();
+
+    $(".section-search-drugs").hide();
+    $(".section-search-form").show();
 
     $(".search-button").removeClass("search-button-reset");
     $(".search-button-text").html("Search");
@@ -143,112 +201,115 @@ searchReset = function() {
 
 }
 
-$(document).ready(function () {
+/* End of functions */
 
-    $(".results-row").hide();
+/**
+ * Initialization code for the page. 
+ * Initializes parts like the search bar 
+ * and nav underline, and sets event listeners.
+ * 
+ * This could all go in $(document).ready(), but doing so 
+ * causes the search bar and nav underline to flicker on page load, 
+ * and event listeners don't need to go in it.
+ */
 
-    $("#ddi_nav").addClass("active");
-    navUnderlineSetup();
-    restyleDatatableFilter();
-    addDrugRemoveListener();
+$(".results-row").hide();
+$("#ddi_nav").addClass("active");
 
-    drugSelect = $(".drug_autocomplete").selectize({
-        valueField: "drugbank_pcid",
-        labelField: "name",
-        searchField: "name",
-        create: false,
-        persist: false,
-        placeholder: "Start typing a drug name",
-        onChange:  function(value) {
-            searchChange(value);
-        },
-        load: function(query, callback) {
-            if (!query.length || query.length < 3) return callback();
-            $.ajax({
-                url: localhost + encodeURI("product_concepts"),
-                delay: 100,
-                type: "GET",
-                data: {
-                    q: query
-                },
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (i) {
-                            return {
-                                id: i.drugbank_pcid,
-                                text: i.name
-                            };
-                        })
-                    };
-                },
-                success: function(data) {
-                    callback(data)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    handleError(jqXHR, ".drug_autocomplete");
-                }
-            })
-        } 
-    });
-    
-    // Add the search icon to the search bar
-    $(".selectize-control").append(
-        "<svg class=\"search-icon\">\
-          <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
-        </svg>"
-    );
+navUnderlineSetup();
+restyleDatatableFilter();
+addDrugRemoveListener();
+checkListLength(); // set up for the example drugs in list
 
-    // Get all the drugs from the list, add them to the 
-    // API query, submit it, and load results table.
-    $("button.search-button").on("click", function(e) {
+// Initialize the Selectize.js select
+drugSelect = $(".drug_autocomplete").selectize({
+    valueField: "drugbank_pcid",
+    labelField: "name",
+    searchField: "name",
+    create: false,
+    persist: false,
+    placeholder: "Start typing a drug name",
+    onChange:  function(value) {
+        searchChange(value);
+    },
+    load: function(query, callback) {
+        if (!query.length || query.length < 3) return callback();
+        $.ajax({
+            url: localhost + encodeURI("product_concepts"),
+            delay: 100,
+            type: "GET",
+            data: {
+                q: query
+            },
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (i) {
+                        return {
+                            id: i.drugbank_pcid,
+                            text: i.name
+                        };
+                    })
+                };
+            },
+            success: function(data) {
+                callback(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                handleError(jqXHR, ".drug_autocomplete");
+            }
+        })
+    } 
+});
 
-        if ($(this).hasClass("search-button-reset")) {
-            searchReset();
-            return;
-        }
+// Add the search icon to the search bar, which is now initialized
+addSearchIconToSelect(); 
 
-        var codes, ddi_params;
+// Get all the drugs from the list, add them to the 
+// API query, submit it, and load results table.
+$("button.search-button").on("click", function(e) {
 
-        // If there are at least 2 products selected, search for interactions
-        if ($("#drug-product-list .drug-product").length > 1) {
-            $("#loader").show();
-            
-            // Empty the interactions table
-            clearTableResults(interactions_table);
+    if ($(this).hasClass("search-button-reset")) {
+        searchReset();
+        return;
+    }
 
-            // Get the list of NDC codes
-            codes = $("#drug-product-list .drug-product").map(function () {
-                return $(this).data("code");
-            }).toArray().join();
+    // If there are at least 2 products selected, search for interactions
+    if ($("#drug-product-list .drug-product").length > 1) {
+        
+        var codes = [];
+        var ddi_params;
 
-            ddi_params = "?product_concept_id=" + codes;
+        $("#loader").show();
+        
+        // Empty the interactions table
+        clearTableResults(interactions_table);
 
-            $.ajax({
-                url: localhost + encodeURI("ddi" + ddi_params),
-                // Brief delay to a) work around a select2 bug that is not patched in the version
-                // included in rails-select2 (https://github.com/select2/select2/issues/4205)
-                // and b) reduce the number of requests sent
-                delay: 100,
-                success: function (data) {
-    
-                    // Fill the side display
-                    displayRequest(encodeURI(api_route + ddi_params), data, api_key);
-    
-                    // Fill the table
-                    loadResults(data);
+        // Get the list of NDC codes and display names of all drugs in list
+        $("#drug-product-list .drug-product").each(function() {
+            codes.push($(this).data("code"));
+            $(".drug-group").append(`<div class='drug-product'><label style='margin-right: 1.25rem'>${$(this).children("label").text()}</label></div>`);
+        })
 
-                    return $("#loader").hide();
-    
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    handleError(jqXHR, ".drug_autocomplete");
-                    return $("#loader").hide();
-                }
-            });
-        }
+        ddi_params = "?product_concept_id=" + codes.join();
 
-    });
+        $.ajax({
+            url: localhost + encodeURI("ddi" + ddi_params),
+            success: function (data) {
 
-    checkListLength(); // set up for the example drugs in list
+                // Fill the side display
+                displayRequest(encodeURI(api_route + ddi_params), data, api_key);
+
+                // Fill the table
+                loadResults(data);
+                
+                return $("#loader").hide();
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                handleError(jqXHR, ".drug_autocomplete");
+                return $("#loader").hide();
+            }
+        });
+    }
 
 });

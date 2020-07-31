@@ -1,12 +1,33 @@
 /**
- * DrugBank API Sample App
+ * DrugBank API Sample App:
  * product_concepts.js
  * 
- * Functions for the product concepts search page.
+ * JavaScript that's run on the "Product Concepts" section.
+ * Handles searching for a product concept and then filtering
+ * down by route, form, and strength, and creating a valid query
+ * that is then sent to the DrugBank API through the locally run server.
+ * 
+ * Most of the code here is just for functionality of the page.
+ * Parts involved in calling the API include: 
+ * 
+ *  - Initializing the search bar: 
+ *      drugSelect = $(".drug_autocomplete").selectize()
+ * 
+ *  - Selecting a product concept from the search bar then loads the routes: 
+ *      searchChange()
+ * 
+ *  - Selecting a route from the dropdown then loads the forms:
+ *      $(".route_autocomplete").on("change")
+ * 
+ *  - Selecting a form from the dropdown then loads the strengths:
+ *      $(".form_autocomplete").on("change")
+ * 
+ *  - submitting the request on clicking the search button: 
+ *      $("button.search-button").on("click")
  */
 
 var api_key = getApiKey();
-var drugSelect // used for clearing the drug search bar
+var drugSelect; // used for clearing the drug search bar
 var db_id; // the id to use in the final search
 var api_route = $("main")[0].attributes["api_route"].value;
 var products_table = $('.products-table').DataTable({
@@ -16,11 +37,12 @@ var products_table = $('.products-table').DataTable({
     ],
 });
 
-getStrengths = function (d) {
-    return d.ingredients.map(function (i) {
-        return i.name + " " + i.strength.number + " " + i.strength.unit;
-    }).join("<br>");
-};
+/**
+ * Product Concepts Page Functions
+ * 
+ * Includes functions for loading 
+ * results and resetting the search.
+ */
 
 /** 
  * Loads the product concept routes when a drug is selected.
@@ -30,10 +52,11 @@ getStrengths = function (d) {
  * 
  * val is the value in the drug autocomplete. If no value,
  * then everything is cleared and readied for a fresh search
+ * (which happens when the reset search button is clicked).
  */
 searchChange = function(val) {
 
-    // If the drug_autocomplete changed to anything (including emptied),
+    // If the drug_autocomplete changed to anything (including empty),
     // empty the other autocomplete forms and disable them.
     // route_autocomplete will be enabled if an actual val is detected
     $(".route_autocomplete").empty();
@@ -47,11 +70,11 @@ searchChange = function(val) {
     // If drug_autocomplete's value was changed to be empty
     if (!val) {
 
-        //clear drug autocomplete
+        // Clear the drug autocomplete
         drugSelect[0].selectize.clear(); // removes value from drug autocomplete
         drugSelect[0].selectize.clearOptions(); // removes dropdown choices from drug autocomplete
         
-        // disable search button
+        // Disable the search button
         $(".search-button").attr("disabled", true); 
         $(".search-button").addClass("search-button-disabled");
 
@@ -90,6 +113,17 @@ searchChange = function(val) {
 };
 
 /**
+ * Grabs the strengths for a given hit from the API response.
+ * Converts data from a map to a single line string for display in the table.
+ * Used in loadTableResults().
+ */
+getStrengths = function (d) {
+    return d.ingredients.map(function (i) {
+        return i.name + " " + i.strength.number + " " + i.strength.unit;
+    }).join("<br>");
+};
+
+/**
  * Loads the results from the API response into the page's table.
  * Puts into the table each product concept's name, dosage
  * form, strength, route, and labeller.
@@ -115,6 +149,7 @@ loadResults = function (data) {
     $(".select-row").hide();
     $(".results-row").show();
 
+    // Change the search button function to reset the search
     $(".search-button").addClass("search-button-reset");
     $(".search-button-text").html("Reset Search");
     
@@ -133,7 +168,7 @@ showSearchTerms = function() {
         $(".term-group").children().eq(0).children().html($(".route_autocomplete").select2("data")[0].text);
 
     } else {
-        return;
+        return; // If no route term was selected, then no other terms will be either
     }
 
     if ($(".form_autocomplete").val()) {
@@ -174,196 +209,213 @@ searchReset = function() {
 
 }
 
-$(document).ready(function() {
+/* End of functions */
 
-    $(".results-row").hide();
-    $(".search-button").attr("disabled", true);
-    $(".route_autocomplete").attr("disabled", true);
-    $(".strength_autocomplete").attr("disabled", true);
+/**
+ * Initialization code for the page. 
+ * Initializes parts like the search bar, selects, 
+ * and nav underline, and sets event listeners.
+ * 
+ * This could all go in $(document).ready(), but doing so 
+ * causes the search bar and nav underline to flicker on page load,
+ * and event listeners don't need to go in it.
+ */
+
+$(".results-row").hide();
+$("#product_concepts_nav").addClass("active");
+
+$(".search-button").attr("disabled", true);
+$(".route_autocomplete").attr("disabled", true);
+$(".strength_autocomplete").attr("disabled", true);
+$(".form_autocomplete").attr("disabled", true);
+
+navUnderlineSetup();
+restyleDatatableFilter();
+
+// Initialize the Selectize.js select
+drugSelect = $(".drug_autocomplete").selectize({
+    valueField: "drugbank_pcid",
+    labelField: "name",
+    searchField: "name",
+    create: false,
+    persist: false,
+    placeholder: "Search by brand or active ingredient",
+    onChange:  function(value) {
+        searchChange(value);
+    },
+    load: function(query, callback) {
+        if (!query.length || query.length < 3) return callback();
+        $.ajax({
+            url: localhost + encodeURI("product_concepts"),
+            type: "GET",
+            data: {
+                q: query
+            },
+            success: function (data) {
+                var url = api_route + encodeURI("?q=" + query);
+                displayRequest(url, data, api_key);
+                callback(data)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                handleError(jqXHR, ".drug_autocomplete");
+            }
+
+        });
+    }
+});
+
+// Add the search icon to the search bar, which is now initialized
+addSearchIconToSelect(); 
+
+// Activate the route input
+$(".route_autocomplete").select2({
+    theme: "drugbank",
+    placeholder: "Select Route",
+});
+
+/**
+ * Load the product concept forms when a route is selected.
+ * Form and strength autocompletes remain 
+ * disabled until API call is successful.
+ */
+$(".route_autocomplete").on("change", function (e) {
+    
+    $(".form_autocomplete").empty();
+    $(".strength_autocomplete").empty();
+
     $(".form_autocomplete").attr("disabled", true);
+    $(".strength_autocomplete").attr("disabled", true);
 
-    $("#product_concepts_nav").addClass("active");
-    navUnderlineSetup();
+    // If no value, return after disabling the form and strength autocompletes.
+    if (!$(this).val()) {
+        return;
+    }
+        
+    var path = encodeURI("/" + $(this).val() + "/forms");
+    db_id = $(this).val();
 
-    restyleDatatableFilter();
-    
-    drugSelect = $(".drug_autocomplete").selectize({
-        valueField: "drugbank_pcid",
-        labelField: "name",
-        searchField: "name",
-        create: false,
-        persist: false,
-        placeholder: "Search by brand or active ingredient",
-        onChange:  function(value) {
-            searchChange(value);
-        },
-        //createFilter: function(input) { return input.length >= 3; },
-        load: function(query, callback) {
-            if (!query.length || query.length < 3) return callback();
-            $.ajax({
-                url: localhost + encodeURI("product_concepts"),
-                type: "GET",
-                data: {
-                    q: query
-                },
-                success: function (data) {
-                    var url = api_route + encodeURI("?q=" + query);
-                    displayRequest(url, data, api_key);
-                    callback(data)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    handleError(jqXHR, ".drug_autocomplete");
-                }
-    
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data, api_key);
+            data.map(function (d) {
+                return {
+                    form: d.name,
+                    id: d.drugbank_pcid
+                };
+            }).sort().forEach(function (r) {
+                $(".form_autocomplete").append(new Option(r.form, r.id, false, false));
             });
+            $(".form_autocomplete").val(null).trigger('change');
+            $(".form_autocomplete").attr("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".route_autocomplete");
         }
+
     });
+
+});
+
+// Activate the dosage input
+$(".form_autocomplete").select2({
+    theme: "drugbank",
+    placeholder: "Select Form"
+});
+
+/** 
+ * Load the product concept strengths when a route is selected.
+ * The strength autocompletes remain disabled until API call is successful.
+ */ 
+$(".form_autocomplete").on("change", function (e) {
     
-    // Add the search icon to the search bar
-    $(".selectize-control").append(
-        "<svg class=\"search-icon\">\
-          <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
-        </svg>"
-    ); 
+    $(".strength_autocomplete").empty();
+    $(".strength_autocomplete").attr("disabled", true);
 
-    // Activate the route input
-    $(".route_autocomplete").select2({
-        theme: "drugbank",
-        placeholder: "Select Route",
+    // If no value, return after disabling the strength autocomplete.
+    if (!$(this).val()) {
+        return;
+    }
+        
+    var path = encodeURI("/" + $(this).val() + "/strengths");
+    db_id = $(this).val();
+
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data, api_key);
+            data.map(function (d) {
+                return {
+                    strength: d.name,
+                    id: d.drugbank_pcid
+                };
+            }).sort().forEach(function (r) {
+                $(".strength_autocomplete").append(new Option(r.strength, r.id, false, false));
+            });
+            $(".strength_autocomplete").val(null).trigger('change');
+            $(".strength_autocomplete").attr("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".form_autocomplete");
+        }
+
     });
 
-    // Load the product concept strengths when a route is selected
-    $(".route_autocomplete").on("change", function (e) {
-        
-        $(".form_autocomplete").empty();
-        $(".strength_autocomplete").empty();
+});
 
-        $(".form_autocomplete").attr("disabled", true);
-        $(".strength_autocomplete").attr("disabled", true);
+// Activate the strength input
+$(".strength_autocomplete").select2({
+    theme: "drugbank",
+    placeholder: "Select Strength"
+});
 
-        if (!$(this).val()) {
-            return;
-        }
-            
-        var path = encodeURI("/" + $(this).val() + "/forms");
+// Load the product concepts when a strength is selected
+$(".strength_autocomplete").on("change", function (e) {
+    
+    if (!$(this).val()) {
+        return;
+    } else {
         db_id = $(this).val();
+    }
 
-        $.ajax({
-            url: localhost + encodeURI("product_concepts") + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_route + path, data, api_key);
-                data.map(function (d) {
-                    return {
-                        form: d.name,
-                        id: d.drugbank_pcid
-                    };
-                }).sort().forEach(function (r) {
-                    $(".form_autocomplete").append(new Option(r.form, r.id, false, false));
-                });
-                $(".form_autocomplete").val(null).trigger('change');
-                $(".form_autocomplete").attr("disabled", false);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".route_autocomplete");
-            }
+});
 
-        });
+/**
+ * Calls the API one last time, using the variable db_id, which has the id
+ * from following drug -> route -> form -> strength and changes at every step.
+ */
+$("button.search-button").on("click", function(e) {
 
-    });
+    if (!db_id) {
+        return;
+    } 
 
-    // Activate the dosage input
-    $(".form_autocomplete").select2({
-        theme: "drugbank",
-        placeholder: "Select Form"
-    });
+    if ($(this).hasClass("search-button-reset")) {
+        searchReset();
+        return;
+    }
 
-    // Load the product concept strengths when a route is selected
-    $(".form_autocomplete").on("change", function (e) {
-        
-        $(".strength_autocomplete").empty();
-        $(".strength_autocomplete").attr("disabled", true);
+    $("#loader").show();
+    clearTableResults(products_table);
 
-        if (!$(this).val()) {
-            return;
-        }
-            
-        var path = encodeURI("/" + $(this).val() + "/strengths");
-        db_id = $(this).val();
+    var path = encodeURI("/" + db_id + "/products");
 
-        $.ajax({
-            url: localhost + encodeURI("product_concepts") + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_route + path, data, api_key);
-                data.map(function (d) {
-                    return {
-                        strength: d.name,
-                        id: d.drugbank_pcid
-                    };
-                }).sort().forEach(function (r) {
-                    $(".strength_autocomplete").append(new Option(r.strength, r.id, false, false));
-                });
-                $(".strength_autocomplete").val(null).trigger('change');
-                $(".strength_autocomplete").attr("disabled", false);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".form_autocomplete");
-            }
-
-        });
-
-    });
-
-    // Activate the strength input
-    $(".strength_autocomplete").select2({
-        theme: "drugbank",
-        placeholder: "Select Strength"
-    });
-
-    // Load the product concepts when a strength is selected
-    $(".strength_autocomplete").on("change", function (e) {
-        
-        if (!$(this).val()) {
-            return;
-        } else {
-            db_id = $(this).val();
+    $.ajax({
+        url: localhost + encodeURI("product_concepts") + path,
+        delay: 100,
+        success: function (data) {
+            displayRequest(api_route + path, data, api_key);
+            showSearchTerms();
+            loadResults(data);
+            $("#loader").hide();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            handleError(jqXHR, ".strength_autocomplete");
+            $("#loader").hide();
         }
 
     });
 
-    $("button.search-button").on("click", function(e) {
-
-        if (!db_id) {
-            return;
-        } 
-
-        if ($(this).hasClass("search-button-reset")) {
-            searchReset();
-            return;
-        }
-
-        $("#loader").show();
-        clearTableResults(products_table);
-
-        var path = encodeURI("/" + db_id + "/products");
-
-        $.ajax({
-            url: localhost + encodeURI("product_concepts") + path,
-            delay: 100,
-            success: function (data) {
-                displayRequest(api_route + path, data, api_key);
-                showSearchTerms();
-                loadResults(data);
-                $("#loader").hide();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".strength_autocomplete");
-                $("#loader").hide();
-            }
-
-        });
-
-    });
-
-});  
+}); 

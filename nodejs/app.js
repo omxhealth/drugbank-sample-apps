@@ -44,7 +44,7 @@ let DRUGBANK_HEADERS =
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); 
 
 app.get("/", function (req, res) {
-    res.redirect("/support");
+    res.render("welcome.jinja", {api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });
 
 /* Set product concepts routes */   
