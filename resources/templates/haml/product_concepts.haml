@@ -1,0 +1,80 @@
+= haml :base
+
+%main{:region => region, :api_key => api_key, :api_route => api_route, :role => "main"}
+  .container-fluid
+    .row.main-row
+      .col-xl-7.col-search
+        #loader
+          .ld.ld-flip-v.pill
+            %svg
+              %use{"xlink:href" => "images/svg-defs.svg#loading-icon"}
+        .section-search
+          %form.section-search-form
+            .search-title Product Concepts Search
+            .form-group.search-group
+              %select.drug_autocomplete
+            .form-group.term-group
+              .search-term
+                %p.route-term
+              .search-term
+                %p.form-term
+              .search-term
+                %p.strength-term
+        .row.select-row
+          .col-5
+            %p.search-help
+              Specify any of the following attributes to search available drug products.
+          .col-7
+            .select-container
+              .form-group
+                %label.select-header{:for => "route-select"} Route
+                %select#route-select.route_autocomplete.form-control
+              .form-group
+                %label.select-header{:for => "form-select"} Form
+                %select#form-select.form_autocomplete.form-control
+              .form-group
+                %label.select-header{:for => "strength-select"} Strength
+                %select#strength-select.strength_autocomplete.form-control
+        .row.results-row
+          .col-sm-12
+            %table.table.products-table
+              %thead
+                %tr{:role => "row"}
+                  %th Name
+                  %th Form
+                  %th Strength
+                  %th Route
+                  %th Labeller
+              %tbody
+        .row.search-row.container-fluid.no-gutters
+          .col.text-center
+            %button.search-button.search-button-disabled
+              %span
+                %span.search-button-text Search
+                %svg.search-icon-submit
+                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+      .col-xl-5.col-demo
+        %h2.demo-title Product Concept Search
+        %p.demo-desc
+          Our sample application will show you how an
+          end user can search for a drug product by specifying known
+          product attributes.
+          %br/
+          %br/
+          To help get you started, this side panel
+          will show you the API queries made in real-time,
+          and the API responses returned.
+          %br/
+          %br/
+        .tab-content
+          .example-header HTTP Request
+          %pre.language-http
+            %code.http-request.language-http
+          .example-header Shell Command
+          %pre.shell-box.language-http
+            %code.shell-command.language-http
+          .example-header.example-header-response API Response
+          %pre.api-box.language-json
+            %code.api-response.language-json
+%link{:href => "stylesheets/product_concepts.css", :rel => "stylesheet"}/
+%script{:src => "javascripts/product_concepts.js"}

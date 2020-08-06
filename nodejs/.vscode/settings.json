@@ -4,8 +4,7 @@
     ],
     "spellright.documentTypes": [
         "markdown",
-        "latex",
-        "plaintext"
+        "latex"
     ],
     "spellright.parserByClass": {
         "jinja-html": {

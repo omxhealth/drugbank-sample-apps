@@ -1,0 +1,145 @@
+= haml :base
+
+- kind_options = [{"treatment_of": "Treatment of",
+    "prevention_of": "Prevention of",
+    "prophylaxis_of": "Prophylaxis of",
+    "symptomatic_treatment_of": "Symptomatic treatment of",
+    "management_of": "Management of",
+    "for_therapy": "For therapy",
+    "adjunct_therapy_in_prevention_of": "Adjunct therapy in prevention of",
+    "adjunct_therapy_in_treatment_of": "Adjunct therapy in treatment of",
+    "adjunct_therapy_in_management_of": "Adjunct therapy in management of" },
+  {"adjunct_therapy_in_prophylaxis_of": "Adjunct therapy in prophylaxis of",
+    "adjunct_for_therapy": "Adjunct for therapy",
+    "used_in_combination_to_treat": "Used in combination to treat",
+    "used_in_combination_for_therapy": "Used in combination for therapy",
+    "used_in_combination_to_induce": "Used in combination to induce",
+    "used_in_combination_to_manage": "Used in combination to manage",
+    "used_in_combination_to_prevent": "Used in combination to prevent",
+    "used_in_combination_for_prophylaxis_of": "Used in combination for prophylaxis of",
+    "used_in_combination_for_symptomatic_treatment_of": "Used in combination for symptomatic treatment of"},
+  {"used_in_combination_as_diagnostic_agent": "Used in combination as diagnostic agent",
+    "used_in_combination_for_diagnostic_process": "Used in combination for diagnostic process",
+    "used_in_combination_to_reverse": "Used in combination to reverse",
+    "induction_of": "Induction of",
+    "reversal_of": "Reversal of",
+    "diagnostic_agent": "Diagnostic agent",
+    "used_as_adjunct_in_combination_to_manage": "Used as adjunct in combination to manage",
+    "used_as_adjunct_in_combination_to_prevent": "Used as adjunct in combination to prevent",
+    "used_as_adjunct_in_combination_to_treat": "Used as adjunct in combination to treat" }]
+
+%main{:region => region, :api_key => api_key, :api_route => api_route, :role => "main"}
+  .container-fluid
+    .row.main-row
+      .col-xl-7.col-search
+        #loader
+          .ld.ld-flip-v.pill
+            %svg
+              %use{"xlink:href" => "images/svg-defs.svg#loading-icon"}
+        .section-search
+          %form.section-search-form
+            .search-title Indications Search
+            .form-group.search-group
+              .selectize-control.single
+                .selectize-input
+                  %input#indication-name{:autocomplete => "off", :placeholder => "Heart disease"}/
+                %svg.search-icon
+                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+            .form-group.term-group
+              .search-term
+                %p.specificity-term
+              .search-term
+                %p.otc-use-term
+              .search-term
+                %p.off-label-term
+        .container.options-row
+          .row
+            .col-sm.col-specificity
+              %h3.indications-options-header Specificity
+              .form-check.md-checkbox
+                %input#name_matches.form-check-input{:checked => "checked", :name => "specificity", :type => "radio", :value => ""}/
+                %label.form-check-label.indications-option-text{:for => "name_matches"} Name Matches Only
+              .form-check.md-checkbox
+                %input#specific_matches.form-check-input{:name => "specificity", :type => "radio", :value => "specific"}/
+                %label.form-check-label.indications-option-text{:for => "specific_matches"} Include More Specific
+              .form-check.md-checkbox
+                %input#general_matches.form-check-input{:name => "specificity", :type => "radio", :value => "general"}/
+                %label.form-check-label.indications-option-text{:for => "general_matches"} Include More General
+            .col-sm.col-otc-use
+              %h3.indications-options-header OTC Use
+              .form-check.md-checkbox
+                %input#include_otc.form-check-input{:checked => "checked", :name => "otc_use", :type => "radio", :value => ""}/
+                %label.form-check-label.indications-option-text{:for => "include_otc"} Include OTC
+              .form-check.md-checkbox
+                %input#exclude_otc.form-check-input{:name => "otc_use", :type => "radio", :value => "false"}/
+                %label.form-check-label.indications-option-text{:for => "exclude_otc"} Exclude OTC
+              .form-check.md-checkbox
+                %input#otc_only.form-check-input{:name => "otc_use", :type => "radio", :value => "true"}/
+                %label.form-check-label.indications-option-text{:for => "otc_only"} Only OTC
+            .col-sm.col-off-label
+              %h3.indications-options-header Off Label
+              .form-check.md-checkbox
+                %input#include_off_label.form-check-input{:checked => "checked", :name => "off_label", :type => "radio", :value => ""}/
+                %label.form-check-label.indications-option-text{:for => "include_off_label"} Include Off Label
+              .form-check.md-checkbox
+                %input#exclude_off_label.form-check-input{:name => "off_label", :type => "radio", :value => "false"}/
+                %label.form-check-label.indications-option-text{:for => "exclude_off_label"} Exclude Off Label
+              .form-check.md-checkbox
+                %input#only_off_label.form-check-input{:name => "off_label", :type => "radio", :value => "true"}/
+                %label.form-check-label.indications-option-text{:for => "only_off_label"} Only Off Label
+          %h3.indications-options-header Filter by Therapy Type
+          .row.kind-row
+            
+            - kind_options.each do |section|
+              .col-md
+                - section.each do |q, text|
+                  - checkbox = q.to_s + "_checkbox"
+                  .kind-option.md-checkbox
+                    %input{:id => checkbox, :type => "checkbox", :value => q}/
+                    %label.indications-option-text.kind-label{:for => checkbox}= text
+
+        .row.results-row
+          .col-sm-12
+            %table.table.indications-table
+              %thead
+                %tr{:role => "row"}
+                  %th Drug
+                  %th Kind
+                  %th Indication
+                  %th Type
+                  %th Label
+              %tbody
+        .row.search-row.container-fluid.no-gutters
+          .col.text-center
+            %button.search-button.search-button-disabled
+              %span
+                %span.search-button-text Search
+                %svg.search-icon-submit
+                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+      .col-xl-5.col-demo
+        %h2.demo-title Indication Search
+        %p.demo-desc
+          Our sample application will show you how an end
+          user can easily explore drugs and treatment options
+          based on indication. A drug indication describes the
+          approved conditions, diseases, or states for which a
+          drug can safely and effectively be used.
+          %br/
+          %br/
+          To help get you started, this side panel
+          will show you the API queries made in real-time,
+          and the API responses returned.
+          %br/
+          %br/
+        .tab-content
+          .example-header HTTP Request
+          %pre.language-http
+            %code.http-request.language-http
+          .example-header Shell Command
+          %pre.shell-box.language-http
+            %code.shell-command.language-http
+          .example-header.example-header-response API Response
+          %pre.api-box.language-json
+            %code.api-response.language-json
+%link{:href => "stylesheets/indications.css", :rel => "stylesheet"}/
+%script{:src => "javascripts/indications.js"}

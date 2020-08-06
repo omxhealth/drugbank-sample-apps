@@ -5,14 +5,30 @@ require "httparty"
 require "json"
 require "haml"
 
-# Read in the config JSON
-file = File.read "../config.json"
-$config = JSON.parse(file)
+# Try to read in the config file. 
+# If it doesn't exist, create it with default values.
+begin
+    file = File.read "../config.json"
+    $config = JSON.parse(file)
+rescue
+    $config = {
+        "port": "8080",
+        "auth-key": "",
+        "region": ""
+    }
+
+    # If created, the keys need to be converted to strings to work properly
+    # (If values were read from the file initially, the keys are treated as strings)
+    $config = $config.transform_keys(&:to_s) 
+
+    File.write("../config.json", JSON.pretty_generate($config))
+
+end    
 
 # Set variables after reading in the config
 
 set :public_folder, __dir__ + "/../resources"
-set :views, settings.public_folder + "/templates"
+set :views, settings.public_folder + "/templates/haml"
 set :port, $config["port"]
 
 # Checks that the region found in the config file is valid.
@@ -23,7 +39,6 @@ def validate_region(config)
     $region = $config["region"].downcase
 
     case $region
-        
         when "us", "ca", "eu"
             $config["region"] = $region
         else
@@ -92,14 +107,15 @@ def getApiEndpoint(endpoint)
 
 end   
 
+# GET render: welcome page
 get "/" do
-    redirect "/support"
-end     
+    haml :welcome, :locals => {:region => $drugbank_region, :api_key => $drugbank_api_key}
+end    
 
 # GET render: product concepts page
 get "/product_concepts" do
     route = getApiRoute("product_concepts")
-    haml :product_concepts, :locals => {:api_route => route, :api_key => $drugbank_api_key} 
+    haml :product_concepts, :locals => {:api_route => route, :api_key => $drugbank_api_key, :region => $drugbank_region} 
 end
 
 # GET API call: product concepts
@@ -119,7 +135,7 @@ end
 # GET render: drug-drug interaction (ddi) page
 get "/ddi" do
     route = getApiRoute("ddi")
-    haml :ddi, :locals => {:api_route => route}
+    haml :ddi, :locals => {:api_route => route, :api_key => $drugbank_api_key, :region => $drugbank_region}
 end
 
 # GET API call: ddi
@@ -132,7 +148,7 @@ end
 # GET render: indications page
 get "/indications" do
     route = getApiRoute("indications")
-    haml :indications, :locals => {:api_route => route}
+    haml :indications, :locals => {:api_route => route, :api_key => $drugbank_api_key, :region => $drugbank_region}
 end
 
 # GET API call: indications
@@ -140,11 +156,6 @@ get "/api/indications" do
     content_type :json
     route = getApiEndpoint("indications")
     drugbank_get(route, params).to_json
-end 
-
-# GET render: support page
-get "/support" do
-    haml :support, :locals => {:region => $drugbank_region, :api_key => $drugbank_api_key}
 end  
 
 # PUT: update the authorization key
@@ -240,7 +251,7 @@ def update_API_key(new_key)
 
     # try to write back to config file
     begin
-        File.write("../config.json",JSON.pretty_generate($config)) 
+        File.write("../config.json", JSON.pretty_generate($config)) 
         $drugbank_headers["Authorization"] = new_key
         return 200    
     rescue StandardError => msg 
@@ -271,7 +282,7 @@ def update_region(new_region)
  
     # try to write back to config file
     begin
-        File.write("../config.json",JSON.pretty_generate($config)) 
+        File.write("../config.json", JSON.pretty_generate($config)) 
         return 200    
     rescue StandardError => msg 
         # in case anything goes wrong, revert changes

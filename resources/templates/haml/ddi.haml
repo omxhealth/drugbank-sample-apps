@@ -1,0 +1,74 @@
+= haml :base
+
+%main{:region => region, :api_key => api_key, :api_route => api_route, :role => "main"}
+  .container-fluid
+    .row.main-row
+      .col-xl-7.col-search
+        #loader
+          .ld.ld-flip-v.pill
+            %svg
+              %use{"xlink:href" => "images/svg-defs.svg#loading-icon"}
+        .section-search
+          %form.section-search-form
+            .search-title Drug-drug Interactions Search
+            .form-group.search-group
+              %select.drug_autocomplete
+          .section-search-drugs
+            .search-title Showing interactions for
+            .drug-group
+        .row.drugs-row
+          .ddi-help
+            %p Add up to 40 drugs. Search by drug ingredient, product, or brand name.
+          #drug-product-list
+            .drug-product{"data-code" => "DBPC0180857"}
+              %label Acetaminophen
+              %button.close{"aria-label" => "Close", "data-hide" => "alert", :type => "button"}
+                %span{"aria-hidden" => "true"} ×
+            .drug-product{"data-code" => "DBPC0021865"}
+              %label Prilocaine
+              %button.close{"aria-label" => "Close", "data-hide" => "alert", :type => "button"}
+                %span{"aria-hidden" => "true"} ×
+        .row.results-row
+          .col-sm-12
+            %table.table.interactions-table
+              %thead
+                %tr{:role => "row"}
+                  %th Product
+                  %th Affected Product
+                  %th Severity
+                  %th Description
+              %tbody
+        .row.search-row.container-fluid.no-gutters
+          .col.text-center
+            %button.search-button.search-button-disabled
+              %span
+                %span.search-button-text Search
+                %svg.search-icon-submit
+                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+      .col-xl-5.col-demo
+        %h2.demo-title Drug-Drug Interactions Search
+        %p.demo-desc
+          Our sample application will show you
+          how an end user can easily search a list of drugs for
+          potential interactions. The results include interactions
+          between any drugs in the list, and provides users with a
+          description and severity rating for each interaction.
+          %br/
+          %br/
+          To help get you started, this side panel
+          will show you the API queries made in real-time,
+          and the API responses returned.
+          %br/
+          %br/
+        .tab-content
+          .example-header HTTP Request
+          %pre.language-http
+            %code.http-request.language-http
+          .example-header Shell Command
+          %pre.shell-box.language-http
+            %code.shell-command.language-http
+          .example-header.example-header-response API Response
+          %pre.api-box.language-json
+            %code.api-response.language-json
+%link{:href => "stylesheets/ddi.css", :rel => "stylesheet"}/
+%script{:src => "javascripts/ddi.js"}
