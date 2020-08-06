@@ -1,0 +1,52 @@
+.ddi-help {
+  margin-bottom: 0;
+  text-align: left;
+  font: 200 22px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  opacity: 1;
+  width: 100%;
+}
+
+.section-search-drugs {
+  display: none;
+  width: 100%;
+  padding-top: 20px;
+  max-height: 10rem;
+}
+
+.drugs-row {
+  margin: 2rem 10% 10rem 10%;
+  overflow-y: auto;
+}
+
+.drug-product {
+  background: #F3F3FC;
+  border-radius: 10px;
+  font: normal 22px/2rem Gemeli;
+  letter-spacing: 0px;
+  color: #172042;
+  opacity: 1;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: default !important;
+  display: inline-block;
+  float: left;
+  position: relative;
+}
+
+.drug-product label {
+  padding: 0.5rem 0rem 0.5rem 1.25rem;
+  margin-bottom: 0;
+}
+
+.drug-product button {
+  padding: 0.5rem 1.25rem 0.5rem 1rem;
+  font-size: 2rem;
+}
+
+.drug-product button span {
+  font-family: auto;
+  color: #172042;
+}
+/*# sourceMappingURL=ddi.css.map */

@@ -37,7 +37,7 @@
   }]
  %}
 
-  <main role="main" api_route="{{api_route}}" api_key="{{api_key}}">
+  <main role="main" api_route="{{api_route}}" region="{{region}}" api_key="{{api_key}}">
     <div class="container-fluid">
       <div class="row main-row">
         <div class="col-xl-7 col-search">
@@ -130,16 +130,42 @@
             <h3 class="indications-options-header">Filter by Therapy Type</h3>
 
             <div class="row kind-row">
-              
+
+              {% set app=app %}
+
               {% for section in kind_options %}
                 <div class="col-md">
-                {% for q, text in section %}
-                  {% set checkbox = q + "_checkbox" %}
-                  <div class="kind-option md-checkbox">
-                    <input type="checkbox" id={{checkbox}} value={{q}}>
-                    <label class="indications-option-text kind-label" for={{checkbox}}>{{text}}</label>
-                  </div>
-                {% endfor %}
+
+                {# 
+                 # The indications page needs to know which app is running,
+                 # as there is a difference between implementations for iterating 
+                 # over key/value pairs
+                 #}
+                {% if app == "node" or app == "php" %}
+
+                  {% for q, text in section %}
+
+                    {% if app == "node" %}
+                      {% set checkbox = q + "_checkbox" %}
+                    {% else %}  
+                      {% set checkbox = q ~ "_checkbox" %}
+                    {% endif %}  
+
+                    <div class="kind-option md-checkbox">
+                      <input type="checkbox" id={{checkbox}} value={{q}}>
+                      <label class="indications-option-text kind-label" for={{checkbox}}>{{text}}</label>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {% for q, text in section.items() %}
+                    {% set checkbox = q + "_checkbox" %}
+                    <div class="kind-option md-checkbox">
+                      <input type="checkbox" id={{checkbox}} value={{q}}>
+                      <label class="indications-option-text kind-label" for={{checkbox}}>{{text}}</label>
+                    </div>
+                  {% endfor %}
+                {% endif %}
+
                 </div>
               {% endfor %}
 

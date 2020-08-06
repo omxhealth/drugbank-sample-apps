@@ -1,0 +1,178 @@
+.options-row {
+    margin: 50px 10% calc(8rem + 50px) 10%;
+    width: auto;
+}
+
+.indications-options-header {
+    text-align: left;
+    font: 200 16px Gemeli;
+    letter-spacing: 1.47px;
+    color: #172042;
+    opacity: 1;
+    text-transform: uppercase;
+}
+
+.indications-option-text {
+    text-align: left;
+    font: 200 14px Gemeli;
+    letter-spacing: 0px;
+    color: #172042;
+    opacity: 1;
+}
+
+.col-specificity, .col-otc-use, .col-off-label {
+    margin-bottom: 2rem;
+}
+
+.kind-label {
+    height: 3rem;
+}
+
+/**
+ * Checkbox and Radio Styling
+ *
+ * Adapted from https://gist.github.com/ldavidsp/7754f4f12fcbc33244bac1da30ae69b0
+ */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+$md-checkbox-checked-color: #172042;
+$md-checkbox-border-color: #ced4da;
+$md-checkbox-border-color-disabled: rgba(0, 0, 0, 0.26);
+$md-checkbox-checked-color-disabled: rgba(0, 0, 0, 0.26);
+
+$md-checkbox-margin: 0.5em 0;
+$md-checkbox-size: 1.25em;
+$md-checkbox-padding: .25em;
+$md-checkbox-border-width: 1px;
+$md-checkbox-border-radius: 0.125em;
+$md-checkmark-width: 0.125em;
+$md-checkmark-color: #F3F3FB;
+$md-checkbox-label-padding: .75em;
+
+.md-checkbox {
+  position: relative;
+  margin: $md-checkbox-margin;
+  text-align: left;
+
+  &.md-checkbox-inline {
+    display: inline-block;
+  }
+  
+  label {
+    cursor: pointer;
+    display: flex;
+    line-height: $md-checkbox-size;
+    vertical-align: top;
+    //clear: both;
+    padding-left: 1px;
+    &:not(:empty) {
+      padding-left: $md-checkbox-label-padding;
+    }
+    
+    &:before, &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    &:before {
+      // box
+      width: $md-checkbox-size;
+      height: $md-checkbox-size;
+      background: #F3F3FB;
+      border: $md-checkbox-border-width solid $md-checkbox-border-color;
+      border-radius: $md-checkbox-border-radius;
+      cursor: pointer;
+      transition: background .2s;
+    }
+  
+    &:after {
+      // checkmark
+    }    
+  }
+  
+  input[type="checkbox"] {
+    outline: 0;
+    visibility: hidden;
+    width: $md-checkbox-size;
+    margin: 0;
+    display: block;
+    float: left;
+    font-size: inherit;
+
+    &:checked {
+       + label:before{
+        background: $md-checkbox-checked-color;
+        border:none;
+      }
+      + label:after {
+        
+        $md-checkmark-size: $md-checkbox-size - 2 * $md-checkbox-padding;
+
+        transform: translate($md-checkbox-padding, ($md-checkbox-size / 2) - ($md-checkmark-size / 2.6)) rotate(-45deg);
+        width: $md-checkmark-size;
+        height: $md-checkmark-size / 2;
+        
+        border: $md-checkmark-width solid $md-checkmark-color;
+        border-top-style: none;
+        border-right-style: none;
+      } 
+    }
+    
+    &:disabled {
+      + label:before{
+        border-color: $md-checkbox-border-color-disabled;
+      }
+      &:checked {
+        + label:before{
+          background: $md-checkbox-checked-color-disabled;
+        }
+      }
+    }
+  }
+
+  input[type="radio"] {
+    outline: 0;
+    visibility: hidden;
+    width: $md-checkbox-size;
+    margin: 0;
+    display: block;
+    float: left;
+    font-size: inherit;
+
+    + label:before{ 
+        border-radius: 100% ;
+    }
+
+    &:checked {
+       + label:before{
+        background: #F3F3FB;
+
+      }
+      + label:after {
+        transition: background .2s;
+        $md-checkmark-size: $md-checkbox-size - 2 * $md-checkbox-padding;
+        background: $md-checkbox-checked-color;
+        transform: translate($md-checkbox-padding, $md-checkbox-padding) rotate(-45deg);
+        width: $md-checkmark-size;
+        height: $md-checkmark-size;
+        
+        border-radius: 100%;
+      } 
+    }
+    
+    &:disabled {
+      + label:before{
+        border-color: $md-checkbox-border-color-disabled;
+      }
+      &:checked {
+        + label:before{
+          background: $md-checkbox-checked-color-disabled;
+        }
+      }
+    }
+  }
+ 
+}

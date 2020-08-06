@@ -50,7 +50,7 @@ tbody, .dataTables_length, .dataTables_info, .dataTables_paginate {
   color: #172042;
 }
 
-td.product_concepts_name {
+td.table_col_name {
   font-weight: bold;
 }
 

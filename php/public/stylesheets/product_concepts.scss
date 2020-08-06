@@ -1,0 +1,36 @@
+// Margin added to the bottom of the .select-row
+// so that the search row on the bottom of the page
+// doesn't overlap it.
+.select-row {
+    margin-bottom: 8rem;
+} 
+
+// Help info for performing the search in .col-search
+.search-help {
+    text-align: left;
+    font: 200 22px/32px Gemeli;
+    letter-spacing: 0px;
+    color: #263063;
+    opacity: 1;
+    margin: 65px 25% 0 25%;
+}
+
+// Container for the route, strength, dosage, and form selects
+.select-container {
+    margin-top: 65px;
+    margin-left: 0;
+    margin-right: 17%;
+    margin-bottom: 35px !important;
+}
+
+// Styling for the headers for the selects in the .select-container
+.select-header {
+    text-align: left;
+    font: 200 16px/14px Gemeli;
+    letter-spacing: 1.47px;
+    color: #172042;
+    opacity: 1;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    width: 100%;
+}

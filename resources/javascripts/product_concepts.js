@@ -26,7 +26,8 @@
  *      $("button.search-button").on("click")
  */
 
-var api_key = getApiKey();
+var api_key;
+var region;
 var drugSelect; // used for clearing the drug search bar
 var db_id; // the id to use in the final search
 var api_route = $("main")[0].attributes["api_route"].value;
@@ -220,6 +221,22 @@ searchReset = function() {
  * causes the search bar and nav underline to flicker on page load,
  * and event listeners don't need to go in it.
  */
+
+api_key = getApiKey();
+region = $("main")[0].getAttribute("region"); // region should always be set
+
+// If no API key was set or found, prompt for it to be entered with a popup
+if (!api_key) {
+    setupPopup(region);
+    $("#welcomeModal").modal(); 
+    
+    // Get the updated API key and region and display them
+    $("#welcomeModal").on("hide.bs.modal", function() {
+        api_key = getApiKey();
+        region = $("main")[0].getAttribute("region");
+    });
+    
+}  
 
 $(".results-row").hide();
 $("#product_concepts_nav").addClass("active");
