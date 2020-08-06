@@ -25,7 +25,7 @@ Sample apps for drugbank, private for now
 
 ### General Information
 
-By default, each app should be running at http://127.0.0.1:4567/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
+By default, each app should be running at http://127.0.0.1:8080/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
 
 Each implementation determines the port to run on as well as the DrugBank API key and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
 
@@ -46,7 +46,7 @@ The app is then run with the command
 mvn exec:java
 ```
 
-Visit [http://localhost:`port`/](http://127.0.0.1:4567/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
+Visit [http://localhost:`port`/](http://127.0.0.1:8080/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
 
 ## Node.js
 Navigate to `drugbank-sample-apps/nodejs`. Run the command

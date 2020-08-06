@@ -14,10 +14,18 @@ config_file = "config.json"
 
 # Try opening the config JSON
 try:
-    config = json.load(open("../" + config_file))  # Store it as a dictionary
-except JSONDecodeError:
-    print("Error: File does not appear to be a valid JSON document.")
-    sys.exit()
+    config = json.load(open("../" + config_file))  # Store it as a dictionary   
+except FileNotFoundError:
+    print("Creating file ../" + config_file + " with default values")
+    config = {
+        "port": "8080",
+        "auth-key": "",
+        "region": ""
+    }
+
+    json_file = open("../" + config_file, "w", encoding="utf-8")
+    json.dump(config, json_file, indent=4)
+    json_file.flush()
 
 
 # Checks that the region found in the config file is valid.
@@ -119,6 +127,7 @@ def update_API_key(new_key):
     try:
         json_file = open("../" + config_file, "w", encoding="utf-8")
         json.dump(config, json_file, indent=4)
+        json_file.flush()
         DRUGBANK_HEADERS["Authorization"] = new_key
         return 200
 
@@ -150,6 +159,7 @@ def update_region(new_region):
     try:
         json_file = open("../" + config_file, "w", encoding="utf-8")
         json.dump(config, json_file, indent=4)
+        json_file.flush()
         return 200
 
     except (FileNotFoundError, IOError):
@@ -162,16 +172,16 @@ def update_region(new_region):
 # Routes #
 
 
-@app.route("/")
-def default_page():
-    return redirect("/support")
+@app.route("/", methods=["GET"])
+def welcome_page():
+    return render_template("welcome.jinja", api_key=DRUGBANK_API_KEY, region=DRUGBANK_REGION)
 
 
 # GET render: product concepts page
 @app.route("/product_concepts", methods=["GET"])
 def product_concepts_page():
     route = getApiRoute("product_concepts")
-    return render_template("product_concepts.jinja", api_route=route, api_key=DRUGBANK_API_KEY)
+    return render_template("product_concepts.jinja", api_route=route, api_key=DRUGBANK_API_KEY, region=DRUGBANK_REGION)
 
 
 # GET API call: product concepts
@@ -194,7 +204,7 @@ def api_product_concepts_vars(x, y):
 @app.route("/ddi", methods=["GET"])
 def ddi_page():
     route = getApiRoute("ddi")
-    return render_template("ddi.jinja", api_route=route)
+    return render_template("ddi.jinja", api_route=route, api_key=DRUGBANK_API_KEY, region=DRUGBANK_REGION)
 
 
 # GET API call: ddi
@@ -209,7 +219,7 @@ def api_ddi():
 @app.route("/indications", methods=["GET"])
 def indications_page():
     route = getApiRoute("indications")
-    return render_template("indications.jinja", api_route=route)
+    return render_template("indications.jinja", app="python", api_route=route, api_key=DRUGBANK_API_KEY, region=DRUGBANK_REGION)
 
 
 # GET API call: indications
@@ -218,12 +228,6 @@ def api_indications():
     route = getApiEndpoint("indications")
     res = drugbank_get(route, request.args)
     return jsonify(res)
-
-
-# GET render: support page
-@app.route("/support", methods=["GET"])
-def support_page():
-    return render_template("support.jinja", region=DRUGBANK_REGION, api_key=DRUGBANK_API_KEY)
 
 
 # PUT: update the authorization key
@@ -302,4 +306,4 @@ def put_region():
 
 # Start the app
 if __name__ == "__main__":
-    app.run(debug=True, port=config["port"])
+    app.run(debug=True, port=config["port"], use_reloader=False)

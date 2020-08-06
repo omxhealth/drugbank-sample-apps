@@ -6,13 +6,7 @@ import spark.Request;
 
 import static spark.debug.DebugScreen.enableDebugScreen;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -27,13 +21,13 @@ import org.apache.logging.log4j.Logger;
 public class App {
 
     protected static String authKey = "";
-    protected static String apiHost = "https://api.drugbankplus.com/v1/";
     protected static String region = "";
+    protected static String apiHost = "https://api.drugbankplus.com/v1/";
     protected static JSONObject config;
 
     private static final Logger logger = LogManager.getLogger(App.class);
 
-    // if config file name or location is changed, also needs to change in pom.xml
+    // If config file name or location is changed, also needs to change in pom.xml
     protected static final String configFile = "config.json";
 
     /**
@@ -58,7 +52,19 @@ public class App {
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
 
-        redirect.get("/", "/support");
+        /* Set the welcome page route */
+
+        // GET render: support page
+        get("/", (req, res) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            attributes.put("region", region);
+            attributes.put("api_key", authKey);
+
+            return engine.render( 
+                new ModelAndView(attributes, "welcome.jinja")
+            );
+        });
 
         /* Set product concepts routes */
 
@@ -69,6 +75,7 @@ public class App {
 
             attributes.put("api_route", route);
             attributes.put("api_key", authKey);
+            attributes.put("region", region);
 
             return engine.render( 
                 new ModelAndView(attributes, "product_concepts.jinja")
@@ -99,7 +106,9 @@ public class App {
             String route = getApiRoute("ddi");
             Map<String, Object> attributes = new HashMap<>();
 
-			attributes.put("api_route", route);
+            attributes.put("api_route", route);
+            attributes.put("region", region);
+            attributes.put("api_key", authKey);
 
             return engine.render( 
                 new ModelAndView(attributes, "ddi.jinja")
@@ -121,7 +130,9 @@ public class App {
             String route = getApiRoute("indications");
             Map<String, Object> attributes = new HashMap<>();
 
-			attributes.put("api_route", route);
+            attributes.put("api_route", route);
+            attributes.put("region", region);
+            attributes.put("api_key", authKey);
 
             return engine.render( 
                 new ModelAndView(attributes, "indications.jinja")
@@ -134,20 +145,6 @@ public class App {
             final Map<String, String> params = setParams(req);
             res.type("application/json");
             return api.drugbank_get(route, params).getData().toString();
-        });
-
-        /* Set support page routes */
-
-        // GET render: support page
-        get("/support", (req, res) -> {
-            Map<String, Object> attributes = new HashMap<>();
-
-            attributes.put("region", region);
-            attributes.put("api_key", authKey);
-
-            return engine.render( 
-                new ModelAndView(attributes, "support.jinja")
-            );
         });    
 
         // PUT: update API authorization key 
@@ -292,39 +289,45 @@ public class App {
     }
 
     /**
-     * Loads properties from the config file into a JSONObject
+     * Loads properties from the config file into a JSONObject.
+     * If the file doesn't exist, it is created with defualt values.
      * 
-     * The file must contain: - port: the port to host the server on - templates:
-     * path to the template resources directory - static: path to the static
-     * resources directory - api-host: the URL to the Drugbank API including the
-     * version to be used ("https://api.drugbankplus.com/v1/") - auth-key:
-     * authorization key for API access
+     * The file must contain: 
+     *  - port: the port to host the server on 
+     *  - auth-key: authorization key for API access
+     *  - region: the region to perform search in ("us", "ca", "eu", or "" for all
      */
     public static JSONObject loadConfig() {
 
-        InputStream in = App.class.getClassLoader().getResourceAsStream(configFile);
-        StringBuilder content = new StringBuilder();
+        JSONObject configObject;
 
-        try (Reader reader = new BufferedReader(
-                new InputStreamReader(in, Charset.forName(StandardCharsets.UTF_8.name())))) {
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get("../../" + configFile));
+            String content = new String(bytes);
 
-            int c;
-            while ((c = reader.read()) != -1) {
-                content.append((char) c);
+            configObject = new JSONObject(content);
+
+        } catch (Exception e) {
+            logger.info("Creating file " + configFile + " with default values");
+            
+            configObject = new JSONObject();
+            configObject.put("port", "8080");
+            configObject.put("auth-key", "");
+            configObject.put("region", "");
+
+            try {
+                updateConfig(configObject);
+            } catch (IOException ex) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new NullPointerException("Cannot find resource file '" + configFile + "'");
         }
 
-        final JSONObject configObject = new JSONObject(content.toString());
         return configObject;
 
     }
 
     /**
-     * Starts up the server based on the values in the config file.
+     * Starts up the server based on the values from the config file.
      * 
      * @param config the config JSON
      */

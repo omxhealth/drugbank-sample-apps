@@ -23,15 +23,25 @@ if (PHP_SAPI == "cli-server") {
 // The name of the config file
 $config_file = "config.json";
 
-// Try opening the config and storing it
-try {
-    $file = fopen(__DIR__ . "/../../" . $config_file, "r") or die("Unable to open file!");
-    $read_file = fread($file, filesize(__DIR__ . "/../../" . $config_file));
+// The location of the config file
+$config_path = __DIR__ . "/../../" . $config_file;
+
+if (file_exists($config_path)) {
+    $file = fopen($config_path, "r");
+    $read_file = fread($file, filesize($config_path));
     fclose($file);
     $config = json_decode($read_file, true);
-} catch (Exception $e) {
-    echo "Caught exception: ",  $e->getMessage(), "\n";
-    exit(1);
+} else {
+    $config = [
+        "port" => "8080",
+        "auth-key" => "",
+        "region" => ""
+    ];
+
+    $config_string = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $file = fopen($config_path, "w");
+    fwrite($file, $config_string);
+    fclose($file);
 }
 
 // Check and set valid region
@@ -78,16 +88,28 @@ $app->add(TwigMiddleware::create($app, $twig));
 // Add middleware to parse HTTP request bodies
 $app->addBodyParsingMiddleware();
 
-$app->redirect("/", "/support");
+// GET render: welcome page
+$app->get("/", function (Request $request, Response $response) {
+
+    global $DRUGBANK_REGION, $DRUGBANK_API_KEY;
+
+    $view = Twig::fromRequest($request);
+    return $view->render($response, "welcome.jinja", array(
+        "region" => $DRUGBANK_REGION,
+        "api_key" => $DRUGBANK_API_KEY
+    ));
+
+});
 
 // GET render: product concepts page
 $app->get("/product_concepts", function (Request $request, Response $response) {
-    global $DRUGBANK_API_KEY;
+    global $DRUGBANK_API_KEY, $DRUGBANK_REGION;
     $route = getApiRoute("product_concepts");
     $view = Twig::fromRequest($request);
     return $view->render($response, "product_concepts.jinja", array(
         "api_route" => $route,
-        "api_key" => $DRUGBANK_API_KEY
+        "api_key" => $DRUGBANK_API_KEY,
+        "region" => $DRUGBANK_REGION
     ));
 });
 
@@ -110,9 +132,14 @@ $app->get("/api/product_concepts/{x}/{y}",
 
 // GET render: ddi page
 $app->get("/ddi", function (Request $request, Response $response) {
+    global $DRUGBANK_API_KEY, $DRUGBANK_REGION;
     $route = getApiRoute("ddi");
     $view = Twig::fromRequest($request);
-    return $view->render($response, "ddi.jinja", array("api_route" => $route));
+    return $view->render($response, "ddi.jinja", array(
+        "api_route" => $route,
+        "api_key" => $DRUGBANK_API_KEY,
+        "region" => $DRUGBANK_REGION
+    ));
 });
 
 // GET API call: ddi
@@ -125,9 +152,14 @@ $app->get("/api/ddi", function (Request $request, Response $response) {
 
 // GET render: indications page
 $app->get("/indications", function (Request $request, Response $response) {
+    global $DRUGBANK_API_KEY, $DRUGBANK_REGION;
     $route = getApiRoute("indications");
     $view = Twig::fromRequest($request);
-    return $view->render($response, "indications.jinja", array("api_route" => $route));
+    return $view->render($response, "indications.jinja", array(
+        "api_route" => $route,
+        "api_key" => $DRUGBANK_API_KEY,
+        "region" => $DRUGBANK_REGION,
+        "app" => "php"));
 });
 
 // GET API call: indications
@@ -136,19 +168,6 @@ $app->get("/api/indications", function (Request $request, Response $response) {
     $payload = drugbank_get($route, $request->getQueryParams());
     $response->getBody()->write($payload);
     return $response->withHeader("Content-Type", "application/json");
-});
-
-// GET render: support page
-$app->get("/support", function (Request $request, Response $response) {
-
-    global $DRUGBANK_REGION, $DRUGBANK_API_KEY;
-
-    $view = Twig::fromRequest($request);
-    return $view->render($response, "support.jinja", array(
-        "region" => $DRUGBANK_REGION,
-        "api_key" => $DRUGBANK_API_KEY
-    ));
-
 });
 
 // PUT: update API authorization key

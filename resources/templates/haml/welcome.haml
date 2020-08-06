@@ -1,0 +1,115 @@
+= haml :base
+
+%main{:region => region, :api_key => api_key, :role => "main"}
+  .container-fluid
+    .row.main-row
+      .col-xl-7.col-info
+        %h1 Welcome to DrugBank’s sample app!
+        %br/
+        %p.info-intro
+          We’ve designed this sample app to give you an idea of how you can
+          integrate the DrugBank API into your clinical products. We’ve included
+          5 sample apps where you can see both front-end design alongside the API
+          queries and results.
+        %br/
+        .container
+          %a.welcome-section-link{:href => "/drugs"}
+            .row.align-items-center.feature-info-row
+              .col.info-section-name
+                %h3 Drug Lookup
+              .col.info-section-desc
+                %p Search by product name, drug ingredient, or even NDC codes.
+          %a.welcome-section-link{:href => "/alternative_drugs"}
+            .row.align-items-center.feature-info-row
+              .col.info-section-name
+                %h3 Alternative Drug Search
+              .col.info-section-desc
+                %p Find alternative drugs based on a drug ingredient or product search.
+          %a.welcome-section-link{:href => "/product_concepts"}
+            .row.align-items-center.feature-info-row
+              .col.info-section-name
+                %h3 Product Concepts Search
+              .col.info-section-desc
+                %p A multi-step search to specify drugs and their attributes (route, strength, form, dosage)
+          %a.welcome-section-link{:href => "/ddi"}
+            .row.align-items-center.feature-info-row
+              .col.info-section-name
+                %h3 Drug-Drug Interactions Search
+              .col.info-section-desc
+                %p Search drug to drug interactions between a list of up to 40 drug products.
+          %a.welcome-section-link{:href => "/indications"}
+            .row.align-items-center.feature-info-row
+              .col.info-section-name
+                %h3 Search by Indication
+              .col.info-section-desc
+                %p Find similar drug treatments based on indications and contraindication.
+      .col-xl-5.col-settings
+        %h2.settings-section-title Your settings
+        .row
+          %form#auth_key_form.form-horizontal{"accept-charset" => "UTF-8", :action => "#", :method => "post"}
+            .form-group
+              %label.control-label.col-sm.option-label{:for => "auth_key_input"}
+                API Key
+                .key-tooltip-container.tooltip-container{"data-placement" => "top", "data-toggle" => "tooltip", :title => "<b>Need an API key?</b> Log in to your <u>portal</u> to access your unique key, or <u>contact sales</u> to request one."}
+                  %svg.tooltip-icon
+                    %use{:href => "images/svg-defs.svg#tooltip-icon"}
+              .col-sm
+                .input-group
+                  %input#auth_key_input.form-control{:type => "text"}/
+                  %button#auth_key_submit{:type => "submit"} Update
+        #auth_key_alert.alert.alert-warning.alert-dismissible{:role => "alert", :style => "display: none;"}
+          %p#auth_update_message
+          %button.close{"aria-label" => "Close", "data-hide" => "alert", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+        .row
+          %form#region_form.form-horizontal
+            .form-group
+              %label.control-label.col-sm.option-label{:for => "region_select"}
+                Region
+                .tooltip-container{"data-placement" => "top", "data-toggle" => "tooltip", :title => "Select a specific region to search within, or choose ‘ALL’ to search across all available region."}
+                  %svg.tooltip-icon
+                    %use{:href => "images/svg-defs.svg#tooltip-icon"}
+              .col-sm
+                %select#region_select.form-control
+                  %option{:value => ""} All
+                  %option{:value => "us"} United States
+                  %option{:value => "ca"} Canada
+                  %option{:value => "eu"} Europe
+        %br/
+        %br/
+        %h2.settings-section-title Getting Started
+        %p For help with this sample app or to view the readme, please refer to the link below:
+        %ul
+          %li
+            %a{:href => "https://github.com/omxhealth/drugbank-sample-apps"}
+              GitHub Repository
+              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+                %use{:href => "images/svg-defs.svg#link-arrow"}
+        %br/
+        %p
+          For further assistance getting started with the API, please
+          refer to the DrugBank Help Center, or click the relevant Help Center
+          links below. Or contact our support centre for more help.
+        %ul
+          %li
+            %a{:href => "https://docs.drugbankplus.com/v1/#drug-names-autocomplete"}
+              Drug Names / Autocomplete
+              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+                %use{:href => "images/svg-defs.svg#link-arrow"}
+          %li
+            %a{:href => "https://docs.drugbankplus.com/v1/#product-concepts"}
+              Product Concepts
+              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+                %use{:href => "images/svg-defs.svg#link-arrow"}
+          %li
+            %a{:href => "https://docs.drugbankplus.com/v1/#drug-drug-interactions"}
+              Drug-Drug Interactions
+              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+                %use{:href => "images/svg-defs.svg#link-arrow"}
+          %li
+            %a{:href => "https://docs.drugbankplus.com/v1/#indications"}
+              Indications
+              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+                %use{:href => "images/svg-defs.svg#link-arrow"}
+%link{:href => "stylesheets/welcome.css", :rel => "stylesheet"}/
+%script{:src => "javascripts/welcome.js"}
