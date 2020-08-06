@@ -165,13 +165,13 @@ navUnderlineMover = function() {
 getApiKey = function() {
     
     try {
-        if ($("main")[0].attributes["api_key"].value) {
-            return $("main")[0].attributes["api_key"].value;
+        if ($("main")[0].getAttribute("api_key")) {
+            return $("main")[0].getAttribute("api_key");
         } else {
             throw(err);
         }    
     } catch(err) {
-        return "mytoken"
+        return ""
     }
     
 }
@@ -183,4 +183,89 @@ addSearchIconToSelect = function() {
           <use xlink:href=\"images/svg-defs.svg#search-icon\" /> \
         </svg>"
     );
+}
+
+setupPopup = function(region) {
+
+    $("#auth_key_input_popup").val(null);
+    $("#region_select_popup").val(region);
+    $(".confirm-button").attr("disabled", true);
+
+    $("#region_select_popup").select2({
+        theme: "drugbank",
+        minimumResultsForSearch: -1, // no search bar
+        width: "resolve" 
+    });
+
+    // Enable the tooltips
+    $('.tooltip-container-popup').tooltip({container:".modal-body", html:true});
+
+    // Prevent the enter key from submitting the form
+    $("#auth_key_form_popup").keypress(
+        function(event){
+            if (event.which == '13') {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }
+    );
+
+    $("#auth_key_input_popup").on("input", function() {
+        if ($(this).val().length > 0) {
+            $(".confirm-button").removeClass("confirm-button-disabled");
+            $(".confirm-button").attr("disabled", false);
+        } else {
+            $(".confirm-button").addClass("confirm-button-disabled");
+            $(".confirm-button").attr("disabled", true);
+        }
+    });
+
+    // On region or auth key change, send the new values to the server
+    $(".confirm-button").on("click", async function(event) {
+
+        event.preventDefault(); // Prevent form submission
+        event.stopPropagation();
+
+        try {
+            await Promise.all([
+
+                // Send region update
+                $.ajax({
+                    url: "/region",
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        region: encodeURI($("#region_select_popup").val())
+                    }),
+                    dataType: "json",
+                    success: function() {
+                        $("main")[0].setAttribute("region", $("#region_select_popup").val());
+                    } 
+                }),
+                
+                // Send the auth key update
+                $.ajax({
+                    url: "/auth_key",
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        q: encodeURI($("#auth_key_input_popup").val())
+                    }),
+                    dataType: "json",
+                    success: function(){
+                        $("main")[0].setAttribute("api_key", $("#auth_key_input_popup").val());
+                    }
+
+                })
+            ]);
+            
+            // Hide the popup after region and auth key successfully updated
+            $("#welcomeModal").modal("hide")
+
+        } catch(ex) { 
+            handleError(jqXHR, ".drug_autocomplete");
+        } 
+
+    });
+
 }

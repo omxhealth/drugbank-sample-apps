@@ -43,6 +43,9 @@ let DRUGBANK_HEADERS =
 // Start the server    
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); 
 
+/* Set welcome page route */
+
+// GET render: welcome page
 app.get("/", function (req, res) {
     res.render("welcome.jinja", {api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });
@@ -52,7 +55,7 @@ app.get("/", function (req, res) {
 // GET render: product concepts page    
 app.get("/product_concepts", function (req, res) {
     let route = getApiRoute("product_concepts");
-    res.render("product_concepts.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
+    res.render("product_concepts.jinja", {api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });  
 
 // GET API call: product concepts
@@ -74,7 +77,7 @@ app.get("/api/product_concepts/:x/:y", async function (req, res) {
 // GET render: drug-drug interations (ddi) page    
 app.get("/ddi", function (req, res) {
     let route = getApiRoute("ddi");
-    res.render("ddi.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
+    res.render("ddi.jinja", {api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });
 
 // GET API call: ddi
@@ -89,7 +92,7 @@ app.get("/api/ddi", async function (req, res) {
 // GET render: indications page    
 app.get("/indications", function (req, res) {
     let route = getApiRoute("indications");
-    res.render("indications.jinja", {api_route : route, api_key : DRUGBANK_API_KEY});
+    res.render("indications.jinja", {app : "node", api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });
 
 // GET API call: indications
@@ -97,13 +100,6 @@ app.get("/api/indications", async function (req, res) {
     let route = getApiEndpoint("indications");
     let data = await drugbank_get(route, req.query);
     res.json(data);
-});
-
-/* Set support page routes */
-
-// GET render: support page
-app.get("/support", function (req, res) {
-    res.render("support.jinja", {region : DRUGBANK_REGION, api_key : DRUGBANK_API_KEY});
 });
 
 // PUT: update API authorization key 
@@ -184,14 +180,28 @@ app.put("/region", function (req, res) {
  * from the config file.
  */
 function openConfig(path) {
+
+    var config;
+
     try {
         var config_data_in = fs.readFileSync(path);  
-        var config = JSON.parse(config_data_in);
-        return config;
+        config = JSON.parse(config_data_in);
     } catch (error) {
-        console.log(error);
-        return process.exit(1);
+        //console.log(error);
+        console.log("Creating file " + path + " with default values");
+
+        config = {
+            "port": "8080",
+            "auth-key": "",
+            "region": ""
+        }
+
+        fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
+
     }
+
+    return config;
+    
 }
 
 /**
