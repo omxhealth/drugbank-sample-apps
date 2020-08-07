@@ -14,9 +14,15 @@ app.use(express.json());
 app.use(express.static("../resources"));
 
 // Configure nunjucks and set the templates path
-nunjucks.configure(path.join(__dirname, "../resources/templates"), {
+var env = nunjucks.configure(path.join(__dirname, "../resources/templates"), {
     autoescape: true,
     express: app
+});
+
+// Add the indications page filter that's used when 
+// looping through all the options and displaying them
+env.addFilter("indication_option", function(name) {
+    return name.toLowerCase().split(" ").join("_");
 });
 
 // Open the config file
@@ -61,8 +67,10 @@ app.get("/product_concepts", function (req, res) {
 // GET API call: product concepts
 app.get("/api/product_concepts", async function (req, res) {
     let route = getApiEndpoint("product_concepts");
-    let data = await drugbank_get(route, req.query);
-    res.json(data);
+    let db_res = await drugbank_get(route, req.query);
+    res.status(db_res.status);
+    res.json(db_res.data);
+    
 });
 
 // GET API call: product concepts (x = DB ID, y = routes/strength)
@@ -92,7 +100,7 @@ app.get("/api/ddi", async function (req, res) {
 // GET render: indications page    
 app.get("/indications", function (req, res) {
     let route = getApiRoute("indications");
-    res.render("indications.jinja", {app : "node", api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
+    res.render("indications.jinja", {api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
 });
 
 // GET API call: indications
@@ -286,11 +294,11 @@ async function drugbank_get(route, params) {
         params: params
     })
     .then(response => {
-        return response.data;
+        return response;
     })
     .catch(error => {
         console.log(error.response.data.error)
-        return error.response.data;
+        return error.response;
     })  
 
 }

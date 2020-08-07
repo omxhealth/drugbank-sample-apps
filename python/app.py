@@ -27,6 +27,12 @@ except FileNotFoundError:
     json.dump(config, json_file, indent=4)
     json_file.flush()
 
+# Add the indications page filter that's used when 
+# looping through all the options and displaying them
+@app.template_filter()
+def indication_option(name):
+    return name.lower().replace(' ', '_') 
+
 
 # Checks that the region found in the config file is valid.
 # Region can either be "us", "ca", "eu", or "" (for searching all).

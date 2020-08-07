@@ -18,6 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.hubspot.jinjava.interpret.JinjavaInterpreter;
+import com.hubspot.jinjava.lib.filter.Filter;
+
 public class App {
 
     protected static String authKey = "";
@@ -51,6 +54,10 @@ public class App {
         // Template engine setup
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
+
+        // Add the indications page filter that's used when looping through
+        // all the options and displaying them
+        engine.renderer.getGlobalContext().registerFilter(new IndicationNameFilter());
 
         /* Set the welcome page route */
 
