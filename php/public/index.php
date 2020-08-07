@@ -5,6 +5,8 @@ use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use GuzzleHttp\Client;
+use Twig\TwigFilter;
+
 
 require __DIR__ . "/../vendor/autoload.php";
 
@@ -81,6 +83,16 @@ $app = AppFactory::create();
 // Create Twig
 // Uses the jinja templates as twig is similar enough for them to work
 $twig = Twig::create("../resources/templates", ["cache" => false]);
+
+// Add the filter for the indications page to convert the section names
+// to lowercase and underscored values for when added to the query.
+$filter = new TwigFilter("indication_option", function ($name) { 
+    $filtered = strtolower($name);
+    $filtered = str_replace(" ", "_", $filtered);
+    return $filtered;
+});
+
+$twig->getEnvironment()->addFilter($filter);
 
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));

@@ -2,39 +2,39 @@
 
 {% block content %}
 
-{% set kind_options = [{
-    "treatment_of": "Treatment of",
-    "prevention_of": "Prevention of",
-    "prophylaxis_of": "Prophylaxis of",
-    "symptomatic_treatment_of": "Symptomatic treatment of",
-    "management_of": "Management of",
-    "for_therapy": "For therapy",
-    "adjunct_therapy_in_prevention_of": "Adjunct therapy in prevention of",
-    "adjunct_therapy_in_treatment_of": "Adjunct therapy in treatment of",
-    "adjunct_therapy_in_management_of": "Adjunct therapy in management of" 
-  },
-  {
-    "adjunct_therapy_in_prophylaxis_of": "Adjunct therapy in prophylaxis of",
-    "adjunct_for_therapy": "Adjunct for therapy",
-    "used_in_combination_to_treat": "Used in combination to treat",
-    "used_in_combination_for_therapy": "Used in combination for therapy",
-    "used_in_combination_to_induce": "Used in combination to induce",
-    "used_in_combination_to_manage": "Used in combination to manage",
-    "used_in_combination_to_prevent": "Used in combination to prevent",
-    "used_in_combination_for_prophylaxis_of": "Used in combination for prophylaxis of",
-    "used_in_combination_for_symptomatic_treatment_of": "Used in combination for symptomatic treatment of"
-  },
-  {
-    "used_in_combination_as_diagnostic_agent": "Used in combination as diagnostic agent",
-    "used_in_combination_for_diagnostic_process": "Used in combination for diagnostic process",
-    "used_in_combination_to_reverse": "Used in combination to reverse",
-    "induction_of": "Induction of",
-    "reversal_of": "Reversal of",
-    "diagnostic_agent": "Diagnostic agent",
-    "used_as_adjunct_in_combination_to_manage": "Used as adjunct in combination to manage",
-    "used_as_adjunct_in_combination_to_prevent": "Used as adjunct in combination to prevent",
-    "used_as_adjunct_in_combination_to_treat": "Used as adjunct in combination to treat"
-  }]
+{% set kind_options = [[
+    "Treatment of",
+    "Prevention of",
+    "Prophylaxis of",
+    "Symptomatic treatment of",
+    "Management of",
+    "For therapy",
+    "Adjunct therapy in prevention of",
+    "Adjunct therapy in treatment of",
+    "Adjunct therapy in management of" 
+  ],
+  [
+    "Adjunct therapy in prophylaxis of",
+    "Adjunct for therapy",
+    "Used in combination to treat",
+    "Used in combination for therapy",
+    "Used in combination to induce",
+    "Used in combination to manage",
+    "Used in combination to prevent",
+    "Used in combination for prophylaxis of",
+    "Used in combination for symptomatic treatment of"
+  ],
+  [
+    "Used in combination as diagnostic agent",
+    "Used in combination for diagnostic process",
+    "Used in combination to reverse",
+    "Induction of",
+    "Reversal of",
+    "Diagnostic agent",
+    "Used as adjunct in combination to manage",
+    "Used as adjunct in combination to prevent",
+    "Used as adjunct in combination to treat"
+  ]]
  %}
 
   <main role="main" api_route="{{api_route}}" region="{{region}}" api_key="{{api_key}}">
@@ -131,42 +131,17 @@
 
             <div class="row kind-row">
 
-              {% set app=app %}
-
               {% for section in kind_options %}
+
                 <div class="col-md">
-
-                {# 
-                 # The indications page needs to know which app is running,
-                 # as there is a difference between implementations for iterating 
-                 # over key/value pairs
-                 #}
-                {% if app == "node" or app == "php" %}
-
-                  {% for q, text in section %}
-
-                    {% if app == "node" %}
-                      {% set checkbox = q + "_checkbox" %}
-                    {% else %}  
-                      {% set checkbox = q ~ "_checkbox" %}
-                    {% endif %}  
-
+                  {% for option in section %}
                     <div class="kind-option md-checkbox">
-                      <input type="checkbox" id={{checkbox}} value={{q}}>
-                      <label class="indications-option-text kind-label" for={{checkbox}}>{{text}}</label>
+                      <input type="checkbox" id="{{option|indication_option}}_checkbox" value={{option|indication_option}}>
+                      <label class="indications-option-text kind-label" for="{{option|indication_option}}_checkbox">{{option}}</label>
                     </div>
                   {% endfor %}
-                {% else %}
-                  {% for q, text in section.items() %}
-                    {% set checkbox = q + "_checkbox" %}
-                    <div class="kind-option md-checkbox">
-                      <input type="checkbox" id={{checkbox}} value={{q}}>
-                      <label class="indications-option-text kind-label" for={{checkbox}}>{{text}}</label>
-                    </div>
-                  {% endfor %}
-                {% endif %}
-
                 </div>
+
               {% endfor %}
 
             </div>
