@@ -13,7 +13,7 @@
 
 var api_key;
 var region;
-var api_route;
+var api_route = $("main")[0].attributes["api_route"].value;
 var options = {};
 var indications_table = $('.indications-table').DataTable({
     order: [[0, "asc"]],

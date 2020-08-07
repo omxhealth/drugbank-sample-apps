@@ -82,7 +82,12 @@ handleError = function(jqXHR, element) {
     if ((jqXHR.status && jqXHR.status === 0) || (jqXHR.statusText && jqXHR.statusText === 'abort')) {
         return;
     } else {
-        $(element).val(null).trigger('change');
+        if (element == ".drug_autocomplete") {
+            searchChange(null);
+        } else {
+            $(element).val(null).trigger('change');
+        }
+        
         try {
             if ($.parseJSON(jqXHR.responseText).errors) {
                 message = $.parseJSON(jqXHR.responseText).errors.join();
