@@ -1,5 +1,6 @@
 # drugbank-sample-apps
-Sample apps for drugbank, private for now
+
+A sample application for accessing the DrugBank API written in multiple languages.
 
 ## Components
 
@@ -21,17 +22,21 @@ Sample apps for drugbank, private for now
 
 ##### Note: Twig is similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
 
+# How It Works
+
+The sample application is a [web app](https://en.wikipedia.org/wiki/Web_application) that is accessed through the usage of a web browser. When an app is run, a server starts on your local machine that handles communications between the DrugBank API and the web app, and serves HTML, CSS, and JavaScript for the app. Each implementation is built using a [microframework](https://en.wikipedia.org/wiki/Microframework). 
+
+All requests from the web app to the API are handled by the server. The server receives the request from the web app, and sends it along to the DrugBank API. The response from the API is sent back to the server, and the server sends it back to the web app.
+
 # How to Use
 
 ### General Information
 
-By default, each app should be running at http://127.0.0.1:8080/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
+By default, each app should be running at http://127.0.0.1:4567/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
 
 Each implementation determines the port to run on as well as the DrugBank API key and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
 
 ##### Note: the Java app may not behave like this, as when it is compiled it creates a copy of `config.json` for itself at `drugbank-sample-apps\java\db-app\target\classes`.
-
-In the future, each app will be setup up with docker containers for fast and easy setup.
 
 ## Java
 First, ensure that [Apache Maven](https://maven.apache.org/install.html) is installed.
@@ -46,7 +51,7 @@ The app is then run with the command
 mvn exec:java
 ```
 
-Visit [http://localhost:`port`/](http://127.0.0.1:8080/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
+Visit [http://localhost:`port`/](http://127.0.0.1:4567/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
 
 ## Node.js
 Navigate to `drugbank-sample-apps/nodejs`. Run the command
@@ -126,7 +131,7 @@ Visit the address given in the console to view the app.
 
 First, ensure that  [Bundler](https://bundler.io/) is installed.
 
-Navigate to `drugbank-sample-apps/nodejs`. Install the necessary gems by using the command
+Navigate to `drugbank-sample-apps/ruby`. Install the necessary gems by using the command
 ```bash
 bundle install
 ```

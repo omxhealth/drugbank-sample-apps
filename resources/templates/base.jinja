@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DrugBank Sample App</title>
+  <title>DrugBank API Sample App</title>
 
   <link rel="icon" type="image/png" href="images/favicons/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/png" href="images/favicons/favicon-32x32.png" sizes="32x32">
@@ -31,6 +31,7 @@
 </head>
 
 <body>
+  
   <header>
     <nav class="navbar fixed-top navbar-expand-xl navbar-light" id="main-nav">
       <a class="navbar-brand db-logo" href="/">
@@ -39,15 +40,12 @@
         </svg>
       </a>
 
-      <!-- Toggler/collapse Button -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Navbar links -->
       <div class="collapse navbar-collapse" id="navbar">
-        <ul class="ml-auto"></ul>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ml-auto">
           <li id="drug_lookup_nav" class="nav-item">
             <a class="nav-link" href="/drugs">Drug Lookup</a>
           </li>
@@ -84,7 +82,7 @@
                 unique API key and specify your region. 
                 <b>If you do not have a key, please <br>
                 <a id="salesLink" href="https://www.drugbankplus.com/contact/sales?ref=www.drugbankplus.com%2F">
-                  <u>contact sales</u></a> to get set up with a 2-week trial</b>.
+                <u>contact sales</u></a> to get set up with a 2-week trial</b>.
               </p> 
             </div>
           </div>
@@ -131,7 +129,25 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="confirm-button confirm-button-disabled" disabled>Update</button>
+          <button type="button" id="welcomeSubmit" class="confirm-button confirm-button-disabled" disabled>Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="errorModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-full" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalTitle"></h5>
+        </div>
+        <div class="modal-body" id="errorModalBody">
+          <p id="errorModalMessage">
+          
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="errorOk" class="confirm-button">Ok</button>
         </div>
       </div>
     </div>

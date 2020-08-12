@@ -273,7 +273,7 @@ drugSelect = $(".drug_autocomplete").selectize({
                 callback(data)
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
+                handleError(jqXHR, true);
             }
         })
     } 
@@ -320,12 +320,13 @@ $("button.search-button").on("click", function(e) {
                 // Fill the table
                 loadResults(data);
                 
-                return $("#loader").hide();
+                $("#loader").hide();
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
-                return $("#loader").hide();
+                $("#loader").hide();
+                handleError(jqXHR, true);
+                
             }
         });
     }
