@@ -62,7 +62,7 @@ $drugbank_headers = {
 def drugbank_get(route, params)
     url = $drugbank_api + route
     res = HTTParty.get(url, :query => params, :headers => $drugbank_headers)
-    return JSON.parse(res.body)
+    return res
 end
 
 # Creates the url needed for accessing the actual DrugBank API directly.
@@ -122,14 +122,16 @@ end
 get "/api/product_concepts" do
     content_type :json
     route = getApiEndpoint("product_concepts")
-    drugbank_get(route, params).to_json
+    db_res = drugbank_get(route, params)
+    [db_res.code, JSON.parse(db_res.body).to_json]
 end
 
 # GET API call: product concepts (x = DB ID, y = routes/strength)
 get "/api/product_concepts/:x/:y" do
     content_type :json
     route = getApiEndpoint("product_concepts/" + params["x"] + "/" + params["y"])
-    drugbank_get(route, params).to_json
+    db_res = drugbank_get(route, params)
+    [db_res.code, JSON.parse(db_res.body).to_json]
 end
 
 # GET render: drug-drug interaction (ddi) page
@@ -142,7 +144,8 @@ end
 get "/api/ddi" do
     content_type :json
     route = getApiEndpoint("ddi")
-    drugbank_get(route, params).to_json
+    db_res = drugbank_get(route, params)
+    [db_res.code, JSON.parse(db_res.body).to_json]
 end     
 
 # GET render: indications page
@@ -155,7 +158,8 @@ end
 get "/api/indications" do
     content_type :json
     route = getApiEndpoint("indications")
-    drugbank_get(route, params).to_json
+    db_res = drugbank_get(route, params)
+    [db_res.code, JSON.parse(db_res.body).to_json]
 end  
 
 # PUT: update the authorization key
@@ -234,7 +238,7 @@ put "/region" do
 
 end
 
-# Updates the auth key by writing the new value to the config file.
+# Updates the api key by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
 # the old key is restored
 # Returns the status code to be sent to the client (200 OK or 500 Server Error)

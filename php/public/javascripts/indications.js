@@ -13,7 +13,7 @@
 
 var api_key;
 var region;
-var api_route;
+var api_route = $("main")[0].attributes["api_route"].value;
 var options = {};
 var indications_table = $('.indications-table').DataTable({
     order: [[0, "asc"]],
@@ -255,9 +255,10 @@ $("button.search-button").on("click", function(e) {
     if ($(this).hasClass("search-button-reset")) {
         searchReset();
         return;
-    }
+    } 
     
     $("#loader").show();
+    $("#indication-name").blur();
     $("#indication-name").prop("disabled", true);
     
     var q = $("#indication-name").val();
@@ -303,12 +304,13 @@ $("button.search-button").on("click", function(e) {
             showSearchTerms();
             // Load results in table and show the table
             loadResults(data);
-            return $("#loader").hide();
+            $("#loader").hide();
 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $("#loader").hide();
-            return handleError(jqXHR, "#indication-name");
+            handleError(jqXHR, false);
+            
         }
     });
 
