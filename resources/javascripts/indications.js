@@ -255,9 +255,10 @@ $("button.search-button").on("click", function(e) {
     if ($(this).hasClass("search-button-reset")) {
         searchReset();
         return;
-    }
+    } 
     
     $("#loader").show();
+    $("#indication-name").blur();
     $("#indication-name").prop("disabled", true);
     
     var q = $("#indication-name").val();
@@ -303,12 +304,13 @@ $("button.search-button").on("click", function(e) {
             showSearchTerms();
             // Load results in table and show the table
             loadResults(data);
-            return $("#loader").hide();
+            $("#loader").hide();
 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $("#loader").hide();
-            return handleError(jqXHR, "#indication-name");
+            handleError(jqXHR, false);
+            
         }
     });
 

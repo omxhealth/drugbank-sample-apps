@@ -76,8 +76,9 @@ app.get("/api/product_concepts", async function (req, res) {
 // GET API call: product concepts (x = DB ID, y = routes/strength)
 app.get("/api/product_concepts/:x/:y", async function (req, res) {
     let route = getApiEndpoint("product_concepts/" + req.params.x + "/" + req.params.y);
-    let data = await drugbank_get(route, req.query);
-    res.json(data);
+    let db_res = await drugbank_get(route, req.query);
+    res.status(db_res.status);
+    res.json(db_res.data);
 });
 
 /* Set drug-drug interactions routes */
@@ -91,8 +92,9 @@ app.get("/ddi", function (req, res) {
 // GET API call: ddi
 app.get("/api/ddi", async function (req, res) {
     let route = getApiEndpoint("ddi");
-    let data = await drugbank_get(route, req.query);
-    res.json(data);
+    let db_res = await drugbank_get(route, req.query);
+    res.status(db_res.status);
+    res.json(db_res.data);
 });
 
 /* Set indications routes */
@@ -106,8 +108,9 @@ app.get("/indications", function (req, res) {
 // GET API call: indications
 app.get("/api/indications", async function (req, res) {
     let route = getApiEndpoint("indications");
-    let data = await drugbank_get(route, req.query);
-    res.json(data);
+    let db_res = await drugbank_get(route, req.query);
+    res.status(db_res.status);
+    res.json(db_res.data);
 });
 
 // PUT: update API authorization key 

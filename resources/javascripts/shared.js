@@ -77,29 +77,69 @@ clearDisplayRequest = function() {
     $(".api-response").html(null);
 };
 
-handleError = function(jqXHR, element) {
-    var message;
-    if ((jqXHR.status && jqXHR.status === 0) || (jqXHR.statusText && jqXHR.statusText === 'abort')) {
-        return;
-    } else {
-        if (element == ".drug_autocomplete") {
-            searchChange(null);
-        } else {
-            $(element).val(null).trigger('change');
-        }
+/**
+ * If an error is returned from an API call, a popup with relevant 
+ * information is displayed.
+ * 
+ * xhr contains all the information returned for the server (JSON response, 
+ * status code, status message, etc).
+ * 
+ * triggerFunction is a boolean that determines how the page should be cleared:
+ * Normally this is done by changing the drug autocomplete to null and triggering
+ * a change manually, but some pages use Selectize.js selects for the drug
+ * autocomplete, which needs to be triggered by calling the function that it
+ * calls on change manually.
+ */
+handleError = function(xhr, triggerFunction) {
+
+    var error = "Error " + xhr.status + ": " + xhr.statusText;
+    var message =  xhr.responseJSON.error;
+
+    switch (xhr.status) {
         
-        try {
-            if ($.parseJSON(jqXHR.responseText).errors) {
-                message = $.parseJSON(jqXHR.responseText).errors.join();
-            } else {
-                message = jqXHR.responseText;
-            }
-        } catch (_error) {
-            message = jqXHR.responseText || "Error accessing " + api_host;
-        }
-        return alert(message.replace(/(<([^>]+)>)/ig,"") + ". Please wait and try again or contact the DrugBank Team.");
+        // 401 is returned if the key is invalid or if the endpoint is invalid    
+        case 401:
+            if (xhr.responseJSON.error == "Key invalid") {
+                message += ", please change your API key.";
+                $("#errorOk").text("Let's go!")
+                $("#errorOk").on("click", function() {
+                    window.location.href = "/"
+                });
+            }    
+            break;  
+        
+        // 410 is returned if the resource requested has been removed the API servers 
+        case 410:
+            message += ". If you believe this is an error, please contact the DrugBank team."
+            break;
+
+        // 500 is returned if there is an internal server error    
+        case 500:
+            message += ". Please wait and try again or contact the DrugBank Team.";
+            break;  
+        
+        // 503 is returned if the server is down for maintanance    
+        case 503:
+            message += ". Please wait and try again later.";
+            break;     
+
+        default:
+            break;    
     }
-};
+
+    // Selectize.js selects can't have events triggered on them like how
+    // Select2 selects can, so for them just call the function they'd call directly
+    if (triggerFunction) {
+        searchChange(null);
+    } else {
+        $(".drug_autocomplete").val(null).trigger("change");
+    }
+
+    $("#errorModalTitle").text(error);
+    $("#errorModalMessage").html(message);
+    $("#errorModal").modal();
+    
+}
 
 /**
  * JavaScript for underlining menu items.
@@ -170,18 +210,18 @@ navUnderlineMover = function() {
 getApiKey = function() {
     
     try {
-        if ($("main")[0].getAttribute("api_key")) {
-            return $("main")[0].getAttribute("api_key");
-        } else {
-            throw(err);
-        }    
+        return $("main")[0].getAttribute("api_key");
     } catch(err) {
         return ""
     }
     
 }
 
-// Adds the search icon to the search bar
+/** 
+ * Adds the search icon to the search bar.
+ * Needs to be called after the search bar 
+ * is intialized as a Selectize.js select box.
+ */ 
 addSearchIconToSelect = function() {
     $(".selectize-control").append(
         "<svg class=\"search-icon\">\
@@ -190,6 +230,7 @@ addSearchIconToSelect = function() {
     );
 }
 
+// Sets up the welcome popup if no API key was detected
 setupPopup = function(region) {
 
     $("#auth_key_input_popup").val(null);
@@ -226,50 +267,45 @@ setupPopup = function(region) {
     });
 
     // On region or auth key change, send the new values to the server
-    $(".confirm-button").on("click", async function(event) {
+    $("#welcomeSubmit").on("click", async function(event) {
 
         event.preventDefault(); // Prevent form submission
         event.stopPropagation();
 
-        try {
-            await Promise.all([
+        await Promise.all([
 
-                // Send region update
-                $.ajax({
-                    url: "/region",
-                    type: "PUT",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        region: encodeURI($("#region_select_popup").val())
-                    }),
-                    dataType: "json",
-                    success: function() {
-                        $("main")[0].setAttribute("region", $("#region_select_popup").val());
-                    } 
+            // Send region update
+            $.ajax({
+                url: "/region",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    region: encodeURI($("#region_select_popup").val())
                 }),
-                
-                // Send the auth key update
-                $.ajax({
-                    url: "/auth_key",
-                    type: "PUT",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        q: encodeURI($("#auth_key_input_popup").val())
-                    }),
-                    dataType: "json",
-                    success: function(){
-                        $("main")[0].setAttribute("api_key", $("#auth_key_input_popup").val());
-                    }
-
-                })
-            ]);
+                dataType: "json",
+                success: function() {
+                    $("main")[0].setAttribute("region", $("#region_select_popup").val());
+                } 
+            }),
             
-            // Hide the popup after region and auth key successfully updated
-            $("#welcomeModal").modal("hide")
+            // Send the auth key update
+            $.ajax({
+                url: "/auth_key",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    q: encodeURI($("#auth_key_input_popup").val())
+                }),
+                dataType: "json",
+                success: function(){
+                    $("main")[0].setAttribute("api_key", $("#auth_key_input_popup").val());
+                }
 
-        } catch(ex) { 
-            handleError(jqXHR, ".drug_autocomplete");
-        } 
+            })
+        ]);
+            
+        // Hide the popup after region and auth key successfully updated
+        $("#welcomeModal").modal("hide");
 
     });
 

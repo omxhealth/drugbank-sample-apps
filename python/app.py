@@ -14,7 +14,7 @@ config_file = "config.json"
 
 # Try opening the config JSON
 try:
-    config = json.load(open("../" + config_file))  # Store it as a dictionary   
+    config = json.load(open("../" + config_file))  # Store it as a dictionary
 except FileNotFoundError:
     print("Creating file ../" + config_file + " with default values")
     config = {
@@ -27,11 +27,13 @@ except FileNotFoundError:
     json.dump(config, json_file, indent=4)
     json_file.flush()
 
-# Add the indications page filter that's used when 
+# Add the indications page filter that's used when
 # looping through all the options and displaying them
+
+
 @app.template_filter()
 def indication_option(name):
-    return name.lower().replace(' ', '_') 
+    return name.lower().replace(' ', '_')
 
 
 # Checks that the region found in the config file is valid.
@@ -71,7 +73,7 @@ DRUGBANK_HEADERS = {
 def drugbank_get(route, params):
     url = DRUGBANK_API + route
     res = requests.get(url, params=params, headers=DRUGBANK_HEADERS)
-    return res.json()
+    return res
 
 
 # Creates the url needed for accessing the actual DrugBank API directly.
@@ -195,7 +197,7 @@ def product_concepts_page():
 def api_product_concepts():
     route = getApiEndpoint("product_concepts")
     res = drugbank_get(route, request.args)
-    return jsonify(res)
+    return jsonify(res.json()), res.status_code
 
 
 # GET API call: product concepts (x = DB ID, y = routes/strength)
@@ -203,7 +205,7 @@ def api_product_concepts():
 def api_product_concepts_vars(x, y):
     route = getApiEndpoint("product_concepts/" + x + "/" + y)
     res = drugbank_get(route, request.args)
-    return jsonify(res)
+    return jsonify(res.json()), res.status_code
 
 
 # GET render: drug-drug interaction (ddi) page
@@ -218,7 +220,7 @@ def ddi_page():
 def api_ddi():
     route = getApiEndpoint("ddi")
     res = drugbank_get(route, request.args)
-    return jsonify(res)
+    return jsonify(res.json()), res.status_code
 
 
 # GET render: indications page
@@ -233,7 +235,7 @@ def indications_page():
 def api_indications():
     route = getApiEndpoint("indications")
     res = drugbank_get(route, request.args)
-    return jsonify(res)
+    return jsonify(res.json()), res.status_code
 
 
 # PUT: update the authorization key
