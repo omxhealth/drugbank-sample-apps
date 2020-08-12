@@ -96,3 +96,13 @@
                           %option{:value => "eu"} Europe
           .modal-footer
             %button.confirm-button.confirm-button-disabled{:disabled => "disabled", :type => "button"} Update
+    
+    #errorModal.modal.fade{"aria-hidden" => "true", "data-backdrop" => "static", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-dialog-centered.modal-lg.modal-full{:role => "document"}
+        .modal-content
+          .modal-header
+            %h5#errorModalTitle.modal-title
+          #errorModalBody.modal-body
+            %p#errorModalMessage
+          .modal-footer
+            %button#errorOk.confirm-button{:type => "button"} Ok

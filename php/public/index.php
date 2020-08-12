@@ -68,12 +68,13 @@ function drugbank_get($route, $params) {
         "base_uri" => $DRUGBANK_API,
         "headers" => $DRUGBANK_HEADERS,
         "query" => $params,
+        "http_errors" => false,
         "verify" => false
     ]);
 
     $response = $client->request("GET", $route);
 
-    return $response->getBody()->getContents();
+    return $response;
 
 };
 
@@ -128,8 +129,10 @@ $app->get("/product_concepts", function (Request $request, Response $response) {
 // GET API call: product concepts
 $app->get("/api/product_concepts", function (Request $request, Response $response) {
     $route = getApiEndpoint("product_concepts");
-    $payload = drugbank_get($route, $request->getQueryParams());
+    $db_res = drugbank_get($route, $request->getQueryParams());
+    $payload = $db_res->getBody()->getContents();
     $response->getBody()->write($payload);
+    $response = $response->withStatus($db_res->getStatusCode());
     return $response->withHeader("Content-Type", "application/json");
 });
 
@@ -137,8 +140,10 @@ $app->get("/api/product_concepts", function (Request $request, Response $respons
 $app->get("/api/product_concepts/{x}/{y}", 
         function (Request $request, Response $response, $args) {
     $route = getApiEndpoint("product_concepts/" . $args["x"] . "/" . $args["y"]);        
-    $payload = drugbank_get($route, $request->getQueryParams());
+    $db_res = drugbank_get($route, $request->getQueryParams());
+    $payload = $db_res->getBody()->getContents();
     $response->getBody()->write($payload);
+    $response = $response->withStatus($db_res->getStatusCode());
     return $response->withHeader("Content-Type", "application/json");
 });
 
@@ -157,8 +162,10 @@ $app->get("/ddi", function (Request $request, Response $response) {
 // GET API call: ddi
 $app->get("/api/ddi", function (Request $request, Response $response) {
     $route = getApiEndpoint("ddi");
-    $payload = drugbank_get($route, $request->getQueryParams());
+    $db_res = drugbank_get($route, $request->getQueryParams());
+    $payload = $db_res->getBody()->getContents();
     $response->getBody()->write($payload);
+    $response = $response->withStatus($db_res->getStatusCode());
     return $response->withHeader("Content-Type", "application/json");
 });
 
@@ -177,8 +184,10 @@ $app->get("/indications", function (Request $request, Response $response) {
 // GET API call: indications
 $app->get("/api/indications", function (Request $request, Response $response) {
     $route = getApiEndpoint("indications");
-    $payload = drugbank_get($route, $request->getQueryParams());
+    $db_res = drugbank_get($route, $request->getQueryParams());
+    $payload = $db_res->getBody()->getContents();
     $response->getBody()->write($payload);
+    $response = $response->withStatus($db_res->getStatusCode());
     return $response->withHeader("Content-Type", "application/json");
 });
 

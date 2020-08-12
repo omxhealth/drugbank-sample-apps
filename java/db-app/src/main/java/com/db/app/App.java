@@ -18,9 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.hubspot.jinjava.interpret.JinjavaInterpreter;
-import com.hubspot.jinjava.lib.filter.Filter;
-
 public class App {
 
     protected static String authKey = "";
@@ -55,8 +52,8 @@ public class App {
         final JinjavaEngine engine = new JinjavaEngine(templatesPath);
         engine.setUseCache(false);
 
-        // Add the indications page filter that's used when looping through
-        // all the options and displaying them
+        // Add the indications page filter that's used when 
+        // looping through all the options and displaying them
         engine.renderer.getGlobalContext().registerFilter(new IndicationNameFilter());
 
         /* Set the welcome page route */
@@ -93,8 +90,12 @@ public class App {
         get("/api/product_concepts", (req, res) -> {
             String route = getApiEndpoint("product_concepts");
             final Map<String, String> params = setParams(req);
+            DBResponse db_res = DrugBankAPI.drugbank_get(route, params);
+            
             res.type("application/json");
-            return api.drugbank_get(route, params).getData().toString();
+            res.status(db_res.getStatusCode());
+
+            return db_res.getData().toString();
         });
 
         // GET API call: product concepts (DB ID, routes/strength)
@@ -102,8 +103,12 @@ public class App {
             String route = getApiEndpoint(
                 "product_concepts/" + req.splat()[0] + "/" + req.splat()[1]);
             final Map<String, String> params = setParams(req);
+            DBResponse db_res = DrugBankAPI.drugbank_get(route, params);
+            
             res.type("application/json");
-            return api.drugbank_get(route, params).getData().toString();
+            res.status(db_res.getStatusCode());
+
+            return db_res.getData().toString();
         });
 
         /* Set drug-drug interactions routes */
@@ -126,8 +131,12 @@ public class App {
         get("/api/ddi", (req, res) -> {
             String route = getApiEndpoint("ddi");
             final Map<String, String> params = setParams(req);
+            DBResponse db_res = DrugBankAPI.drugbank_get(route, params);
+            
             res.type("application/json");
-            return api.drugbank_get(route, params).getData().toString();
+            res.status(db_res.getStatusCode());
+
+            return db_res.getData().toString();
         });
 
         /* Set indications routes */
@@ -150,8 +159,12 @@ public class App {
         get("/api/indications", (req, res) -> {
             String route = getApiEndpoint("indications");
             final Map<String, String> params = setParams(req);
+            DBResponse db_res = DrugBankAPI.drugbank_get(route, params);
+            
             res.type("application/json");
-            return api.drugbank_get(route, params).getData().toString();
+            res.status(db_res.getStatusCode());
+
+            return db_res.getData().toString();
         });    
 
         // PUT: update API authorization key 
@@ -200,8 +213,8 @@ public class App {
                     logger.info("Authentication updated: " + authKey);
                     
                     // update variables in api.java
-                    api.DRUGBANK_API_KEY = authKey;
-                    api.DRUGBANK_HEADERS.put("Authorization", authKey);
+                    DrugBankAPI.DRUGBANK_API_KEY = authKey;
+                    DrugBankAPI.DRUGBANK_HEADERS.put("Authorization", authKey);
 
                     res.status(200);
                     JsonResponse.put("message", "Key successfully updated");
@@ -214,8 +227,8 @@ public class App {
                     config.put("auth-key", oldKey);
 
                     // revert variables in api.java
-                    api.DRUGBANK_API_KEY = oldKey;
-                    api.DRUGBANK_HEADERS.put("Authorization", oldKey);
+                    DrugBankAPI.DRUGBANK_API_KEY = oldKey;
+                    DrugBankAPI.DRUGBANK_HEADERS.put("Authorization", oldKey);
 
                     res.status(500);
                     JsonResponse.put("message", "Unable to update file '" + configFile + "'");

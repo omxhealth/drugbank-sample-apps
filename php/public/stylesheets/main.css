@@ -654,6 +654,7 @@ pre.api-box {
 
 .modal-body a {
   font: 22px/32px Gemeli;
+  color: inherit;
 }
 
 .modal-footer {
