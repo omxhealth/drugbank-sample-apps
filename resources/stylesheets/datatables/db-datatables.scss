@@ -71,3 +71,8 @@ td.table_col_name {
     background-color: #FF00B8 !important;
     border-color: #FF00B8 !important;
 }
+
+.dataTables_filter input:focus {
+    box-shadow: 0 0 0 .2rem rgba(147,147,249,.6) !important;
+    border-color:#9393F9 !important;
+}

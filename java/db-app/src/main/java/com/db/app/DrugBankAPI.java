@@ -16,7 +16,7 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import org.json.*;
 
-public class api {
+public class DrugBankAPI {
 
     public static String DRUGBANK_API = App.apiHost;
     public static String DRUGBANK_API_KEY = App.authKey;
@@ -109,6 +109,7 @@ public class api {
         URL url;
         DBResponse res;
         String readLine = "";
+        InputStreamReader inputReader;
 
         if (params == null || params.isEmpty()) {
             url = drugbank_url(route);
@@ -124,31 +125,32 @@ public class api {
         responseCode = connection.getResponseCode();
 
         if (responseCode == HttpsURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuffer response = new StringBuffer();
-
-            //read the call response into the stringbuffer
-            while ((readLine = in.readLine()) != null) {
-                response.append(readLine);
-            }
-
-            in.close();
-
-            Map<String, List<String>> header = connection.getHeaderFields();
-            
-            if (response.toString().startsWith("[")) {
-                JSONArray responseJSON = new JSONArray(response.toString());
-                res = new DBResponse(responseJSON, header);
-            } else {
-                JSONObject responseJSON = new JSONObject(response.toString());
-                res = new DBResponse(responseJSON, header);
-            }
-            
-            return res;
-
+            inputReader = new InputStreamReader(connection.getInputStream());
         } else {
-            throw new RuntimeException("Request Failed. Status Code: " + responseCode);
+            inputReader = new InputStreamReader(connection.getErrorStream());
         }
+
+        BufferedReader in = new BufferedReader(inputReader);
+        StringBuffer response = new StringBuffer();
+
+        //read the call response into the stringbuffer
+        while ((readLine = in.readLine()) != null) {
+            response.append(readLine);
+        }
+
+        in.close();
+
+        Map<String, List<String>> header = connection.getHeaderFields();
+        
+        if (response.toString().startsWith("[")) {
+            JSONArray responseJSON = new JSONArray(response.toString());
+            res = new DBResponse(responseJSON, header, responseCode);
+        } else {
+            JSONObject responseJSON = new JSONObject(response.toString());
+            res = new DBResponse(responseJSON, header, responseCode);
+        }
+        
+        return res;
 
     }
 
@@ -179,7 +181,7 @@ public class api {
 
     /**
      * Drug-drug interaction (DDI) example. 
-     * Gets interactions by Drugbank IDs.
+     * Gets interactions by DrugBank IDs.
      */
     public static void ddi_example() {
         
@@ -227,16 +229,18 @@ public class api {
 
 /**
  * Object that stores information from an API call:
- *  - JSON data returned from call
- *  - response header from call
+ *  - JSON data returned 
+ *  - Response header
+ *  - HTTP status code
  */
 class DBResponse {
 
     Object data; //the JSON object or array returned from call
     Map<String, List<String>> response; //response header from the call
     boolean isObject; //used to check if the data stored is a JSONObject or JSONArray
+    int status;
 
-    DBResponse(Object data, Map<String, List<String>> response) {
+    DBResponse(Object data, Map<String, List<String>> response, int statusCode) {
         
         if (data instanceof JSONObject) {
             this.isObject = true;
@@ -248,6 +252,7 @@ class DBResponse {
         
         this.data = data;
         this.response = response;
+        this.status = statusCode;
         
     }
 
@@ -272,6 +277,10 @@ class DBResponse {
         return data;
     }
 
+    public int getStatusCode() {
+        return status;
+    }
+
     /**
      * Returns the link to the next page of the data.
      * Only applicable to requests that offer pagination.
@@ -289,7 +298,7 @@ class DBResponse {
     }
 
     /**
-     * Returns information on requests that offer pagination, with the follwoing structure: 
+     * Returns information on requests that offer pagination, with the following structure: 
      * {
      *     page: '2',
      *     per_page: '50',

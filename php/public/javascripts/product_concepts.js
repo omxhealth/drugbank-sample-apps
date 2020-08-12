@@ -107,7 +107,7 @@ searchChange = function(val) {
             $(".route_autocomplete").attr("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            handleError(jqXHR, ".drug_autocomplete");
+            handleError(jqXHR, true);
         }
 
     });
@@ -236,7 +236,11 @@ if (!api_key) {
         region = $("main")[0].getAttribute("region");
     });
     
-}  
+} 
+
+$("#errorOk").on("click", function() {
+    $("#errorModal").modal("hide");
+});
 
 $(".results-row").hide();
 $("#product_concepts_nav").addClass("active");
@@ -274,7 +278,7 @@ drugSelect = $(".drug_autocomplete").selectize({
                 callback(data)
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                handleError(jqXHR, ".drug_autocomplete");
+                handleError(jqXHR, true);
             }
 
         });
@@ -328,7 +332,7 @@ $(".route_autocomplete").on("change", function (e) {
             $(".form_autocomplete").attr("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            handleError(jqXHR, ".route_autocomplete");
+            handleError(jqXHR, true);
         }
 
     });
@@ -375,7 +379,7 @@ $(".form_autocomplete").on("change", function (e) {
             $(".strength_autocomplete").attr("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            handleError(jqXHR, ".form_autocomplete");
+            handleError(jqXHR, true);
         }
 
     });
@@ -429,7 +433,7 @@ $("button.search-button").on("click", function(e) {
             $("#loader").hide();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            handleError(jqXHR, ".strength_autocomplete");
+            handleError(jqXHR, true);
             $("#loader").hide();
         }
 
