@@ -4,6 +4,8 @@
  * Styling for the welcome page
  */
 
+@import "./variables";  
+
 // Add padding for the column on the left 
 .col-info {
     padding: 4rem 6% 2rem 6%;
@@ -16,7 +18,6 @@ h1 {
     font: 200 40px Gemeli;
     letter-spacing: 0px;
     color: white;
-    opacity: 1;
 }
 
 // The paragraph below the welcome message
@@ -25,7 +26,6 @@ h1 {
     font: 200 22px/32px Gemeli;
     letter-spacing: 0px;
     color: white;
-    opacity: 1;
 }
 
 .welcome-section-link {
@@ -38,68 +38,54 @@ h1 {
     background-color: rgba(243, 243, 251, 0.3);
     border-radius: 5px;
     transition:background-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}   
 
-.feature-info-row:hover {
-    background-color: rgba(217,217,242, 0.3);
-    transition:background-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    //box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(217,217,242, 0.1);
-}
-
-// Feature name list column
-.info-section-name {
-
-    padding: 1rem 2rem;
-    border-right: 1px solid white;
-    
-    h3 {
-        text-align: left;
-        font: normal 22px/32px Gemeli;
-        letter-spacing: 0px;
-        color: white;
-        opacity: 1;
-        margin-bottom: 0;
+    &:hover {
+        background-color: rgba(217,217,242, 0.3);
+        transition:background-color ease-in-out .15s, box-shadow ease-in-out .15s;
     }
 
-}
+    // Feature name list column
+    .info-section-name {
+        padding: 1rem 2rem;
+        border-right: 1px solid white;
+        
+        h3 {
+            text-align: left;
+            font: normal 22px/32px Gemeli;
+            letter-spacing: 0px;
+            color: white;
+            opacity: 1;
+            margin-bottom: 0;
+        }
 
-// Description for the features column
-.info-section-desc {
+    }
 
-    padding: 1.5rem 2rem;
+    // Description for the features column
+    .info-section-desc {
+        padding: 1.5rem 2rem;
 
-    p {
-        text-align: left;
-        font: 200 16px/28px Gemeli;
-        letter-spacing: 0px;
-        color: white;
-        opacity: 1;
-        margin-bottom: 0;
-    }    
-}
+        p {
+            text-align: left;
+            font: 200 16px/28px Gemeli;
+            letter-spacing: 0px;
+            color: white;
+            opacity: 1;
+            margin-bottom: 0;
+        }   
 
-// Section titles in the right column 
-// ("Your Settings" and "Getting Started")
-.settings-section-title {
-    text-align: left;
-    font: Bold 22px/32px Gemeli;
-    letter-spacing: 0px;
-    color: #263063;
-    opacity: 1;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-}
+    }
 
-// Stlying for the right column (settings and links)
+}   
+
+// Styling for the right column (settings and links)
 .col-settings {
     padding: 4rem 4rem; 
     text-align: left;
     font: 200 18px Gemeli;
     letter-spacing: 0px;
-    color: #263063;
+    color: $db-blue;
     background: #F3F3FB 0% 0% no-repeat padding-box;
     box-shadow: 0px 5px 10px #00000029;
-    opacity: 1;
     padding-top: 62px;
     overflow: auto;
 
@@ -109,15 +95,14 @@ h1 {
 
 }
 
-.option-label {
+// Section titles in the right column 
+// ("Your Settings" and "Getting Started")
+.settings-section-title {
     text-align: left;
-    font: normal 16px/1rem Gemeli;
-    letter-spacing: 0px;
-    color: #263063;
-    opacity: 1;
+    font: Bold 22px/32px Gemeli;
+    color: $db-blue;
     text-transform: uppercase;
-    padding-right: 0.5rem;
-    width: auto;
+    margin-bottom: 2rem;
 }
 
 #select2-region_select-container, .select2-dropdown {
@@ -131,68 +116,51 @@ h1 {
     vertical-align: baseline;
 }
 
-// Style the API input to match the select2 dropdown
-#auth_key_input {
-    border-radius: 7px;
-    border: black 1px solid;
-    font: 200 16px/24px Gemeli;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 // The API key submit button
 #auth_key_submit {
     padding: 0 20px;
-    background: #263063 0% 0% no-repeat padding-box;
+    background: $db-blue;
     border-radius: 9px;
     opacity: 1;
     margin-left: 0.5rem;
     color: white;
     font: normal 16px Gemeli;
     border: none;
+
+    &:hover {
+        background: #1c244a;
+    }
 }
 
-#auth_key_submit:hover {
-    background: #1c244a;
-}
-
+// Alert that pops up after sending key update request
 #auth_key_alert {
     border-radius: 7px;
+
+    // Increase the font size of the API key update message
+    p {
+        margin: 0;
+        font-size: 16px;
+    }
+
 }
 
-// Increase the font size of the auth key update method
-#auth_update_message {
-    margin: 0;
-    font-size: 16px;
-}
-
-// Stlye the API key input to have the same focus effect as the select2
-input.form-control:focus {
-    -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,147,249,.6);
-    box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,147,249,.6);
-    -o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    -webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    border-color:#9393F9
-}
-
+// List of the external links
 ul {
     list-style-type: none;
-}
 
-a {
-    text-align: left;
-    font: Bold 18px/32px Gemeli;
-    letter-spacing: 0px;
-    color: #263063;
-}
+    a {
+        text-align: left;
+        font: Bold 18px/32px Gemeli;
+        letter-spacing: 0px;
+        color: $db-blue;
+    
+        &:hover {
+            color: #1c244a;
+        }
+    
+    }
 
-a:hover {
-    color: #1c244a;
 }
-
 
 .tooltip-container {
     width: 1rem;

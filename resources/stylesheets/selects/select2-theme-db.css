@@ -7,7 +7,6 @@
 .select2-container--drugbank {
   display: block;
   margin-bottom: 34px !important;
-  width: 100% !important;
 }
 
 .select2-container--drugbank .select2-selection {
@@ -20,7 +19,6 @@
   min-height: 38px;
   font: 200 16px/24px Gemeli !important;
   letter-spacing: 0px;
-  color: #172042;
 }
 
 .select2-container--drugbank .select2-selection.form-control {
@@ -235,7 +233,7 @@
 }
 
 .select2-container--drugbank .select2-selection--single .select2-selection__rendered {
-  color: #555;
+  color: #172042;
   padding: 0 !important;
 }
 

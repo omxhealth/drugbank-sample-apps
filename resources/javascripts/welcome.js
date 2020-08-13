@@ -6,7 +6,7 @@
  * 
  * The code here is used for changing your API key and region, 
  * which is done by communication with the local server.
- * There is no code here that hits the DrugBank API.
+ * There is no code here that calls on the DrugBank API.
  */
 
 var api_key = getApiKey();
@@ -14,6 +14,7 @@ var region = $("main")[0].getAttribute("region"); // region should always be set
 
 // If no API key was set or found, prompt for it to be entered with a popup
 if (!api_key) {
+    
     setupPopup(region);
     $("#welcomeModal").modal({keyboard: false});  
 
@@ -30,6 +31,10 @@ if (!api_key) {
     $("#auth_key_input").attr("placeholder", api_key);
     $("#region_select").val(region);
 }
+
+$("#errorOk").on("click", function() {
+    $("#errorModal").modal("hide");
+});
 
 $(".db-logo").addClass("active");
 navUnderlineSetup();
@@ -74,7 +79,8 @@ $("#auth_key_form").keypress(
  * API key update button.
  * On submission, send a JSON with the new key to the server.
  * The server processes the request, and returns a message and whether 
- * the key update was successful or not through http status code.
+ * the key update was successful or not (HTTP status code).
+ * A notification containing the message is dislayed afterwards.
  */
 $("#auth_key_submit").on("click", function(e) {
     

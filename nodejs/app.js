@@ -70,7 +70,6 @@ app.get("/api/product_concepts", async function (req, res) {
     let db_res = await drugbank_get(route, req.query);
     res.status(db_res.status);
     res.json(db_res.data);
-    
 });
 
 // GET API call: product concepts (x = DB ID, y = routes/strength)
@@ -83,7 +82,7 @@ app.get("/api/product_concepts/:x/:y", async function (req, res) {
 
 /* Set drug-drug interactions routes */
 
-// GET render: drug-drug interations (ddi) page    
+// GET render: drug-drug interactions (ddi) page    
 app.get("/ddi", function (req, res) {
     let route = getApiRoute("ddi");
     res.render("ddi.jinja", {api_route : route, api_key : DRUGBANK_API_KEY, region : DRUGBANK_REGION});
@@ -183,9 +182,8 @@ app.put("/region", function (req, res) {
 
 /**
  * Attempts to open the config file on the
- * provided relative path. If no file exists or the
- * file is unable to be opened, an error is logged
- * and the script terminates.
+ * provided relative path. If no file exists,
+ * it is created with defaulted values,
  * 
  * Returns a JSON object containing the values 
  * from the config file.
@@ -198,7 +196,6 @@ function openConfig(path) {
         var config_data_in = fs.readFileSync(path);  
         config = JSON.parse(config_data_in);
     } catch (error) {
-        //console.log(error);
         console.log("Creating file " + path + " with default values");
 
         config = {
@@ -239,17 +236,17 @@ function validateRegion(config) {
 
 /**
  * Creates the url needed for accessing the actual DrugBank API directly.
- * Used for display in the API demo part of the app. The url get embedded into
- * template, and is accessed on the client side. Needed mainly to insert
- * the region correctly into the url. 
+ * Used for display in the API demo part of the app. The url is embedded into
+ * template, and is accessed on the client side. Function is needed mainly 
+ * to insert the region correctly into the url. 
  * 
  * If the region is "" (all), then the api 
- * host and endpoint with no region is returned 
- * (https://api.drugbankplus.com/v1/product_concepts).
+ * host and endpoint with no region is returned: 
+ * https://api.drugbankplus.com/v1/product_concepts
  * 
  * If a region like "us" is being used, then it appends to the api host the 
- * region and a "/" before the endpoint 
- * (https://api.drugbankplus.com/v1/us/product_concepts).
+ * region and a "/" before the endpoint: 
+ * https://api.drugbankplus.com/v1/us/product_concepts
  * 
  * @param {*} endpoint API call type (product_concepts, ddi, etc)
  */
@@ -286,8 +283,8 @@ function getApiEndpoint(endpoint) {
 
 /**
  * Makes a GET request to the DrugBank API with query parameters.
- * Uses axios to send the request, and returns the recieved JSON response.
- * @param {*} route - route into the Drugbank API
+ * Uses axios to send the request, and returns the received JSON response.
+ * @param {*} route - route into the DrugBank API
  * @param {*} params - query parameters for the search
  */
 async function drugbank_get(route, params) {
@@ -309,7 +306,7 @@ async function drugbank_get(route, params) {
 /**
  * Updates the auth key by writing the new value to the config file.
  * If anything goes wrong, the old key is restored.
- * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ * Returns the status code to be sent to the client (200 OK or 400 Bad Request)
  * @param {*} new_key 
  * @param {*} old_key 
  */
@@ -318,19 +315,19 @@ function update_API_key(new_key, old_key) {
     DRUGBANK_API_KEY = new_key;
     config["auth-key"] = new_key;
 
-    // try to write back to config file
+    // Try to write back to config file
     try {
         fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
         DRUGBANK_HEADERS["Authorization"] = new_key;
         return 200;
 
     } catch (error) {
-        // in case anything goes wrong, revert changes
+        // In case anything goes wrong, revert changes
         console.log(error);
         DRUGBANK_API_KEY = old_key;
         config["auth-key"] = old_key;
         DRUGBANK_HEADERS["Authorization"] = old_key;
-        return 500
+        return 400;
     }
     
 }
@@ -338,7 +335,7 @@ function update_API_key(new_key, old_key) {
 /**
  * Updates the selected region by writing the new value to the config file.
  * If anything goes wrong, the old region is restored.
- * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ * Returns the status code to be sent to the client (200 OK or 400 Bad Request)
  * @param {*} new_region 
  */
 function update_region(new_region) {
@@ -348,16 +345,16 @@ function update_region(new_region) {
     DRUGBANK_REGION = new_region;
     config["region"] = new_region;
 
-    // try to write back to config file
+    // Try to write back to config file
     try {
         fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
         return 200;
 
     } catch (error) {
-        // in case anything goes wrong, revert changes
+        // In case anything goes wrong, revert changes
         console.log(error);
         DRUGBANK_REGION = old_region;
         config["region"] = old_region;
-        return 500
+        return 400;
     }
 }
