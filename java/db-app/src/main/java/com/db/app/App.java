@@ -31,10 +31,10 @@ public class App {
     protected static final String configFile = "config.json";
 
     /**
-     * NOTE: the static path is set realtive to the directory where the server is being
+     * NOTE: the static path is set relative to the directory where the server is being
      * called from. So if run from the "drugbank-sample-apps" folder, the static path
      * is "resources", but if run from in the "db-app" folder, the static path is
-     * "../../resource". This can hopefully be changed so it doesn't matter.
+     * "../../resource".
      */
     protected static String staticPath = "../../resources";
     protected static String templatesPath = staticPath + "/templates/";
@@ -58,7 +58,7 @@ public class App {
 
         /* Set the welcome page route */
 
-        // GET render: support page
+        // GET render: welcome page
         get("/", (req, res) -> {
             Map<String, Object> attributes = new HashMap<>();
 
@@ -113,7 +113,7 @@ public class App {
 
         /* Set drug-drug interactions routes */
 
-        // GET render: drug-drug interations (ddi) page 
+        // GET render: drug-drug interactions (ddi) page 
         get("/ddi", (req, res) -> {
             String route = getApiRoute("ddi");
             Map<String, Object> attributes = new HashMap<>();
@@ -182,13 +182,13 @@ public class App {
             JsonResponse.put("updated-key", newKey);
 
             /**
-             * if the new key is the same as the old one, dont bother updating it
+             * If the new key is the same as the old one, dont bother updating it.
              * 
-             * else if the new key is empty, don't bother updating it 
+             * Else if the new key is empty, don't bother updating it 
              * (note: this shouldn't ever be an issue as an HTML form
-             * won't submit if it is empty)
+             * won't submit if it is empty).
              * 
-             * otherwise, try to update the key
+             * Otherwise, try to update the key.
              */
             if (authKey.equals(newKey)) {
                 res.status(200);
@@ -204,7 +204,7 @@ public class App {
 
                 try {
                     
-                    // update local variables
+                    // Update local variables
                     authKey = newKey;
                     config.put("auth-key", authKey);
                     
@@ -212,7 +212,7 @@ public class App {
 
                     logger.info("Authentication updated: " + authKey);
                     
-                    // update variables in api.java
+                    // Update variables in DrugBankAPI.java
                     DrugBankAPI.DRUGBANK_API_KEY = authKey;
                     DrugBankAPI.DRUGBANK_HEADERS.put("Authorization", authKey);
 
@@ -222,15 +222,15 @@ public class App {
                 } catch (final IOException e) {
                     e.printStackTrace();
 
-                    // revert local variables
+                    // Revert local variables
                     authKey = oldKey;
                     config.put("auth-key", oldKey);
 
-                    // revert variables in api.java
+                    // Revert variables in DrugBankAPI.java
                     DrugBankAPI.DRUGBANK_API_KEY = oldKey;
                     DrugBankAPI.DRUGBANK_HEADERS.put("Authorization", oldKey);
 
-                    res.status(500);
+                    res.status(400);
                     JsonResponse.put("message", "Unable to update file '" + configFile + "'");
                 }
 
@@ -252,9 +252,8 @@ public class App {
             res.type("application/json");
 
             /**
-             * if the new region is the same as the old one, dont bother updating it
-             * 
-             * otherwise, try to update the region
+             * If the new region is the same as the old one, dont bother updating it.
+             * Otherwise, try to update the region
              */
             if (region.equals(newRegion)) {
                 res.status(200);
@@ -280,7 +279,7 @@ public class App {
                     region = oldRegion;
                     config.put("region", oldRegion);
 
-                    res.status(500);
+                    res.status(400);
                     JsonResponse.put("message", "Unable to update file '" + configFile + "'");
                 }
 
@@ -310,7 +309,7 @@ public class App {
 
     /**
      * Loads properties from the config file into a JSONObject.
-     * If the file doesn't exist, it is created with defualt values.
+     * If the file doesn't exist, it is created with default values.
      * 
      * The file must contain: 
      *  - port: the port to host the server on 
@@ -415,17 +414,17 @@ public class App {
 
     /**
      * Creates the url needed for accessing the actual DrugBank API directly.
-     * Used for display in the API demo part of the app. The url get embedded into
-     * template, and is accessed on the client side. Needed mainly to insert
-     * the region correctly into the url. 
+     * Used for display in the API demo part of the app. The url is embedded into
+     * template, and is accessed on the client side. Function is needed mainly 
+     * to insert the region correctly into the url. 
      * 
      * If the region is "" (all), then the api 
-     * host and endpoint with no region is returned 
-     * (https://api.drugbankplus.com/v1/product_concepts).
+     * host and endpoint with no region is returned: 
+     * https://api.drugbankplus.com/v1/product_concepts
      * 
      * If a region like "us" is being used, then it appends to the api host the 
-     * region and a "/" before the endpoint 
-     * (https://api.drugbankplus.com/v1/us/product_concepts).
+     * region and a "/" before the endpoint: 
+     * https://api.drugbankplus.com/v1/us/product_concepts
      * 
      * @param {*} endpoint API call type (product_concepts, ddi, etc)
      */

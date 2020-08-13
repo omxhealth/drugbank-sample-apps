@@ -7,12 +7,11 @@ use Slim\Views\TwigMiddleware;
 use GuzzleHttp\Client;
 use Twig\TwigFilter;
 
-
 require __DIR__ . "/../vendor/autoload.php";
 
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file.
-// If this isn"t here, CSS and Javascript won"t be loaded for the pages.
+// If this isn't here, CSS and JavaScript won"t be loaded for the pages.
 if (PHP_SAPI == "cli-server") {
     $_SERVER["SCRIPT_NAME"] = basename(__FILE__);
     $url  = parse_url($_SERVER["REQUEST_URI"]);
@@ -313,10 +312,10 @@ function getApiEndpoint($endpoint) {
 }
 
 /**
- * Updates the auth key by writing the new value to the config file.
+ * Updates the api key by writing the new value to the config file.
  * If anything goes wrong (file not found, IO exception),
- * the old key is restored
- * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ * the old key is restored.
+ * Returns the status code to be sent to the client (200 OK or 400 Bad Request).
  */
 function update_API_key($new_key) {
     
@@ -344,16 +343,16 @@ function update_API_key($new_key) {
         // in case anything goes wrong, revert changes
         $config["auth-key"] = $old_key;
         $DRUGBANK_HEADERS["Authorization"] = $old_key;
-        return 500;
+        return 400;
     }
 
 }
 
 /**
- * Updates the auth key by writing the new value to the config file.
+ * Updates the region by writing the new value to the config file.
  * If anything goes wrong (file not found, IO exception),
- * the old key is restored
- * Returns the status code to be sent to the client (200 OK or 500 Server Error)
+ * the old region is restored.
+ * Returns the status code to be sent to the client (200 OK or 400 Bad Request).
  */
 function update_region($new_region) {
     
@@ -380,7 +379,7 @@ function update_region($new_region) {
         // in case anything goes wrong, revert changes
         $DRUGBANK_REGION = $old_region;
         $config["region"] = $old_region;
-        return 500;
+        return 400;
     }
 
 }

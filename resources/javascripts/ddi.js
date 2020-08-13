@@ -231,6 +231,10 @@ if (!api_key) {
     
 } 
 
+$("#errorOk").on("click", function() {
+    $("#errorModal").modal("hide");
+});
+
 $(".results-row").hide();
 $("#ddi_nav").addClass("active");
 

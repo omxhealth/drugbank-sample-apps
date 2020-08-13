@@ -198,6 +198,10 @@ if (!api_key) {
     
 } 
 
+$("#errorOk").on("click", function() {
+    $("#errorModal").modal("hide");
+});
+
 $(".results-row").hide();
 $(".search-button").attr("disabled", true);
 
@@ -290,10 +294,6 @@ $("button.search-button").on("click", function(e) {
 
     return $.ajax({
         url: localhost + encodeURI("indications" + indications_params),
-        // Brief delay to a) work around a select2 bug that is not patched in the version
-        // included in rails-select2 (https://github.com/select2/select2/issues/4205)
-        // and b) reduce the number of requests sent
-        delay: 100,
         data: {
             request_path: encodeURI(indications_params)
         },
@@ -302,16 +302,16 @@ $("button.search-button").on("click", function(e) {
             // Fill the side display
             displayRequest(encodeURI(api_route + indications_params), data, api_key);
             showSearchTerms();
+
             // Load results in table and show the table
             loadResults(data);
             $("#loader").hide();
-
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $("#loader").hide();
-            handleError(jqXHR, false);
-            
+            handleError(jqXHR, false); 
         }
+
     });
 
 });
