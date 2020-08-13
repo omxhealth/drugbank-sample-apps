@@ -4,7 +4,13 @@
     ],
     "spellright.documentTypes": [
         "markdown",
-        "latex"
+        "latex",
+        "scss",
+        "jinja-html",
+        "php",
+        "java",
+        "python",
+        "javascript"
     ],
     "spellright.parserByClass": {
         "jinja-html": {

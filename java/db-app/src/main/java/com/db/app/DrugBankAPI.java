@@ -44,7 +44,7 @@ public class DrugBankAPI {
     /**
      * Creates the URL where the API call is to be sent to (with query parameters)
      * Implemented from https://stackoverflow.com/a/26177982/12471692
-     * @param route where to pull from
+     * @param route what part of the API to pull from
      * @param params the query parameters to the API
      * @return URL to the API with the given route and queries
      * @throws URISyntaxException
@@ -56,7 +56,7 @@ public class DrugBankAPI {
         URI oldUri = new URI(DRUGBANK_API + route);
         StringBuilder queries = new StringBuilder();
         
-        //add all the params to the request
+        // Add all the params to the request
         for (Map.Entry<String, String> query: params.entrySet()) {
             queries.append( "&" + query.getKey()+"="+query.getValue());
         }
@@ -105,6 +105,7 @@ public class DrugBankAPI {
      */
     public static DBResponse drugbank_get(String route, Map<String, String> params) throws IOException, URISyntaxException {
 
+        HttpsURLConnection connection;
         int responseCode;
         URL url;
         DBResponse res;
@@ -117,7 +118,7 @@ public class DrugBankAPI {
             url = drugbank_url(route, params);
         }
         
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection = (HttpsURLConnection) url.openConnection();
 
         connection.setRequestMethod("GET");
         setHeader(connection);
@@ -133,7 +134,7 @@ public class DrugBankAPI {
         BufferedReader in = new BufferedReader(inputReader);
         StringBuffer response = new StringBuffer();
 
-        //read the call response into the stringbuffer
+        // Read the call response into the stringbuffer
         while ((readLine = in.readLine()) != null) {
             response.append(readLine);
         }
@@ -142,6 +143,9 @@ public class DrugBankAPI {
 
         Map<String, List<String>> header = connection.getHeaderFields();
         
+        // The response can either be a JSON object, or
+        // an array of JSON objects. Determine what it is so
+        // it can be stored properly.
         if (response.toString().startsWith("[")) {
             JSONArray responseJSON = new JSONArray(response.toString());
             res = new DBResponse(responseJSON, header, responseCode);
@@ -173,7 +177,6 @@ public class DrugBankAPI {
             res = drugbank_get("drug_names", params);
             res.prettyPrintData();
         } catch (IOException | URISyntaxException e) {
-            
             e.printStackTrace();
         }
         

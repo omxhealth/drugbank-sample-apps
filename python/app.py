@@ -27,10 +27,9 @@ except FileNotFoundError:
     json.dump(config, json_file, indent=4)
     json_file.flush()
 
+
 # Add the indications page filter that's used when
 # looping through all the options and displaying them
-
-
 @app.template_filter()
 def indication_option(name):
     return name.lower().replace(' ', '_')
@@ -55,7 +54,7 @@ def validate_region(config):
 validate_region(config)
 
 # Set variables after reading in the config.
-# Note that not all delcarations may remain constant.
+# Note that not all declarations may remain constant.
 DRUGBANK_API = "https://api.drugbankplus.com/v1/"
 DRUGBANK_API_KEY = config["auth-key"]
 DRUGBANK_REGION = config["region"]
@@ -114,10 +113,10 @@ def getApiEndpoint(endpoint):
     return apiRegion + endpoint
 
 
-# Updates the auth key by writing the new value to the config file.
+# Updates the api key by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
 # the old key is restored
-# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+# Returns the status code to be sent to the client (200 OK or 400 Bad Request)
 def update_API_key(new_key):
 
     global DRUGBANK_API_KEY
@@ -144,12 +143,12 @@ def update_API_key(new_key):
         DRUGBANK_API_KEY = old_key
         config["auth-key"] = old_key
         DRUGBANK_HEADERS["Authorization"] = old_key
-        return 500
+        return 400
 
 
 # Updates the selected region by writing the new value to the config file.
 # If anything goes wrong, the old region is restored.
-# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+# Returns the status code to be sent to the client (200 OK or 400 Bad Request)
 def update_region(new_region):
 
     global DRUGBANK_REGION
@@ -174,7 +173,7 @@ def update_region(new_region):
         # in case anything goes wrong, revert changes
         DRUGBANK_REGION = old_region
         config["region"] = old_region
-        return 500
+        return 400
 
 
 # Routes #
