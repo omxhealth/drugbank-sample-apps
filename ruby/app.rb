@@ -241,7 +241,7 @@ end
 # Updates the api key by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
 # the old key is restored
-# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+# Returns the status code to be sent to the client (200 OK or 400 Bad Request)
 def update_API_key(new_key)
     
     #get the old key
@@ -264,7 +264,7 @@ def update_API_key(new_key)
         $config["auth-key"] = old_key
         $drugbank_api_key = old_key
         $drugbank_headers["Authorization"] = old_key
-        return 500
+        return 400
     end    
 
 end    
@@ -272,7 +272,7 @@ end
 # Updates the region by writing the new value to the config file.
 # If anything goes wrong (file not found, IO exception),
 # the old region is restored
-# Returns the status code to be sent to the client (200 OK or 500 Server Error)
+# Returns the status code to be sent to the client (200 OK or 400 Bad Request)
 def update_region(new_region)
 
     #get the old region
@@ -293,7 +293,7 @@ def update_region(new_region)
         puts msg
         $config["region"] = old_region
         $drugbank_region = old_region
-        return 500
+        return 400
     end    
 
 end    

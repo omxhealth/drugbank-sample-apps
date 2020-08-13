@@ -158,7 +158,7 @@ loadResults = function (data) {
 
 /**
  * Displays the selected search parameters below the
- * search bar after a search is sent.
+ * search bar after a request is sent.
  * Goes through the term-group children in order by indexing from 0-2 (using eq()).
  */
 showSearchTerms = function() {
