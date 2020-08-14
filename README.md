@@ -1,12 +1,13 @@
 # drugbank-sample-apps
 
-A sample application for accessing the DrugBank API written in multiple languages.
+A sample application for accessing the DrugBank API with a back-end written in multiple languages.
 
 ## Components
 
 ### Front-End
 - [Bootstrap](https://getbootstrap.com/)
 - [jQuery](https://jquery.com/)
+- [Selectize.js](https://selectize.github.io/selectize.js/)
 - [Select2](https://select2.org/)
 - [DataTables](https://datatables.net/)
 - [Prism](https://prismjs.com/)
@@ -16,11 +17,11 @@ A sample application for accessing the DrugBank API written in multiple language
 |-----------------------|---------------------------------------------------------------------------|-------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
 |     Java              |     [Apache Maven](https://maven.apache.org)                              |     [Spark](http://sparkjava.com/)                          |     [`javax.net.ssl.HttpsURLConnection`](https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/HttpsURLConnection.html)    |     [jinjava](https://github.com/HubSpot/jinjava)   (Jinja2)            |
 |     Node.js           |     [npm](https://www.npmjs.com/)                                         |     [Express](https://expressjs.com/)                       |     [axios](https://github.com/axios/axios)                                                                                  |     [nunjucks](https://github.com/mozilla/nunjucks)   (Jinja2)          |
-|     PHP               |     [Composer](https://getcomposer.org/)                                  |     [Slim](http://www.slimframework.com/)                   |     [Guzzle](https://github.com/guzzle/guzzle)                                                                               |     [slim/twig-view](https://github.com/slimphp/Twig-View)   (Twig)     |
+|     PHP               |     [Composer](https://getcomposer.org/)                                  |     [Slim](http://www.slimframework.com/)                   |     [Guzzle](https://github.com/guzzle/guzzle)                                                                               |     [slim/twig-view](https://github.com/slimphp/Twig-View)   (Twig*)     |
 |     Python            |     [pip](https://packaging.python.org/tutorials/installing-packages/)    |     [Flask](https://flask.palletsprojects.com/en/1.1.x/)    |     [Requests](https://requests.readthedocs.io/en/master/)                                                                   |     [Jinja](https://jinja.palletsprojects.com/en/2.11.x/)   (Jinja2)    |
 |     Ruby              |     [Bundler](https://bundler.io/)                                        |     [Sinatra](http://sinatrarb.com/)                        |     [httparty](https://github.com/jnunemaker/httparty)                                                                       |     [Haml](http://haml.info/) (Haml)                                    |
 
-##### Note: Twig is similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
+##### *Twig is similar to Jinja2, so the Jinja2 templates are used in the PHP app without issue.
 
 # How It Works
 
@@ -32,7 +33,7 @@ All requests from the web app to the API are handled by the server. The server r
 
 ### General Information
 
-By default, each app should be running at http://127.0.0.1:4567/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
+By default, each app should be running at http://127.0.0.1:8080/ and is accessed by going to that address in a web browser. To stop the server, press CTRL+C.
 
 Each implementation determines the port to run on as well as the DrugBank API key and the region to use for searches from the `config.json` file at the root of the repo. To change the port, API key, or region, simply change the values in the `config.json`. The region and API key can also be changed from the support page within the app.
 
@@ -51,7 +52,7 @@ The app is then run with the command
 mvn exec:java
 ```
 
-Visit [http://localhost:`port`/](http://127.0.0.1:4567/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
+Visit [http://localhost:`port`/](http://127.0.0.1:8080/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
 
 ## Node.js
 Navigate to `drugbank-sample-apps/nodejs`. Run the command

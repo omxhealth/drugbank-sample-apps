@@ -593,7 +593,7 @@ pre[class*="language-"] {
 }
 
 input.auth_key_input {
-  border-radius: 7px;
+  border-radius: 7px !important;
   border: black 1px solid;
   font: 200 16px/24px Gemeli;
   overflow: hidden;
