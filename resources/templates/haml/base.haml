@@ -39,10 +39,10 @@
         #navbar.collapse.navbar-collapse
           %ul.ml-auto
           %ul.navbar-nav
-            %li#drug_lookup_nav.nav-item
-              %a.nav-link{:href => "/drugs"} Drug Lookup
-            %li#alternative_drugs_nav.nav-item
-              %a.nav-link{:href => "/alternative_drugs"} Alternative Drug Lookup
+            -# %li#drug_lookup_nav.nav-item
+            -#   %a.nav-link{:href => "/drugs"} Drug Lookup
+            -# %li#alternative_drugs_nav.nav-item
+            -#   %a.nav-link{:href => "/alternative_drugs"} Alternative Drug Lookup
             %li#product_concepts_nav.nav-item
               %a.nav-link{:href => "/product_concepts"} Product Concepts
             %li#ddi_nav.nav-item
@@ -79,7 +79,7 @@
                             %use{:href => "images/svg-defs.svg#tooltip-icon"}
                       .col-sm
                         .input-group
-                          %input#auth_key_input_popup.form-control{:type => "text"}/
+                          %input#auth_key_input_popup.form-control.auth_key_input{:type => "text"}/
                 .col
                   %form#region_form_popup.form-horizontal
                     .form-group

@@ -13,18 +13,18 @@
           queries and results.
         %br/
         .container
-          %a.welcome-section-link{:href => "/drugs"}
-            .row.align-items-center.feature-info-row
-              .col.info-section-name
-                %h3 Drug Lookup
-              .col.info-section-desc
-                %p Search by product name, drug ingredient, or even NDC codes.
-          %a.welcome-section-link{:href => "/alternative_drugs"}
-            .row.align-items-center.feature-info-row
-              .col.info-section-name
-                %h3 Alternative Drug Search
-              .col.info-section-desc
-                %p Find alternative drugs based on a drug ingredient or product search.
+          -# %a.welcome-section-link{:href => "/drugs"}
+          -#   .row.align-items-center.feature-info-row
+          -#     .col.info-section-name
+          -#       %h3 Drug Lookup
+          -#     .col.info-section-desc
+          -#       %p Search by product name, drug ingredient, or even NDC codes.
+          -# %a.welcome-section-link{:href => "/alternative_drugs"}
+          -#   .row.align-items-center.feature-info-row
+          -#     .col.info-section-name
+          -#       %h3 Alternative Drug Search
+          -#     .col.info-section-desc
+          -#       %p Find alternative drugs based on a drug ingredient or product search.
           %a.welcome-section-link{:href => "/product_concepts"}
             .row.align-items-center.feature-info-row
               .col.info-section-name
@@ -55,7 +55,7 @@
                     %use{:href => "images/svg-defs.svg#tooltip-icon"}
               .col-sm
                 .input-group
-                  %input#auth_key_input.form-control{:type => "text"}/
+                  %input#auth_key_input.form-control.auth_key_input{:type => "text"}/
                   %button#auth_key_submit{:type => "submit"} Update
         #auth_key_alert.alert.alert-warning.alert-dismissible{:role => "alert", :style => "display: none;"}
           %p#auth_update_message
@@ -91,11 +91,11 @@
           refer to the DrugBank Help Center, or click the relevant Help Center
           links below. Or contact our support centre for more help.
         %ul
-          %li
-            %a{:href => "https://docs.drugbankplus.com/v1/#drug-names-autocomplete"}
-              Drug Names / Autocomplete
-              %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
-                %use{:href => "images/svg-defs.svg#link-arrow"}
+          -# %li
+          -#   %a{:href => "https://docs.drugbankplus.com/v1/#drug-names-autocomplete"}
+          -#     Drug Names / Autocomplete
+          -#     %svg.link-arrow{:viewbox => "0 0 11.067 9.876"}
+          -#       %use{:href => "images/svg-defs.svg#link-arrow"}
           %li
             %a{:href => "https://docs.drugbankplus.com/v1/#product-concepts"}
               Product Concepts
