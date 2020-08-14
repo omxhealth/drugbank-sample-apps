@@ -1,9 +1,10 @@
 /**
  * selectize.dbsearch.css
  *
- * Selectize.js theme using selectize.bootstrap3.css (v0.12.6) as a base
+ * Selectize.js theme using selectize.bootstrap3.css (v0.12.6) as a base.
  * (Copyright (c) 2013–2015 Brian Reavis & contributors)
  */
+
 .selectize-control.plugin-drag_drop.multi > .selectize-input > div.ui-sortable-placeholder {
   visibility: visible !important;
   background: #f2f2f2 !important;
@@ -168,7 +169,6 @@
   display: inline-block;
   zoom: 1;
 }
-
 .selectize-input > div {
   width: 100%;
   overflow: hidden !important;
@@ -325,7 +325,7 @@
   margin: 0 4px 0 -2px !important;
 }
 .selectize-control .selectize-input.disabled {
-  opacity: 0.5;
+  /* opacity: 0.5; */
   background-color: #fff;
 }
 .selectize-dropdown,

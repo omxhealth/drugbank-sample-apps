@@ -193,6 +193,7 @@ showSearchTerms = function() {
 searchReset = function() {
 
     $("#loader").show();
+    drugSelect[0].selectize.enable();
 
     searchChange(null);
     clearDisplayRequest();
@@ -418,6 +419,7 @@ $("button.search-button").on("click", function(e) {
         return;
     }
 
+    drugSelect[0].selectize.disable();
     $("#loader").show();
     clearTableResults(products_table);
 

@@ -158,7 +158,7 @@ loadResults = function (data) {
 
 /**
  * Displays the selected search parameters below the
- * search bar after a search is sent.
+ * search bar after a request is sent.
  * Goes through the term-group children in order by indexing from 0-2 (using eq()).
  */
 showSearchTerms = function() {
@@ -193,6 +193,7 @@ showSearchTerms = function() {
 searchReset = function() {
 
     $("#loader").show();
+    drugSelect[0].selectize.enable();
 
     searchChange(null);
     clearDisplayRequest();
@@ -418,6 +419,7 @@ $("button.search-button").on("click", function(e) {
         return;
     }
 
+    drugSelect[0].selectize.disable();
     $("#loader").show();
     clearTableResults(products_table);
 

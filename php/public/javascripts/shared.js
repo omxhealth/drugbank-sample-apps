@@ -16,7 +16,7 @@
 var localhost = "/api/"; // for connecting to the locally hosted server
 
 /**
- * Replaces the table search bar with a DrugBank themed one
+ * Replaces the table search bar with a DrugBank themed one.
  */
 restyleDatatableFilter = function() {
     
@@ -44,8 +44,10 @@ restyleDatatableFilter = function() {
 
 }
 
-// Clears and hides the terms below the search bar.
-// For use after the "reset search" button is clicked.
+/**
+ * Clears and hides the terms below the search bar.
+ * For use after the "reset search" button is clicked.
+ */
 clearSearchTermsDisplay = function() {
 
     // Remove top margin for the group so the search bar is
@@ -96,6 +98,13 @@ handleError = function(xhr, triggerFunction) {
     var message =  xhr.responseJSON.error;
 
     switch (xhr.status) {
+
+        // 400 is returned when the region or api key are unable to be updated
+        case 400:
+            if (xhr.responseJSON.message) {
+                message =  xhr.responseJSON.message;
+            }
+            break;
         
         // 401 is returned if the key is invalid or if the endpoint is invalid    
         case 401:
@@ -118,13 +127,14 @@ handleError = function(xhr, triggerFunction) {
             message += ". Please wait and try again or contact the DrugBank Team.";
             break;  
         
-        // 503 is returned if the server is down for maintanance    
+        // 503 is returned if the server is down for maintenance    
         case 503:
             message += ". Please wait and try again later.";
             break;     
 
         default:
-            break;    
+            break;   
+
     }
 
     // Selectize.js selects can't have events triggered on them like how
@@ -153,8 +163,8 @@ navUnderlineSetup = function() {
     var $magicLine = $("#magic-line");
     var $el, leftPos, newWidth;
 
-    // The not("#magic-line") is here because the console will through errors
-    // if you hover over the magic line because it has no children
+    // The not("#magic-line") is here because the console will throw errors
+    // if you hover over the magic line itself because it has no children
     $(".db-logo, .navbar-nav li").not("#magic-line").hover(
         function() {
             $el = $(this).children();
@@ -175,7 +185,7 @@ navUnderlineSetup = function() {
     
     navUnderlineMover(); // initial move into position
 
-    // if the window is resized, the magic-line values 
+    // If the window is resized, the magic-line values 
     // need to be updated to work properly
     $(window).resize(navUnderlineMover);
     
@@ -206,7 +216,7 @@ navUnderlineMover = function() {
 } 
 
 // Pulls the API key from the template for use in shell command display.
-// If not present, uses placeholder "mytoken"
+// If not present, returns empty string.
 getApiKey = function() {
     
     try {
@@ -220,7 +230,7 @@ getApiKey = function() {
 /** 
  * Adds the search icon to the search bar.
  * Needs to be called after the search bar 
- * is intialized as a Selectize.js select box.
+ * is initialized as a Selectize.js select box.
  */ 
 addSearchIconToSelect = function() {
     $(".selectize-control").append(
@@ -244,7 +254,7 @@ setupPopup = function(region) {
     });
 
     // Enable the tooltips
-    $('.tooltip-container-popup').tooltip({container:".modal-body", html:true});
+    $('.tooltip-container-popup').tooltip({container:"#welcomeModalBody", html:true});
 
     // Prevent the enter key from submitting the form
     $("#auth_key_form_popup").keypress(
@@ -266,7 +276,7 @@ setupPopup = function(region) {
         }
     });
 
-    // On region or auth key change, send the new values to the server
+    // On region or api key change, send the new values to the server
     $("#welcomeSubmit").on("click", async function(event) {
 
         event.preventDefault(); // Prevent form submission
@@ -285,10 +295,13 @@ setupPopup = function(region) {
                 dataType: "json",
                 success: function() {
                     $("main")[0].setAttribute("region", $("#region_select_popup").val());
-                } 
+                }, 
+                error: function(xhr) {
+                    throw xhr;
+                }
             }),
             
-            // Send the auth key update
+            // Send the api key update
             $.ajax({
                 url: "/auth_key",
                 type: "PUT",
@@ -300,11 +313,14 @@ setupPopup = function(region) {
                 success: function(){
                     $("main")[0].setAttribute("api_key", $("#auth_key_input_popup").val());
                 }
-
             })
-        ]);
+        ])
+        .catch(function(xhr) {
+            $("#welcomeModal").modal("hide");
+            handleError(xhr, false);
+        });
             
-        // Hide the popup after region and auth key successfully updated
+        // Hide the popup after region and api key successfully updated
         $("#welcomeModal").modal("hide");
 
     });
