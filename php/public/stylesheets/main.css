@@ -38,10 +38,9 @@ header {
   top: 0px;
   min-height: 62px;
   padding-left: 0;
-  background: #FF00B8 0% 0% no-repeat padding-box;
+  background: #FF00B8;
   -webkit-box-shadow: 0px 3px 6px #00000029;
           box-shadow: 0px 3px 6px #00000029;
-  opacity: 1;
 }
 
 .db-logo {
@@ -89,11 +88,10 @@ header {
   left: 0;
   width: 100px;
   height: 4px;
-  background: #FFFFFF;
-  z-index: 10000;
+  background: white;
 }
 
-button navbar-toggler {
+button.navbar-toggler {
   border: none;
   border-color: transparent;
 }
@@ -123,10 +121,10 @@ main .container-fluid:not(.search-row), .main-row {
   top: 0;
   left: 0;
   background-color: rgba(255, 255, 255, 0.75);
-  z-index: 999;
+  z-index: 2;
 }
 
-.pill {
+#loader .pill {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -220,7 +218,7 @@ main .container-fluid:not(.search-row), .main-row {
           align-items: center;
   background-attachment: scroll;
   background-clip: border-box;
-  background: #172042 0% 0% no-repeat padding-box;
+  background: #172042;
   border-bottom: 1px solid #707070;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -231,28 +229,57 @@ main .container-fluid:not(.search-row), .main-row {
       -ms-flex-pack: center;
           justify-content: center;
   line-height: 24px;
-  padding: 0 10%;
+  padding: 20px 10%;
   text-align: left;
   text-rendering: optimizelegibility;
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
-.section-search-form {
+.section-search .section-search-form {
   width: 100%;
 }
 
-.search-title {
+.section-search .search-title {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   text-align: left;
   font: normal 20px/24px Gemeli;
   letter-spacing: 1.1px;
   color: white;
-  opacity: 1;
   text-rendering: optimizelegibility;
   text-transform: uppercase;
   margin-bottom: 0.75rem;
+}
+
+.section-search .form-group.search-group {
+  margin-bottom: 0px;
+}
+
+.section-search .term-group {
+  display: block;
+  margin-top: 0px;
+  margin-bottom: 0 !important;
+  overflow-y: auto;
+}
+
+.section-search .term-group .search-term {
+  background: #F3F3FC;
+  border-radius: 10px;
+  height: auto;
+  margin-right: 10px;
+  margin-top: 10px;
+  display: none;
+}
+
+.section-search .term-group .search-term p {
+  font: normal 14px Gemeli;
+  letter-spacing: 0px;
+  color: #172042;
+  display: inline-block;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  margin: 0;
+  text-align: center;
+  vertical-align: bottom;
 }
 
 .search-icon {
@@ -268,49 +295,16 @@ main .container-fluid:not(.search-row), .main-row {
   z-index: 10000000;
 }
 
-.form-group.search-group {
-  margin-bottom: 0px;
-}
-
-.term-group {
-  display: block;
-  margin-top: 0px;
-  margin-bottom: 0 !important;
-  overflow-y: auto;
-}
-
-.search-term {
-  background: #F3F3FC 0% 0% no-repeat padding-box;
-  border-radius: 10px;
-  height: auto;
-  margin-right: 10px;
-  margin-top: 10px;
-  display: none;
-}
-
-.search-term p {
-  font: normal 14px Gemeli;
-  letter-spacing: 0px;
-  color: #172042;
-  display: inline-block;
-  text-transform: uppercase;
-  padding: 7px 20px;
-  margin: 0;
-  text-align: center;
-  vertical-align: bottom;
-}
-
 .search-row {
-  background: #FFFFFF 0% 0% no-repeat padding-box;
+  background: white;
   -webkit-box-shadow: 0px 0px 6px #00000029;
           box-shadow: 0px 0px 6px #00000029;
-  opacity: 1;
   height: 8rem;
   bottom: 0;
   position: absolute;
 }
 
-.col.text-center {
+.search-row .text-center {
   vertical-align: middle;
   margin: auto;
 }
@@ -329,20 +323,9 @@ main .container-fluid:not(.search-row), .main-row {
   font: normal 28px/34px Gemeli;
   text-transform: uppercase;
   letter-spacing: 1.54px;
-  background: #FF00B8 0% 0% no-repeat padding-box;
+  background: #FF00B8;
   border-radius: 26px;
-  opacity: 1;
   scale: 0.8;
-}
-
-.modal-footer {
-  -webkit-box-pack: center !important;
-      -ms-flex-pack: center !important;
-          justify-content: center !important;
-}
-
-.confirm-button {
-  padding: 10px 45px;
 }
 
 .search-button:hover, .confirm-button:hover {
@@ -365,7 +348,7 @@ main .container-fluid:not(.search-row), .main-row {
   cursor: default;
 }
 
-.search-icon-submit {
+.search-button .search-icon-submit, .confirm-button .search-icon-submit {
   fill: white;
   width: 34px;
   height: 30px;
@@ -374,56 +357,71 @@ main .container-fluid:not(.search-row), .main-row {
   cursor: pointer;
 }
 
-.search-icon-submit use {
+.search-button .search-icon-submit use, .confirm-button .search-icon-submit use {
   height: 2rem;
   width: 2rem;
   vertical-align: middle;
 }
 
-.search-button-reset {
+.search-button-reset, .confirm-button-reset {
   color: #FF00B8;
   background-color: white;
   border: 3px solid #FF00B8;
   padding: 10px 35px;
 }
 
-.search-button-reset svg {
+.search-button-reset svg, .confirm-button-reset svg {
   display: none;
 }
 
+.confirm-button {
+  padding: 10px 45px;
+}
+
 .col-demo {
-  background: #F3F3FB 0% 0% no-repeat padding-box;
+  background: #F3F3FB;
   -webkit-box-shadow: 0px 5px 10px #00000029;
           box-shadow: 0px 5px 10px #00000029;
-  opacity: 1;
   padding-top: 62px;
   overflow: auto;
 }
 
-.demo-title {
+.col-demo .demo-title {
   text-align: left;
   font: normal 31px/50px Gemeli;
   letter-spacing: 0px;
   color: #263063;
-  opacity: 1;
   padding-left: 50px;
   padding-right: 65px;
   margin-bottom: 18px;
 }
 
-.demo-desc {
+.col-demo .demo-desc {
   text-align: left;
   font: 200 18px/24px Gemeli;
   letter-spacing: 0px;
   color: #263063;
-  opacity: 1;
   padding-left: 50px;
   padding-right: 65px;
 }
 
-.tab-content {
+.col-demo .tab-content {
   padding-left: 50px;
   padding-right: 65px;
+}
+
+.col-demo .tab-content .example-header {
+  text-align: left;
+  font: normal 14px/24px Gemeli;
+  color: #263063;
+}
+
+.col-demo .tab-content .example-header.example-header-response {
+  padding-top: 40px;
+}
+
+.col-demo .tab-content pre.api-box {
+  height: 320px;
 }
 
 /**
@@ -433,8 +431,7 @@ main .container-fluid:not(.search-row), .main-row {
  * PrismJS 1.16.0
  * This theme has been customized for drugbankplus.com
  */
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*="language-"], pre[class*="language-"] {
   color: #fff;
   background: none;
   text-shadow: 0 1px rgba(0, 0, 0, 0.3);
@@ -553,22 +550,6 @@ pre[class*="language-"] {
   cursor: help;
 }
 
-.example-header {
-  text-align: left;
-  font: normal 14px/24px Gemeli;
-  letter-spacing: 0px;
-  color: #263063;
-  opacity: 1;
-}
-
-.example-header.example-header-response {
-  padding-top: 40px;
-}
-
-pre.api-box {
-  height: 320px;
-}
-
 /* End of styling for HTTP request, shell command, and API response text displays */
 ::-webkit-input-placeholder {
   color: #4D5672 !important;
@@ -587,6 +568,15 @@ pre.api-box {
   opacity: 1 !important;
 }
 
+.option-label {
+  text-align: left;
+  font: normal 16px/1rem Gemeli;
+  color: #263063;
+  text-transform: uppercase;
+  padding-right: 0.5rem;
+  width: auto;
+}
+
 .tooltip-container-popup {
   width: 1rem;
   height: 1rem;
@@ -602,17 +592,28 @@ pre.api-box {
   vertical-align: baseline;
 }
 
-#auth_key_input_popup {
-  border-radius: 7px;
+input.auth_key_input {
+  border-radius: 7px !important;
   border: black 1px solid;
   font: 200 16px/24px Gemeli;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #172042;
+}
+
+input.auth_key_input:focus {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(147, 147, 249, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(147, 147, 249, 0.6);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  border-color: #9393F9;
 }
 
 #auth_key_submit_popup {
   padding: 0 20px;
-  background: #263063 0% 0% no-repeat padding-box;
+  background: #263063;
   border-radius: 9px;
   opacity: 1;
   margin-left: 0.5rem;
@@ -621,6 +622,7 @@ pre.api-box {
   border: none;
 }
 
+/* Modal Styling, including the welcome and error popups. */
 .modal-content {
   padding: 1rem;
   border-radius: 14px !important;
@@ -636,7 +638,6 @@ pre.api-box {
   font: 200 40px/78px Gemeli !important;
   letter-spacing: 0px;
   color: #172042;
-  opacity: 1;
   width: 100%;
 }
 
@@ -660,6 +661,9 @@ pre.api-box {
 .modal-footer {
   padding-top: 0 !important;
   border-top: none !important;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
 }
 
 .modal-backdrop.show {

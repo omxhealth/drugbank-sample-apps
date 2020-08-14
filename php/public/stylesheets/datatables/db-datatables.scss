@@ -4,6 +4,8 @@
  * Modifications made to the datatables css for the sample app.
  */
 
+@import "./variables";
+
 // The row on the page containing the table 
 .results-row {
     margin: 0 5% 8rem 5% !important;
@@ -29,9 +31,10 @@
     font: 200 1rem/18px Gemeli;
 }
 
-// Table seach bar search icon styling
+// Table search bar icon styling.
+// Uses some styling from .search-icon in welcome.scss,
+// it stopped working when it was moved here.
 .input-group-append .input-group-text svg{
-    z-index: 1000000;
     fill: black;
     height: 1.5rem;
     opacity: 0.5;
@@ -46,7 +49,6 @@ th {
     font: 200 16px/14px Gemeli;
     letter-spacing: 1.47px;
     color: #172042;
-    opacity: 1;
 }
 
 // Removes the border for all table entries
@@ -68,6 +70,11 @@ td.table_col_name {
 }
 
 .page-item.active .page-link {
-    background-color: #FF00B8 !important;
-    border-color: #FF00B8 !important;
+    background-color: $db-pink !important;
+    border-color: $db-pink !important;
+}
+
+.dataTables_filter input:focus {
+    box-shadow: 0 0 0 .2rem rgba(147,147,249,.6) !important;
+    border-color:#9393F9 !important;
 }
