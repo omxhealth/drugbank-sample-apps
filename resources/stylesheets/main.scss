@@ -583,7 +583,7 @@ pre[class*="language-"] {
 
 // Style the API key input to match the select2 dropdown
 input.auth_key_input {
-    border-radius: 7px;
+    border-radius: 7px !important;
     border: black 1px solid;
     font: 200 16px/24px Gemeli;
     overflow: hidden;
