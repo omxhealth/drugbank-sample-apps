@@ -6,8 +6,9 @@
  */
 
  .select2-container--drugbank {
-    display:block;
+    display: block;
     margin-bottom: 34px !important;
+    width: auto !important;
    }
    .select2-container--drugbank .select2-selection {
     -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);

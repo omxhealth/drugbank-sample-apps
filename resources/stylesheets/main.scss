@@ -31,11 +31,9 @@
     font-style: normal;
 }
 
-// Fixes an issue where clicking a select2 adds 
-// horizontal scrolling to whitespace
-body {
-    overflow-x:hidden; 
-    height: 100vh;
+body, html {
+    overflow-x: hidden; 
+    height: 100%;
 }
 
 header {
