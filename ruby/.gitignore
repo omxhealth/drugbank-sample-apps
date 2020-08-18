@@ -1,0 +1,5 @@
+# Ignore bundler config
+/.bundle
+
+# Vendored gems
+vendor/ruby
