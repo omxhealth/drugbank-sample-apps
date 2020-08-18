@@ -1,6 +1,6 @@
 # drugbank-sample-apps
 
-A sample application for accessing the DrugBank API with a back-end written in multiple languages.
+Ssample applications for accessing the DrugBank API with a back-end written in multiple languages.
 
 ## Components
 
