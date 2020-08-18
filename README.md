@@ -1,7 +1,7 @@
 # DrugBank Sample Applications
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/omxhealth/drugbank-sample-apps/master/resources/images/Sample%20App%20SS.png" width="900px">
+  <img src="https://raw.githubusercontent.com/omxhealth/drugbank-sample-apps/master/resources/images/Sample%20App%20SS.png" width="901px">
 </p>
 
 Sample applications for accessing the DrugBank API with a back-end written in multiple languages.
