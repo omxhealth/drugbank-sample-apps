@@ -146,4 +146,4 @@ The app is then run with the command
 bundle exec ruby app.rb
 ```
 
-Visit the default address  with the port given in the console to view the app.
+Visit the default address with the port given in the console to view the app.
