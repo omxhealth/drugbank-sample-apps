@@ -3,9 +3,9 @@
 {% block content %}
 
   <main role="main" api_route="{{api_route}}" api_key="{{api_key}}" region="{{region}}">
-    <div class="container-fluid">
-      <div class="row main-row">
-        <div class="col-xl-7 col-search">
+    <div class="container-fluid h-100 d-flex flex-column">
+      <div class="row main-row flex-fill">
+        <div class="col-xl-7 col-search mh-100">
 
           <div id="loader">
             <div class="ld ld-flip-v pill">
@@ -33,7 +33,7 @@
 
           </div>
 
-          <div class="row drugs-row">
+          <div class="drugs-row">
 
             <div class="ddi-help">
                 <p>Add up to 40 drugs. Search by drug ingredient, product, or brand name.</p>
@@ -54,9 +54,9 @@
 
           </div>
 
-          <div class="row results-row">
-            <div class="col-sm-12">
-              <table class="table interactions-table">
+          <div class="results-row">
+            <div class="table-wrapper">
+              <table class="table interactions-table" cellspacing="0" width="100%">
                 <thead>
                   <tr role="row">
                     <th>Product</th>
@@ -70,7 +70,7 @@
             </div>
           </div>
 
-          <div class="row search-row container-fluid no-gutters">
+          <div class="row search-row position-sticky container-fluid no-gutters">
             <div class="col text-center">
               <button class="search-button search-button-disabled">
                 <span>
@@ -85,7 +85,7 @@
 
         </div>
         
-        <div class="col-xl-5 col-demo">
+        <div class="col-xl-5 col-demo mh-100 overflow-auto">
           <h2 class="demo-title">Drug-Drug Interactions Search</h2>
           <p class=demo-desc>Our sample application will show you 
             how an end user can easily search a list of drugs for 

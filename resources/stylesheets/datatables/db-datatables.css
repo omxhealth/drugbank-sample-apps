@@ -4,8 +4,15 @@
  * Modifications made to the datatables css for the sample app.
  */
 .results-row {
-  margin: 0 5% 8rem 5% !important;
-  padding: 40px 0;
+  padding: 2rem 8% !important;
+}
+
+.table-wrapper {
+  height: 100%;
+}
+
+.datatable-if > .col-sm-12 {
+  margin-bottom: 1rem;
 }
 
 .dataTables_wrapper .row:nth-child(2) {
@@ -23,13 +30,12 @@
 }
 
 .input-group-append .input-group-text svg {
-  z-index: 1000000;
   fill: black;
   height: 1.5rem;
   opacity: 0.5;
 }
 
-th {
+.dataTables_scrollHead th {
   border-top: none !important;
   border-bottom: 0.5px solid #172042 !important;
   text-transform: uppercase;
@@ -37,7 +43,6 @@ th {
   font: 200 16px/14px Gemeli;
   letter-spacing: 1.47px;
   color: #172042;
-  opacity: 1;
 }
 
 td {
@@ -63,5 +68,10 @@ td.table_col_name {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(147, 147, 249, 0.6) !important;
           box-shadow: 0 0 0 0.2rem rgba(147, 147, 249, 0.6) !important;
   border-color: #9393F9 !important;
+}
+
+.dataTables_info {
+  font: 200 18px/18px Gemeli;
+  color: #172042;
 }
 /*# sourceMappingURL=db-datatables.css.map */

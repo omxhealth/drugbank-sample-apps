@@ -5,6 +5,7 @@
   letter-spacing: 0px;
   color: #263063;
   width: 100%;
+  height: auto !important;
 }
 
 .section-search-drugs {
@@ -12,10 +13,12 @@
   width: 100%;
   padding-top: 20px;
   max-height: 10rem;
+  overflow: auto;
 }
 
 .drugs-row {
-  margin: 2rem 10% 10rem 10%;
+  padding: 2rem 10%;
+  height: calc(100% -  8rem -  218px);
   overflow-y: auto;
 }
 
@@ -46,5 +49,9 @@
 .drug-product button span {
   font-family: auto;
   color: #172042;
+}
+
+.drug-product-list {
+  height: auto !important;
 }
 /*# sourceMappingURL=ddi.css.map */

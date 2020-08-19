@@ -24,8 +24,20 @@ var api_route = $("main")[0].attributes["api_route"].value;
 var interactions_table = $('.interactions-table').DataTable({
     order: [[0, "desc"]],
     "columnDefs": [
-        { className: "table_col_name", "targets": [0] } // bolds the first column text
+        { className: "table_col_name", "targets": [0] }, // bolds the first column text
+        {"width": "25%", "targets": [0,1,2]}
     ],
+    "language": {
+        info: "_TOTAL_ results found"
+    },
+    dom: '<"row datatable-if" <"col-sm-12 col-md-6"i> <"col-sm-12 col-md-6"f> > rt',
+    scrollResize: true,
+    scrollX: true,
+    scrollY: 100,
+    scrollCollapse: true,
+    paging: true,
+    lengthChange: false,
+    pageLength: 1000,
 });
 
 /**
@@ -141,6 +153,7 @@ loadResults = function (data) {
 
     $(".drugs-row").hide();
     $(".results-row").show();
+    interactions_table.columns.adjust().draw();
 
     $(".section-search-drugs").show();
     $(".section-search-form").hide();

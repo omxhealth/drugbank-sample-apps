@@ -38,8 +38,8 @@ restyleDatatableFilter = function() {
     // To get the restyled search input to work, need to set any input
     // detected to call the filter function from datatables
     $(document).on('keyup', "input[type='search']", function(){
-        var oTable = $('.dataTable').dataTable();
-        oTable.fnFilter($(this).val());
+        var oTable = $('.dataTables_scrollBody .dataTable').dataTable();
+        oTable.fnFilter($(this).val());  
     });
 
 }
