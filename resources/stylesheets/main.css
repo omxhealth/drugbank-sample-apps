@@ -317,20 +317,24 @@ main .container-fluid:not(.search-row), .main-row {
 .search-button, .confirm-button {
   border: none;
   color: white;
-  padding: 10px 45px;
-  padding-right: 25px;
+  padding: 10px 30px;
+  padding-right: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
   cursor: pointer;
-  font: normal 28px/34px Gemeli;
+  font: normal 20px Gemeli;
   text-transform: uppercase;
   letter-spacing: 1.54px;
   background: #FF00B8;
   border-radius: 26px;
-  scale: 0.8;
+}
+
+.search-button .search-button-text, .confirm-button .search-button-text {
+  display: inline-block;
+  line-height: 1rem;
 }
 
 .search-button:hover, .confirm-button:hover {
@@ -355,24 +359,17 @@ main .container-fluid:not(.search-row), .main-row {
 
 .search-button .search-icon-submit, .confirm-button .search-icon-submit {
   fill: white;
-  width: 34px;
-  height: 30px;
-  vertical-align: bottom;
-  padding-left: 8px;
+  height: 20px;
+  vertical-align: sub;
+  margin-left: 8px;
   cursor: pointer;
-}
-
-.search-button .search-icon-submit use, .confirm-button .search-icon-submit use {
-  height: 2rem;
-  width: 2rem;
-  vertical-align: middle;
 }
 
 .search-button-reset, .confirm-button-reset {
   color: #FF00B8;
   background-color: white;
   border: 3px solid #FF00B8;
-  padding: 10px 35px;
+  padding: 10px 30px;
 }
 
 .search-button-reset svg, .confirm-button-reset svg {

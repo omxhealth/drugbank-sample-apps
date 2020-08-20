@@ -1,9 +1,9 @@
 = haml :base
 
 %main{:region => region, :api_key => api_key, :api_route => api_route, :role => "main"}
-  .container-fluid
-    .row.main-row
-      .col-xl-7.col-search
+  .container-fluid.h-100.d-flex.flex-column
+    .row.main-row.flex-fill
+      .col-xl-7.col-search.mh-100
         #loader
           .ld.ld-flip-v.pill
             %svg
@@ -21,10 +21,11 @@
               .search-term
                 %p.strength-term
         .row.select-row
-          .col-5
+          .col-xl-4.col-sm-12
             %p.search-help
               Specify any of the following attributes to search available drug products.
-          .col-7
+          .col-xl-1.col-sm-12{:style => "height: 0;"}
+          .col-xl-7.col-sm-12
             .select-container
               .form-group
                 %label.select-header{:for => "route-select"} Route
@@ -35,9 +36,9 @@
               .form-group
                 %label.select-header{:for => "strength-select"} Strength
                 %select#strength-select.strength_autocomplete.form-control
-        .row.results-row
-          .col-sm-12
-            %table.table.products-table
+        .results-row
+          .table-wrapper
+            %table.table.products-table{:cellspacing => "0", :width => "100%"}
               %thead
                 %tr{:role => "row"}
                   %th Name
@@ -46,14 +47,13 @@
                   %th Route
                   %th Labeller
               %tbody
-        .row.search-row.container-fluid.no-gutters
+        .row.search-row.position-sticky.container-fluid.no-gutters
           .col.text-center
             %button.search-button.search-button-disabled
-              %span
-                %span.search-button-text Search
-                %svg.search-icon-submit
-                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
-      .col-xl-5.col-demo
+              %span.search-button-text Search
+              %svg.search-icon-submit{:viewbox => "0 0 20 20"}
+                %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+      .col-xl-5.col-demo.mh-100.overflow-auto
         %h2.demo-title Product Concept Search
         %p.demo-desc
           Our sample application will show you how an

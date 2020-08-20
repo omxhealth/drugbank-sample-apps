@@ -1,9 +1,9 @@
 = haml :base
 
 %main{:region => region, :api_key => api_key, :api_route => api_route, :role => "main"}
-  .container-fluid
-    .row.main-row
-      .col-xl-7.col-search
+  .container-fluid.h-100.d-flex.flex-column
+    .row.main-row.flex-fill
+      .col-xl-7.col-search.mh-100
         #loader
           .ld.ld-flip-v.pill
             %svg
@@ -16,7 +16,7 @@
           .section-search-drugs
             .search-title Showing interactions for
             .drug-group
-        .row.drugs-row
+        .drugs-row
           .ddi-help
             %p Add up to 40 drugs. Search by drug ingredient, product, or brand name.
           #drug-product-list
@@ -28,9 +28,9 @@
               %label Prilocaine
               %button.close{"aria-label" => "Close", "data-hide" => "alert", :type => "button"}
                 %span{"aria-hidden" => "true"} ×
-        .row.results-row
-          .col-sm-12
-            %table.table.interactions-table
+        .results-row
+          .table-wrapper
+            %table.table.interactions-table{:cellspacing => "0", :width => "100%"}
               %thead
                 %tr{:role => "row"}
                   %th Product
@@ -38,14 +38,13 @@
                   %th Severity
                   %th Description
               %tbody
-        .row.search-row.container-fluid.no-gutters
+        .row.search-row.position-sticky.container-fluid.no-gutters
           .col.text-center
             %button.search-button.search-button-disabled
-              %span
-                %span.search-button-text Search
-                %svg.search-icon-submit
-                  %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
-      .col-xl-5.col-demo
+              %span.search-button-text Search
+              %svg.search-icon-submit{:viewbox => "0 0 20 20"}
+                %use{"xlink:href" => "images/svg-defs.svg#search-icon"}
+      .col-xl-5.col-demo.mh-100.overflow-auto
         %h2.demo-title Drug-Drug Interactions Search
         %p.demo-desc
           Our sample application will show you

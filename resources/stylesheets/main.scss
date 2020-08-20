@@ -298,19 +298,23 @@ main .container-fluid:not(.search-row), .main-row {
 .search-button, .confirm-button {
   border:none;
   color: white;
-  padding: 10px 45px;
-  padding-right:25px;
+  padding: 10px 30px;
+  padding-right: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   transition: all .25s ease;
   cursor: pointer;
-  font: normal 28px/34px Gemeli;
+  font: normal 20px Gemeli;
   text-transform: uppercase; 
   letter-spacing: 1.54px;
   background: $db-pink;
   border-radius: 26px;
-  scale: 0.8;
+
+  .search-button-text {
+    display: inline-block;
+    line-height: 1rem;
+  }
 
   &:hover {
     background-color: $db-pink-hover;
@@ -337,17 +341,10 @@ main .container-fluid:not(.search-row), .main-row {
   // Styling for the search icon in the search button
   .search-icon-submit {
     fill: white;
-    width: 34px;
-    height: 30px;
-    vertical-align: bottom;
-    padding-left: 8px;
+    height: 20px;
+    vertical-align: sub;
+    margin-left: 8px;
     cursor: pointer;
-
-    use {
-      height: 2rem;
-      width: 2rem;
-      vertical-align: middle;
-    }
 
   }
 
@@ -356,7 +353,7 @@ main .container-fluid:not(.search-row), .main-row {
     color: $db-pink;
     background-color: white;
     border: 3px solid $db-pink;
-    padding: 10px 35px;
+    padding: 10px 30px;
 
     svg {
       display: none;
