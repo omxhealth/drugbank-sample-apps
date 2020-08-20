@@ -92,40 +92,59 @@ To host with a different server (like Apache), see Slim's [web server](http://ww
 
 ## Python
 
-### Setting Up the Virtual Environment
+The Python app is run in a virtual environment, which is how the Flask documentation recommends installing and running the app. Below is a quick rundown on getting the app up and running with a virtual environment. More information can be found below:
+ - [Flask Documentation](https://flask.palletsprojects.com/en/1.1.x/installation/)
+ - [PyPA Documentation](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment)
 
-Navigate to `drugbank-sample-apps/python`. Run the command 
+ Of course, the app can be run without a virtual environment. To do so, just skip to [Installing the Requirements](#installing-the-requirements).
+
+### Creating the Virtual Environment
+
+Navigate to `drugbank-sample-apps/python`. Run the following command to create the virtual environment from where the app will run.
+
+On macOS and Linux:
 ```bash
-pip install virtualenv
+python3 -m venv env
 ```
 
-to install the virtual environment for running the app. Activate the Python environment by running the following command:
+On Windows:
+```bash
+py -m venv env
+```
 
-Mac OS / Linux
+If you are using Python 2, replace `venv` with `virtualenv` in the commands.
+
+A virtual environment called `env` is now located at `drugbank-sample-apps/python/env`.
+
+### Activating the Virtual Environment
+
+On macOS and Linux:
 ```bash
 source env/bin/activate
 ```
 
-Windows
+On Windows:
 ```bash
-env\Scripts\activate
+.\env\Scripts\activate
 ```
 
-You should see the name of your virtual environment in brackets on your terminal line. Any Python commands you use will now work with the virtual environment.
+You should see the name of the virtual environment in brackets on your terminal line. Any Python commands you use will now work with the virtual environment.
 
-Now, install all the requirements needed for the app in the virtual environment. To do this, run the command 
-```bash
-pip install -r requirements.txt
-```
-
-To deactivate the virtual environment and use your original Python environment, simply type ‘deactivate’.
+To leave the virtual environment, simply run:
 ```bash
 deactivate
 ```
 
+### Installing the Requirements
+
+Now, install all the requirements needed for the app in the virtual environment. To do this, run:
+```bash
+pip install -r requirements.txt
+```
+
 ### Running the App
 
-With the virtual environment set and the requirements installed, execute the following command:
+With the virtual environment set and the requirements installed, run:
 ```bash
 python app.py
 ```
