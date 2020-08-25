@@ -1,0 +1,31 @@
+.search-help {
+  text-align: left;
+  font: 200 22px/32px Gemeli;
+  letter-spacing: 0px;
+  color: #263063;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.select-row {
+  padding: 4rem 10%;
+  height: calc(100% -  8rem -  218px);
+  overflow: auto;
+  margin-right: 0;
+}
+
+.select-header {
+  text-align: left;
+  font: 200 16px/14px Gemeli;
+  letter-spacing: 1.47px;
+  color: #172042;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  width: 100%;
+}
+/*# sourceMappingURL=product_concepts.css.map */

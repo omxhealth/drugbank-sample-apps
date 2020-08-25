@@ -33,6 +33,11 @@ The sample application is a [web app](https://en.wikipedia.org/wiki/Web_applicat
 
 All requests from the web app to the API are handled by the server. The server receives the request from the web app, and sends it along to the DrugBank API. The response from the API is sent back to the server, and the server sends it back to the web app.
 
+## Token Authentication 
+Included is a variant of the app that uses JSON Web Tokens to access the the API directly from web browsers. Tokens allow short term access to the DrugBank API without exposing your secret API key, and are guaranteed to expire within 24 hours. For more information, check [here](https://docs.drugbankplus.com/v1/#token-authentication).
+
+<b>The use of token authentication is required for accessing DrugBank APIs directly from web browsers.</b> 
+
 # How to Use
 
 ### General Information
@@ -59,7 +64,7 @@ mvn exec:java
 Visit [http://localhost:`port`/](http://127.0.0.1:8080/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
 
 ## Node.js
-Navigate to `drugbank-sample-apps/nodejs`. Run the command
+Navigate to `drugbank-sample-apps/nodejs` (or `drugbank-sample-apps/nodejs - JWT` for the token-based app). Run the command
 ```bash
 npm install
 ```
