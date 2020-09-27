@@ -1,9 +1,9 @@
 /**
- * main.scss
- *
- * Font definitions and styling for elements that nearly 
- * every page has (navbar, rows and columns, search bar, etc).
- */
+* main.scss
+*
+* Font definitions and styling for elements that nearly 
+* every page has (navbar, rows and columns, search bar, etc).
+*/
 @font-face {
   font-family: Gemeli;
   src: url("../fonts/GemeliWeb-Regular.eot") format("embedded-opentype"), url("../fonts/GemeliWeb-Regular.woff") format("woff");
@@ -25,9 +25,9 @@
   font-style: normal;
 }
 
-body {
+body, html {
   overflow-x: hidden;
-  height: 100vh;
+  height: 100%;
 }
 
 header {
@@ -295,6 +295,10 @@ main .container-fluid:not(.search-row), .main-row {
   z-index: 10000000;
 }
 
+.results-row {
+  height: calc(100vh - 62px - 8rem -  218px);
+}
+
 .search-row {
   background: white;
   -webkit-box-shadow: 0px 0px 6px #00000029;
@@ -302,6 +306,7 @@ main .container-fluid:not(.search-row), .main-row {
   height: 8rem;
   bottom: 0;
   position: absolute;
+  z-index: 2;
 }
 
 .search-row .text-center {
@@ -312,20 +317,24 @@ main .container-fluid:not(.search-row), .main-row {
 .search-button, .confirm-button {
   border: none;
   color: white;
-  padding: 10px 45px;
-  padding-right: 25px;
+  padding: 10px 30px;
+  padding-right: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
   cursor: pointer;
-  font: normal 28px/34px Gemeli;
+  font: normal 20px Gemeli;
   text-transform: uppercase;
   letter-spacing: 1.54px;
   background: #FF00B8;
   border-radius: 26px;
-  scale: 0.8;
+}
+
+.search-button .search-button-text, .confirm-button .search-button-text {
+  display: inline-block;
+  line-height: 1rem;
 }
 
 .search-button:hover, .confirm-button:hover {
@@ -350,24 +359,17 @@ main .container-fluid:not(.search-row), .main-row {
 
 .search-button .search-icon-submit, .confirm-button .search-icon-submit {
   fill: white;
-  width: 34px;
-  height: 30px;
-  vertical-align: bottom;
-  padding-left: 8px;
+  height: 20px;
+  vertical-align: sub;
+  margin-left: 8px;
   cursor: pointer;
-}
-
-.search-button .search-icon-submit use, .confirm-button .search-icon-submit use {
-  height: 2rem;
-  width: 2rem;
-  vertical-align: middle;
 }
 
 .search-button-reset, .confirm-button-reset {
   color: #FF00B8;
   background-color: white;
   border: 3px solid #FF00B8;
-  padding: 10px 35px;
+  padding: 10px 30px;
 }
 
 .search-button-reset svg, .confirm-button-reset svg {
@@ -382,7 +384,7 @@ main .container-fluid:not(.search-row), .main-row {
   background: #F3F3FB;
   -webkit-box-shadow: 0px 5px 10px #00000029;
           box-shadow: 0px 5px 10px #00000029;
-  padding-top: 62px;
+  padding: 4rem !important;
   overflow: auto;
 }
 
@@ -391,8 +393,6 @@ main .container-fluid:not(.search-row), .main-row {
   font: normal 31px/50px Gemeli;
   letter-spacing: 0px;
   color: #263063;
-  padding-left: 50px;
-  padding-right: 65px;
   margin-bottom: 18px;
 }
 
@@ -401,13 +401,6 @@ main .container-fluid:not(.search-row), .main-row {
   font: 200 18px/24px Gemeli;
   letter-spacing: 0px;
   color: #263063;
-  padding-left: 50px;
-  padding-right: 65px;
-}
-
-.col-demo .tab-content {
-  padding-left: 50px;
-  padding-right: 65px;
 }
 
 .col-demo .tab-content .example-header {
@@ -417,7 +410,7 @@ main .container-fluid:not(.search-row), .main-row {
 }
 
 .col-demo .tab-content .example-header.example-header-response {
-  padding-top: 40px;
+  margin-top: 3rem;
 }
 
 .col-demo .tab-content pre.api-box {
@@ -425,12 +418,12 @@ main .container-fluid:not(.search-row), .main-row {
 }
 
 /**
- * Styling for the HTTP request, shell command, 
- * and API response text displays.
- *
- * PrismJS 1.16.0
- * This theme has been customized for drugbankplus.com
- */
+* Styling for the HTTP request, shell command, 
+* and API response text displays.
+*
+* PrismJS 1.16.0
+* This theme has been customized for drugbankplus.com
+*/
 code[class*="language-"], pre[class*="language-"] {
   color: #fff;
   background: none;
@@ -458,9 +451,13 @@ pre[class*="language-"] {
   padding: 1em;
   margin: 5px 0;
   overflow: auto;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   border-radius: 7px;
   opacity: 1;
+}
+
+pre[class*="language-"].api-box {
+  margin-bottom: 3rem;
 }
 
 :not(pre) > code[class*="language-"],

@@ -82,7 +82,7 @@ $app = AppFactory::create();
 
 // Create Twig
 // Uses the jinja templates as twig is similar enough for them to work
-$twig = Twig::create("../resources/templates", ["cache" => false]);
+$twig = Twig::create("templates", ["cache" => false]);
 
 // Add the filter for the indications page to convert the section names
 // to lowercase and underscored values for when added to the query.

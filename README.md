@@ -48,6 +48,40 @@ Each implementation determines the port to run on as well as the DrugBank API ke
 
 ##### Note: the Java app may not behave like this, as when it is compiled it creates a copy of `config.json` for itself at `drugbank-sample-apps\java\db-app\target\classes`.
 
+### Docker
+Some apps can be containerized through the use of [Docker](https://www.docker.com/). 
+
+To do this, navigate to the root of the repo (`drugbank-sample-apps`) and run the command
+```bash
+docker build . -t db-app-<app> -f <app folder>/Dockerfile  
+```
+where `app folder` is the location of the  app you want to containerize.
+This command must be run from the root of the repo to ensure the resources are properly copied over.
+
+For example, to build the node.js app, use
+```bash
+docker build . -t db-app-nodejs -f nodejs/Dockerfile  
+```
+
+To run the app, use
+```bash
+docker run --rm --name db-app-<app>-container -p 8080:8080 db-app-<app>
+```
+
+Each Docker file exposes the port 8080 as by default each app will be hosted on port 8080. When creating a containerized app, note that the `config.json` file is not brought into the container, so you will need to re-enter your region and API key on a per-image basis.
+
+To stop the app and remove the container, use
+```bash
+docker stop db-app-<app>-container
+```
+
+To delete images completely, run
+```bash
+docker rmi db-app-<app>
+```
+
+Note that the image tags and containers names can be whatever you want.
+
 ## Java
 First, ensure that [Apache Maven](https://maven.apache.org/install.html) is installed.
 

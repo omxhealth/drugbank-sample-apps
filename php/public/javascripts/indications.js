@@ -16,10 +16,22 @@ var region;
 var api_route = $("main")[0].attributes["api_route"].value;
 var options = {};
 var indications_table = $('.indications-table').DataTable({
-    order: [[0, "asc"]],
+    order: [[0, "desc"]],
     "columnDefs": [
-        { className: "table_col_name", "targets": [0] } // bolds the first column text
-    ]
+        { className: "table_col_name", "targets": [0] }, // bolds the first column text
+        {"width": "25%", "targets": [0,1,2]}
+    ],
+    "language": {
+        info: "_TOTAL_ results found"
+    },
+    dom: '<"row datatable-if" <"col-sm-12 col-md-6"i> <"col-sm-12 col-md-6"f> > rt',
+    scrollResize: true,
+    scrollX: true,
+    scrollY: 100,
+    scrollCollapse: true,
+    paging: true,
+    lengthChange: false,
+    pageLength: 1000,
 });
 
 /**
@@ -42,6 +54,7 @@ loadResults = function (data) {
 
     $(".options-row").hide();
     $(".results-row").show();
+    indications_table.columns.adjust().draw();
 
     $(".search-button").addClass("search-button-reset");
     $(".search-button-text").html("Reset Search");

@@ -1,4 +1,5 @@
 nodejs/node_modules
+php/vendor
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

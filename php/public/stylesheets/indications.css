@@ -1,7 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 .options-row {
-  margin: 50px 10% calc(8rem + 50px) 10%;
+  padding: 3rem 10%;
   width: auto;
+  height: calc(100% - 218px - 8rem);
+  overflow: auto;
 }
 
 .indications-options-header {
@@ -23,6 +25,10 @@
 
 .col-specificity, .col-otc-use, .col-off-label {
   margin-bottom: 2rem;
+}
+
+.kind-row {
+  padding-bottom: 2rem;
 }
 
 .kind-label {

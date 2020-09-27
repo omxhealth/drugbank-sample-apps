@@ -31,11 +31,22 @@ var region;
 var drugSelect; // used for clearing the drug search bar
 var db_id; // the id to use in the final search
 var api_route = $("main")[0].attributes["api_route"].value;
-var products_table = $('.products-table').DataTable({
+var products_table = $('.products-table').DataTable({ 
     order: [[0, "desc"]],
     "columnDefs": [
         { className: "table_col_name", "targets": [0] } // bolds the first column text
     ],
+    "language": {
+        info: "_TOTAL_ results found"
+    },
+    dom: '<"row datatable-if" <"col-sm-12 col-md-6"i> <"col-sm-12 col-md-6"f> > rt',
+    scrollResize: true,
+    scrollX: true,
+    scrollY: 100,
+    scrollCollapse: true,
+    paging: true,
+    lengthChange: false,
+    pageLength: 1000,
 });
 
 /**
@@ -149,6 +160,7 @@ loadResults = function (data) {
 
     $(".select-row").hide();
     $(".results-row").show();
+    products_table.columns.adjust().draw();
 
     // Change the search button function to reset the search
     $(".search-button").addClass("search-button-reset");
