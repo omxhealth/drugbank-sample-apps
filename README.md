@@ -192,9 +192,29 @@ Visit the address given in the console to view the app.
 
 ## Ruby
 
-First, ensure that  [Bundler](https://bundler.io/) is installed.
+### Setting the Ruby Version
+Ensure that you have Ruby 2.7.1 [installed](https://www.ruby-lang.org/en/downloads/).
 
-Navigate to `drugbank-sample-apps/ruby`. Install the necessary gems by using the command
+Navigate to `drugbank-sample-apps/ruby`.
+
+If you are using rbenv, Ruby 2.7.1 will be used automatically due to the `.ruby-version` file.
+
+If you are using RVM, use the command
+```bash
+rvm use 2.7.1
+```
+
+If you are using chruby, use the command
+```bash
+chruby ruby-2.7.1
+```
+or if you have [auto-switching](https://github.com/postmodern/chruby/blob/master/README.md#auto-switching) enabled, the correct version will be used from the `.ruby-version` file.
+
+### Running the app
+
+First, ensure that [Bundler](https://bundler.io/) is installed.
+
+ Install the necessary gems by using the command
 ```bash
 bundle install
 ```
