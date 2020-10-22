@@ -1,0 +1,172 @@
+/**
+ * welcome.scss
+ *
+ * Styling for the welcome page
+ */
+
+@import "./variables";  
+
+// Add padding for the column on the left 
+.col-info {
+  padding: 4rem 6% 2rem 6%;
+  background: #172042;
+}
+
+// Welcome message at the top
+h1 {
+  text-align: left;
+  font: 200 40px Gemeli;
+  letter-spacing: 0px;
+  color: white;
+}
+
+// The paragraph below the welcome message
+.info-intro {
+  text-align: left;
+  font: 200 22px/32px Gemeli;
+  letter-spacing: 0px;
+  color: white;
+}
+
+.welcome-section-link {
+  text-decoration: none !important;
+}
+
+// The rows listing the features and their descriptions
+.feature-info-row {
+  margin-bottom: 1.5rem;
+  background-color: rgba(243, 243, 251, 0.3);
+  border-radius: 5px;
+  transition:background-color ease-in-out .15s, box-shadow ease-in-out .15s;
+
+  &:hover {
+    background-color: rgba(217,217,242, 0.3);
+    transition:background-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  }
+
+  // Feature name list column
+  .info-section-name {
+    padding: 1rem 2rem;
+    border-right: 1px solid white;
+    
+    h3 {
+      text-align: left;
+      font: normal 22px/32px Gemeli;
+      letter-spacing: 0px;
+      color: white;
+      opacity: 1;
+      margin-bottom: 0;
+    }
+
+  }
+
+  // Description for the features column
+  .info-section-desc {
+    padding: 1.5rem 2rem;
+
+    p {
+      text-align: left;
+      font: 200 16px/28px Gemeli;
+      letter-spacing: 0px;
+      color: white;
+      opacity: 1;
+      margin-bottom: 0;
+    }   
+
+  }
+
+}   
+
+// Styling for the right column (settings and links)
+.col-settings {
+  padding: 4rem 4rem; 
+  text-align: left;
+  font: 200 18px Gemeli;
+  letter-spacing: 0px;
+  color: $db-blue;
+  background: #F3F3FB 0% 0% no-repeat padding-box;
+  box-shadow: 0px 5px 10px #00000029;
+  padding-top: 62px;
+  overflow: auto;
+
+  .row > form {
+      width: 100%;
+  }
+
+}
+
+// Section titles in the right column 
+// ("Your Settings" and "Getting Started")
+.settings-section-title {
+  text-align: left;
+  font: Bold 22px/32px Gemeli;
+  color: $db-blue;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+#select2-region_select-container, .select2-dropdown {
+  font: 200 16px/24px Gemeli !important;
+}
+
+.link-arrow {
+  width: 0.75rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+  vertical-align: baseline;
+}
+
+// The API key submit button
+#auth_key_submit {
+  padding: 0 20px;
+  background: $db-blue;
+  border-radius: 9px;
+  opacity: 1;
+  margin-left: 0.5rem;
+  color: white;
+  font: normal 16px Gemeli;
+  border: none;
+
+  &:hover {
+      background: #1c244a;
+  }
+
+}
+
+// Alert that pops up after sending key update request
+#auth_key_alert {
+  border-radius: 7px;
+
+  // Increase the font size of the API key update message
+  p {
+      margin: 0;
+      font-size: 16px;
+  }
+
+}
+
+// List of the external links
+ul {
+  list-style-type: none;
+
+  a {
+    text-align: left;
+    font: Bold 18px/32px Gemeli;
+    letter-spacing: 0px;
+    color: $db-blue;
+  
+      &:hover {
+        color: #1c244a;
+      }
+  
+  }
+
+}
+
+.tooltip-container {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  vertical-align: sub;
+  margin-left: 0.25rem;
+}

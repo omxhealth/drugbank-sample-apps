@@ -11,10 +11,10 @@ const config_file = "config.json"; // the name of the config file
 // Initialize the Express app to read JSON and set the static files path
 const app = express();
 app.use(express.json());
-app.use(express.static("../resources"));
+app.use(express.static("./resources"));
 
 // Configure nunjucks and set the templates path
-var env = nunjucks.configure(path.join(__dirname, "../resources/templates"), {
+var env = nunjucks.configure(path.join(__dirname, "./resources/templates"), {
     autoescape: true,
     express: app
 });

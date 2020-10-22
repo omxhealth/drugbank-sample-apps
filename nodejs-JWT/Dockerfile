@@ -15,7 +15,7 @@ RUN npm install
 
 # Bundle app source
 COPY ./nodejs-JWT /usr/src/app/
-COPY ./resources /usr/src/resources/
+COPY ./nodejs-JWT/resources /usr/src/resources/
 
 EXPOSE 8080
 CMD ["node", "app.js"]

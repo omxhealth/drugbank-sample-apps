@@ -1,0 +1,30 @@
+@import "./variables"; 
+
+// Help info for performing the search in .col-search
+.search-help {
+  text-align: left;
+  font: 200 22px/32px Gemeli;
+  letter-spacing: 0px;
+  color: $db-blue;
+  justify-content: center;
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.select-row {
+  padding: 4rem 10%;
+  height: calc(100% -  #{$search-row-height} -  #{$section-search-height});
+  overflow: auto;
+  margin-right: 0;
+} 
+
+// Styling for the headers for the selects in the .select-container
+.select-header {
+  text-align: left;
+  font: 200 16px/14px Gemeli;
+  letter-spacing: 1.47px;
+  color: #172042;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  width: 100%;
+}

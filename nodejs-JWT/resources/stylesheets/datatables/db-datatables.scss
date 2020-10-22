@@ -1,0 +1,93 @@
+/**
+ * db-datatables.scss
+ *
+ * Modifications made to the datatables css for the sample app.
+ */
+
+@import "./../variables";
+
+// The row on the page containing the table 
+.results-row {
+  padding: 2rem 8% !important;
+}
+
+.table-wrapper {
+  height: 100%;
+}
+
+// Adds margin between search bar and table
+.datatable-if > .col-sm-12 {
+  margin-bottom: 1rem;
+}
+
+// When the page resizes and shrinks, gives overflow to just the table
+// itself (not the search bar, entries select, and page buttons, which
+// just stay centered).
+.dataTables_wrapper .row:nth-child(2) {
+  overflow: auto;
+} 
+
+// Width for the table search bar
+.dataTables_filter label {
+  min-width: 75%;
+}
+
+// Table search bar styling
+.dataTables_filter label .input-group input {
+  background-color: #F3F3FC;
+  padding-left: 1rem;
+  font: 200 1rem/18px Gemeli;
+}
+
+// Table search bar icon styling.
+// Uses some styling from .search-icon in welcome.scss,
+// it stopped working when it was moved here.
+.input-group-append .input-group-text svg{
+  fill: black;
+  height: 1.5rem;
+  opacity: 0.5;
+}
+
+// Table header styling
+.dataTables_scrollHead th {
+  border-top: none !important;
+  border-bottom: 0.5px solid #172042 !important;
+  text-transform: uppercase;
+  text-align: left;
+  font: 200 16px/14px Gemeli;
+  letter-spacing: 1.47px;
+  color: #172042;
+}
+
+// Removes the border for all table entries
+td {
+  border: none !important;
+}
+
+// Sets the font for all table elements
+tbody, .dataTables_length, .dataTables_info, .dataTables_paginate {
+  font-family: Gemeli;
+  font-weight: 200;
+  color: #172042;
+}
+
+// Sets font for all entries in the "Name" column to be bold
+// except for the table header itself
+td.table_col_name {
+  font-weight: bold;
+}
+
+.page-item.active .page-link {
+  background-color: $db-pink !important;
+  border-color: $db-pink !important;
+}
+
+.dataTables_filter input:focus {
+  box-shadow: 0 0 0 .2rem rgba(147,147,249,.6) !important;
+  border-color:#9393F9 !important;
+}
+
+.dataTables_info {
+  font: 200 18px/18px Gemeli;
+  color: #172042;
+}
