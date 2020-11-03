@@ -3,6 +3,8 @@ const fs = require("fs");
 const axios = require("axios").default; // promise based HTTP client
 const express = require("express"); // web framework 
 const nunjucks = require("nunjucks"); // a templating engine similar to jinja2
+const session = require('express-session'); // session managment middleware
+const crypto = require('crypto')
 
 const config_file = "config.json"; // the name of the config file
 
@@ -28,23 +30,26 @@ env.addFilter("indication_option", function(name) {
 // Open the config file
 let config = openConfig("../" + config_file);
 
-// Check and set valid region
-validateRegion(config);
-
 // Set variables from config
 let port = config["port"]; // the port the server will be hosted on
+let secretKey = config["secret_key"] // session secret key
 let DRUGBANK_API = "https://api.drugbankplus.com/v1/"; // the DrugBank API link
-let DRUGBANK_REGION = config["region"]; // the region to get results from
-let DRUGBANK_API_KEY = config["auth-key"]; // DrugBank API key    
 
-// DrugBank headers that need to be set. Needs to be sent with any request to the 
-// DrugBank API as it contains the API authorization key, which validates access.
-let DRUGBANK_HEADERS = 
-    {
-        "Authorization": DRUGBANK_API_KEY,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-    };    
+// app.set('trust proxy', 1) // trust proxy uncomment if running behind a proxy like nginx
+
+// Setup server side sessions.
+app.use(session({
+    secret: secretKey,
+    name: 'drugbank-jwt-sample',
+    resave: true,
+    cookie: {
+        httpOnly: true,
+        secure: false, // secure false when running locally or without https
+        // secure: true, // serure true when running with https
+        sameSite: true,
+        maxAge: 600000 // Time is in miliseconds
+    }
+}))
 
 // Start the server    
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`)); 
@@ -53,34 +58,34 @@ app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
 
 // GET render: welcome page
 app.get("/", function (req, res) {
-    res.render("welcome.jinja", {region : DRUGBANK_REGION});
+    res.render("welcome.jinja", {region : req.session.region});
 });
 
 /* Set product concepts routes */   
 
 // GET render: product concepts page    
 app.get("/product_concepts", function (req, res) {
-    res.render("product_concepts.jinja", {region : DRUGBANK_REGION});
+    res.render("product_concepts.jinja", {region : req.session.region});
 });  
 
 /* Set drug-drug interactions routes */
 
 // GET render: drug-drug interactions (ddi) page    
 app.get("/ddi", function (req, res) {
-    res.render("ddi.jinja", {region : DRUGBANK_REGION});
+    res.render("ddi.jinja", {region : req.session.region});
 });
 
 /* Set indications routes */
 
 // GET render: indications page    
 app.get("/indications", function (req, res) {
-    res.render("indications.jinja", {region : DRUGBANK_REGION});
+    res.render("indications.jinja", {region : req.session.region});
 });
 
 // GET API: new token
 app.get("/new_token", async function (req, res) {
     let body = {"ttl": "24"};
-    let db_res = await drugbank_post("tokens", body, null);
+    let db_res = await drugbank_post("tokens", req.session.api_key, body, null);
     res.status(db_res.status);
     res.json(db_res.data);
 });
@@ -89,28 +94,21 @@ app.get("/new_token", async function (req, res) {
 app.put("/auth_key", function (req, res) {
     
     let json_response;
-    let status;
+    let status = 200;
     let message = "";
     
-    let old_key = DRUGBANK_API_KEY;
+    let old_key = req.session.api_key;
     let new_key = req.body.q;
 
     if (new_key == old_key) {
-        status = 200;
+        
         message = "New key is the same as the old key";
     } else if (new_key == "") {
         status = 400;
         message = "No key was provided";
     } else {
-
-        status = update_API_key(new_key, old_key);
-
-        if (status == 200){
-            message = "Key successfully updated";
-        } else {
-            message = "Unable to update file '" + config_file + "'";
-        }
-           
+        req.session.api_key = new_key
+        message = "Key successfully updated";
     }
     
     json_response = {
@@ -127,21 +125,19 @@ app.put("/auth_key", function (req, res) {
 // PUT: update region
 app.put("/region", function (req, res) {
     
-    let new_region = req.body.region;
+    let new_region = req.body.region.toLowerCase();
     let json_response;
     let status = 200;
     let message = "";
 
-    if (new_region == DRUGBANK_REGION) {
+    if (new_region == req.session.region) {
         message = "New region is the same as the old region";
+    } else if (is_valid_region(new_region)) {
+        req.session.region = new_region;
+        message = "Region successfully updated";
     } else {
-        status = update_region(new_region);
-
-        if (status == 200){
-            message = "Region successfully updated";
-        } else {
-            message = "Unable to update file '" + config_file + "'";
-        }
+        status = 400;
+        message = new_region + " is not a valid region.";
     }
 
     json_response = {
@@ -173,8 +169,7 @@ function openConfig(path) {
 
         config = {
             "port": "8080",
-            "auth-key": "",
-            "region": ""
+            "secret_key": crypto.randomBytes(64).toString('hex')
         }
 
         fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
@@ -186,25 +181,20 @@ function openConfig(path) {
 }
 
 /**
- * Checks that the region found in the config file is valid.
+ * Checks that the region is valid.
  * Region can either be "us", "ca", "eu", or "" (for searching all).
- * If the region isn't any of the above, it will default to "" (all).
  */
-function validateRegion(config) {
-
-    var region = config["region"].toLowerCase();
+function is_valid_region(region) {
 
     switch (region) {
         case "us":
         case "ca":
         case "eu":
-            config["region"] = region;
-            break;
+        case "":
+            return true;
         default:
-            config["region"] = "";
-            break;
+            return false;
     }
-
 }
 
 /**
@@ -213,10 +203,10 @@ function validateRegion(config) {
  * @param {*} route - route into the DrugBank API
  * @param {*} params - query parameters for the search
  */
-async function drugbank_post(route, body, params) {
+async function drugbank_post(route, api_key, body, params) {
     
     return axios.post(DRUGBANK_API + route, body, {
-        headers: DRUGBANK_HEADERS,
+        headers: drugbank_headers(api_key),
         params: params
     })
     .then(response => {
@@ -229,58 +219,12 @@ async function drugbank_post(route, body, params) {
 
 }
 
-/**
- * Updates the auth key by writing the new value to the config file.
- * If anything goes wrong, the old key is restored.
- * Returns the status code to be sent to the client (200 OK or 400 Bad Request)
- * @param {*} new_key 
- * @param {*} old_key 
- */
-function update_API_key(new_key, old_key) {
-    
-    DRUGBANK_API_KEY = new_key;
-    config["auth-key"] = new_key;
-
-    // Try to write back to config file
-    try {
-        fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
-        DRUGBANK_HEADERS["Authorization"] = new_key;
-        return 200;
-
-    } catch (error) {
-        // In case anything goes wrong, revert changes
-        console.log(error);
-        DRUGBANK_API_KEY = old_key;
-        config["auth-key"] = old_key;
-        DRUGBANK_HEADERS["Authorization"] = old_key;
-        return 400;
-    }
-    
-}
-
-/**
- * Updates the selected region by writing the new value to the config file.
- * If anything goes wrong, the old region is restored.
- * Returns the status code to be sent to the client (200 OK or 400 Bad Request)
- * @param {*} new_region 
- */
-function update_region(new_region) {
-
-    let old_region = DRUGBANK_REGION;
-
-    DRUGBANK_REGION = new_region;
-    config["region"] = new_region;
-
-    // Try to write back to config file
-    try {
-        fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
-        return 200;
-
-    } catch (error) {
-        // In case anything goes wrong, revert changes
-        console.log(error);
-        DRUGBANK_REGION = old_region;
-        config["region"] = old_region;
-        return 400;
-    }
+// DrugBank headers that need to be set. Needs to be sent with any request to the 
+// DrugBank API as it contains the API authorization key, which validates access.
+function drugbank_headers(api_key) {
+    return {
+        "Authorization": api_key,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    };
 }
