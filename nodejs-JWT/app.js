@@ -33,9 +33,13 @@ let config = openConfig("../" + config_file);
 // Set variables from config
 let port = config["port"]; // the port the server will be hosted on
 let secretKey = config["secret_key"] // session secret key
+let secure = config["secure"] // should be true when using https or false when running locally or without https
+let behind_proxy = config["behind_proxy"] // trust proxy uncomment if running behind a proxy like nginx
 let DRUGBANK_API = "https://api.drugbankplus.com/v1/"; // the DrugBank API link
 
-// app.set('trust proxy', 1) // trust proxy uncomment if running behind a proxy like nginx
+if (behind_proxy) {
+    app.set('trust proxy', 1) 
+}
 
 // Setup server side sessions.
 app.use(session({
@@ -44,8 +48,7 @@ app.use(session({
     resave: true,
     cookie: {
         httpOnly: true,
-        secure: false, // secure false when running locally or without https
-        // secure: true, // serure true when running with https
+        secure: secure,
         sameSite: true,
         maxAge: 600000 // Time is in miliseconds
     }
@@ -169,7 +172,9 @@ function openConfig(path) {
 
         config = {
             "port": "8080",
-            "secret_key": crypto.randomBytes(64).toString('hex')
+            "secret_key": crypto.randomBytes(64).toString('hex'),
+            "secure": false,
+            "behind_proxy": false
         }
 
         fs.writeFileSync("../" + config_file, JSON.stringify(config, undefined, 2));
