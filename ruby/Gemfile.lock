@@ -14,26 +14,27 @@ GEM
     multi_xml (0.6.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    rack (2.2.2)
-    rack-protection (2.0.8.1)
+    rack (2.2.3)
+    rack-protection (2.2.0)
       rack
-    ruby2_keywords (0.0.2)
-    sinatra (2.0.8.1)
+    ruby2_keywords (0.0.5)
+    sinatra (2.2.0)
       mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.8.1)
+      rack (~> 2.2)
+      rack-protection (= 2.2.0)
       tilt (~> 2.0)
     temple (0.8.2)
     tilt (2.0.10)
 
 PLATFORMS
   x64-mingw32
+  x86_64-linux
 
 DEPENDENCIES
   haml (~> 5.1, >= 5.1.2)
   httparty (~> 0.18.0)
   json (~> 2.3)
-  sinatra (~> 2.0, >= 2.0.8.1)
+  sinatra (~> 2.2)
 
 RUBY VERSION
    ruby 2.7.1p83

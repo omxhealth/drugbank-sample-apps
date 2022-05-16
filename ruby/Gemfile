@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 ruby '2.7.1'
-gem 'sinatra', '~> 2.0', '>= 2.0.8.1'
+gem 'sinatra', '~> 2.2'
 gem 'json', '~> 2.3'
 gem 'httparty', '~> 0.18.0'
 gem 'haml', '~> 5.1', '>= 5.1.2'
