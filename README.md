@@ -49,40 +49,28 @@ Each implementation determines the port to run on as well as the DrugBank API ke
 ##### Note: the Java app may not behave like this, as when it is compiled it creates a copy of `config.json` for itself at `drugbank-sample-apps\java\db-app\target\classes`.
 
 ### Docker
-Some apps can be containerized through the use of [Docker](https://www.docker.com/). 
 
-To do this, navigate to the root of the repo (`drugbank-sample-apps`) and run the command
-```bash
-docker build . -t db-app-<app> -f <app folder>/Dockerfile  
-```
-where `app folder` is the location of the  app you want to containerize.
-This command must be run from the root of the repo to ensure the resources are properly copied over.
+All apps can be run via [Docker](https://www.docker.com/). The easiest way to do this is through
+Docker Compose commands:
 
-For example, to build the node.js app, use
-```bash
-docker build . -t db-app-nodejs -f nodejs/Dockerfile  
-```
+| app        | command                        |
+|------------|--------------------------------|
+| java       | `docker-compose up java`       |
+| nodejs     | `docker-compose up nodejs`     |
+| nodejs-JWT | `docker-compose up nodejs-jwt` |
+| php        | `docker-compose up php`        |
+| python     | `docker-compose up python`     |
+| ruby       | `docker-compose up ruby`       |
 
-To run the app, use
-```bash
-docker run --rm --name db-app-<app>-container -p 8080:8080 db-app-<app>
-```
+Docker containers and images created through these commands can be cleaned up by running the
+following from the project root:
 
-Each Docker file exposes the port 8080 as by default each app will be hosted on port 8080. When creating a containerized app, note that the `config.json` file is not brought into the container, so you will need to re-enter your region and API key on a per-image basis.
-
-To stop the app and remove the container, use
-```bash
-docker stop db-app-<app>-container
+```sh
+./clean-docker.sh
 ```
 
-To delete images completely, run
-```bash
-docker rmi db-app-<app>
-```
-
-Note that the image tags and containers names can be whatever you want.
-
-## Java
+## Manual setup
+### Java
 First, ensure that [Apache Maven](https://maven.apache.org/install.html) is installed.
 
 Navigate to `drugbank-sample-apps/java/db-app`. Compile the app by running
@@ -97,7 +85,7 @@ mvn exec:java
 
 Visit [http://localhost:`port`/](http://127.0.0.1:8080/) to view the app, where `port` is the port number declared in the `config.json`. The current port will also be be given in the console.
 
-## Node.js
+### Node.js
 Navigate to `drugbank-sample-apps/nodejs` (or `drugbank-sample-apps/nodejs - JWT` for the token-based app). Run the command
 ```bash
 npm install
@@ -109,7 +97,7 @@ node app.js
 
 Visit the address given in the console to view the app. 
 
-## PHP
+### PHP
 ##### Note: due to the way Slim handles static resources, a location outside of the project could not be specified like for the other apps. Copies of the JavaScript and CSS files had to be made and placed at `drugbank-sample-apps/php/public`. Keep this in mind if you want to edit or add resources.
 
 First, ensure that [Composer](https://getcomposer.org/) is installed.
@@ -129,7 +117,7 @@ Visit `localhost:port` to view the app.
 
 To host with a different server (like Apache), see Slim's [web server](http://www.slimframework.com/docs/v4/start/web-servers.html) documentation.
 
-## Python
+### Python
 
 The Python app is run in a virtual environment, which is how the Flask documentation recommends installing and running the app. Below is a quick rundown on getting the app up and running with a virtual environment. More information can be found below:
  - [Flask Documentation](https://flask.palletsprojects.com/en/1.1.x/installation/)
@@ -137,7 +125,7 @@ The Python app is run in a virtual environment, which is how the Flask documenta
 
  Of course, the app can be run without a virtual environment. To do so, just skip to [Installing the Requirements](#installing-the-requirements).
 
-### Creating the Virtual Environment
+#### Creating the Virtual Environment
 
 Navigate to `drugbank-sample-apps/python`. Run the following command to create the virtual environment from where the app will run.
 
@@ -155,7 +143,7 @@ If you are using Python 2, replace `venv` with `virtualenv` in the commands.
 
 A virtual environment called `env` is now located at `drugbank-sample-apps/python/env`.
 
-### Activating the Virtual Environment
+#### Activating the Virtual Environment
 
 On macOS and Linux:
 ```bash
@@ -174,14 +162,14 @@ To leave the virtual environment, simply run:
 deactivate
 ```
 
-### Installing the Requirements
+#### Installing the Requirements
 
 Now, install all the requirements needed for the app in the virtual environment. To do this, run:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Running the App
+#### Running the App
 
 With the virtual environment set and the requirements installed, run:
 ```bash
@@ -190,9 +178,9 @@ python app.py
 
 Visit the address given in the console to view the app.
 
-## Ruby
+### Ruby
 
-### Setting the Ruby Version
+#### Setting the Ruby Version
 Ensure that you have Ruby 2.7.1 [installed](https://www.ruby-lang.org/en/downloads/).
 
 Navigate to `drugbank-sample-apps/ruby`.
@@ -210,7 +198,7 @@ chruby ruby-2.7.1
 ```
 or if you have [auto-switching](https://github.com/postmodern/chruby/blob/master/README.md#auto-switching) enabled, the correct version will be used from the `.ruby-version` file.
 
-### Running the app
+#### Running the app
 
 First, ensure that [Bundler](https://bundler.io/) is installed.
 

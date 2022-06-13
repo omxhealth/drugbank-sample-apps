@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  java:
+    image: drugbank-sample-apps/java
+    build:
+      context: .
+      dockerfile: ./java/db-app/Dockerfile
+    ports:
+      - "8080:8080"
+  nodejs-jwt:
+    image: drugbank-sample-apps/nodejs-jwt
+    build:
+      context: .
+      dockerfile: ./nodejs-JWT/Dockerfile
+    ports:
+      - "8080:8080"
+  nodejs:
+    image: drugbank-sample-apps/nodejs
+    build:
+      context: .
+      dockerfile: ./nodejs/Dockerfile
+    ports:
+      - "8080:8080"
+  php:
+    image: drugbank-sample-apps/php
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    ports:
+      - "8080:8080"
+  python:
+    image: drugbank-sample-apps/python
+    build:
+      context: .
+      dockerfile: ./python/Dockerfile
+    ports:
+      - "8080:8080"
+  ruby:
+    image: drugbank-sample-apps/ruby
+    build:
+      context: .
+      dockerfile: ./ruby/Dockerfile
+    ports:
+      - "8080:8080"
