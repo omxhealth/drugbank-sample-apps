@@ -7,6 +7,9 @@ services:
       dockerfile: ./java/db-app/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./java/db-app/pom.xml:/usr/src/app/pom.xml
+      - ./java/db-app/src:/usr/src/app/src
   nodejs-jwt:
     image: drugbank-sample-apps/nodejs-jwt
     build:
@@ -14,6 +17,10 @@ services:
       dockerfile: ./nodejs-JWT/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./nodejs-JWT/package.json:/usr/src/app/package.json
+      - ./nodejs-JWT/package-lock.json:/usr/src/app/package-lock.json
+
   nodejs:
     image: drugbank-sample-apps/nodejs
     build:
@@ -21,6 +28,9 @@ services:
       dockerfile: ./nodejs/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./nodejs/package.json:/usr/src/app/package.json
+      - ./nodejs/package-lock.json:/usr/src/app/package-lock.json
   php:
     image: drugbank-sample-apps/php
     build:
@@ -28,6 +38,8 @@ services:
       dockerfile: ./php/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./php:/usr/src/app
   python:
     image: drugbank-sample-apps/python
     build:
@@ -35,6 +47,8 @@ services:
       dockerfile: ./python/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./python/requirements.txt:/usr/src/app/requirements.txt
   ruby:
     image: drugbank-sample-apps/ruby
     build:
@@ -42,3 +56,5 @@ services:
       dockerfile: ./ruby/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./ruby:/usr/src/app
